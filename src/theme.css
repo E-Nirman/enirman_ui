@@ -1,176 +1,236 @@
 /*
- * enirman-ui — theme tokens (single source of truth)
+ * enirman-ui v2 — design tokens
  *
- * To rebrand: change --brand-* values in :root and [data-theme="dark"].
- * All components reference semantic tokens (--color-*, --surface-*, --ink-*)
- * which resolve to brand tokens, so a rebrand is a one-file change.
+ * shadcn-vue compatible HSL tokens. Every component reads these; swap
+ * the values to rebrand the entire design system.
  *
- * Layered on top of frappe-ui's own CSS variables — we override semantic
- * surfaces/inks for a slightly warmer, softer neutral palette and define
- * our own accent scales for vibrancy without loudness.
+ * Conventions:
+ *   - HSL components (no hsl() wrapper) so consumers can compose with
+ *     alpha: hsl(var(--primary) / 0.5)
+ *   - Dark mode keys off [data-theme="dark"] on <html> (matching frappe-ui)
+ *
+ * Categories:
+ *   - Surface / foreground pairs (background, card, popover)
+ *   - Semantic roles (primary, secondary, muted, accent, destructive)
+ *   - Chart / status tones (success, warning, info, plus)
+ *   - Chrome (border, input, ring)
+ *   - Sidebar-specific (its own palette so you can tune sidebar without
+ *     touching the rest of the app)
+ *   - Layout constants (sidebar widths, topbar height, radii)
  */
 
 :root {
-  /* ─── Brand accent (primary) ─────────────────────────────────────────
-   * Currently blue, matching existing eNirman palette. Change these six
-   * values to rebrand the entire system. Accent hues (orange/green/
-   * amber/red/purple) are fixed semantic colors and kept separate. */
-  --brand-50:  #eff6ff;
-  --brand-100: #dbeafe;
-  --brand-300: #93c5fd;
-  --brand-500: #3b82f6;
-  --brand-600: #2563eb;
-  --brand-700: #1d4ed8;
+  /* ─── Surfaces ────────────────────────────────────────────────── */
+  --background:        0 0% 100%;
+  --foreground:        222 25% 11%;
 
-  /* ─── Semantic colors (light) ───────────────────────────────────── */
-  --color-primary:        var(--brand-500);
-  --color-primary-hover:  var(--brand-600);
-  --color-primary-subtle: var(--brand-50);
-  --color-primary-ink:    var(--brand-600);
+  --card:              0 0% 100%;
+  --card-foreground:   222 25% 11%;
 
-  --color-success:        #16a34a;
-  --color-success-subtle: #f0fdf4;
-  --color-success-ink:    #15803d;
+  --popover:           0 0% 100%;
+  --popover-foreground: 222 25% 11%;
 
-  --color-warning:        #f59e0b;
-  --color-warning-subtle: #fffbeb;
-  --color-warning-ink:    #b45309;
+  /* ─── Semantic roles ─────────────────────────────────────────── */
+  --primary:           221 83% 53%;    /* brand blue */
+  --primary-foreground: 0 0% 100%;
 
-  --color-danger:         #ef4444;
-  --color-danger-subtle:  #fef2f2;
-  --color-danger-ink:     #dc2626;
+  --secondary:         220 14% 96%;
+  --secondary-foreground: 222 25% 11%;
 
-  --color-info:           #0ea5e9;
-  --color-info-subtle:    #f0f9ff;
-  --color-info-ink:       #0369a1;
+  --muted:             220 14% 96%;
+  --muted-foreground:  220 9% 46%;
 
-  --color-accent:         #a855f7;  /* Plus / premium tier */
-  --color-accent-subtle:  #faf5ff;
-  --color-accent-ink:     #7e22ce;
+  --accent:            220 14% 96%;
+  --accent-foreground: 222 25% 11%;
 
-  /* ─── Radius tokens ─────────────────────────────────────────────── */
-  --radius-xs: 4px;
-  --radius-sm: 6px;
-  --radius-md: 8px;
-  --radius-lg: 10px;
-  --radius-xl: 12px;
-  --radius-2xl: 16px;
-  --radius-full: 9999px;
+  --destructive:       0 84% 60%;
+  --destructive-foreground: 0 0% 100%;
 
-  /* ─── Elevation (soft, low-contrast) ────────────────────────────── */
-  --shadow-xs: 0 1px 2px 0 rgb(0 0 0 / 0.04);
-  --shadow-sm: 0 1px 3px 0 rgb(0 0 0 / 0.06), 0 1px 2px -1px rgb(0 0 0 / 0.04);
-  --shadow-md: 0 4px 8px -2px rgb(0 0 0 / 0.08), 0 2px 4px -2px rgb(0 0 0 / 0.04);
-  --shadow-lg: 0 10px 20px -4px rgb(0 0 0 / 0.10), 0 4px 8px -4px rgb(0 0 0 / 0.06);
-  --shadow-xl: 0 20px 40px -8px rgb(0 0 0 / 0.14), 0 8px 16px -8px rgb(0 0 0 / 0.08);
-  --shadow-pop: 0 12px 32px -8px rgb(0 0 0 / 0.18);
+  /* ─── Status tones (apps use these for project / design states) ── */
+  --success:           142 71% 45%;
+  --success-foreground: 0 0% 100%;
+  --success-muted:     142 76% 96%;   /* subtle fill */
+  --success-ink:       142 72% 29%;   /* ink over subtle */
 
-  /* ─── Control sizing ────────────────────────────────────────────── */
-  --control-height-sm: 28px;
-  --control-height-md: 34px;
-  --control-height-lg: 40px;
+  --warning:           38 92% 50%;
+  --warning-foreground: 0 0% 100%;
+  --warning-muted:     48 96% 94%;
+  --warning-ink:       28 80% 36%;
 
-  /* ─── Layout constants ──────────────────────────────────────────── */
-  --sidebar-width: 232px;
-  --sidebar-width-collapsed: 56px;
-  --topbar-height: 48px;
-  --mobile-topbar-height: 52px;
+  --info:              199 89% 48%;
+  --info-foreground:   0 0% 100%;
+  --info-muted:        204 94% 94%;
+  --info-ink:          201 90% 32%;
+
+  --plus:              271 91% 65%;   /* eNirman Plus accent */
+  --plus-foreground:   0 0% 100%;
+  --plus-muted:        270 96% 96%;
+  --plus-ink:          272 72% 40%;
+
+  /* ─── Chrome ─────────────────────────────────────────────────── */
+  --border:            220 13% 91%;
+  --input:             220 13% 91%;
+  --ring:              221 83% 53%;
+
+  /* ─── Sidebar palette ────────────────────────────────────────── */
+  --sidebar:                  220 20% 98%;
+  --sidebar-foreground:       222 25% 11%;
+  --sidebar-muted:            220 9% 46%;
+  --sidebar-border:           220 13% 91%;
+  --sidebar-accent:           220 14% 94%;     /* hover */
+  --sidebar-accent-foreground: 222 25% 11%;
+  --sidebar-primary:          221 83% 53%;     /* active */
+  --sidebar-primary-foreground: 0 0% 100%;
+
+  /* ─── Layout ─────────────────────────────────────────────────── */
+  --radius: 0.625rem;            /* 10px — soft but not rounded */
+  --radius-sm: 0.375rem;         /* 6px  — buttons, inputs */
+  --radius-lg: 0.75rem;          /* 12px — cards */
+  --radius-xl: 1rem;             /* 16px — dialogs */
+
+  --sidebar-width:        240px;
+  --sidebar-width-icon:   56px;
+  --topbar-height:        52px;
+
+  /* ─── Font stack ─────────────────────────────────────────────── */
+  --font-sans: "Inter", ui-sans-serif, system-ui, -apple-system, "Segoe UI",
+    Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji",
+    "Segoe UI Emoji";
+  --font-mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas,
+    "Liberation Mono", monospace;
 }
 
+/* ─── Dark mode ──────────────────────────────────────────────── */
 [data-theme="dark"] {
-  /* Brand scale — slightly desaturated in dark mode to reduce eye strain */
-  --brand-50:  #172554;
-  --brand-100: #1e3a8a;
-  --brand-300: #60a5fa;
-  --brand-500: #60a5fa;
-  --brand-600: #3b82f6;
-  --brand-700: #93c5fd;
+  --background:        222 22% 8%;     /* soft near-black, not pitch */
+  --foreground:        210 20% 96%;
 
-  --color-primary:        var(--brand-500);
-  --color-primary-hover:  var(--brand-300);
-  --color-primary-subtle: rgb(96 165 250 / 0.12);
-  --color-primary-ink:    #93c5fd;
+  --card:              222 22% 11%;    /* elevated vs background */
+  --card-foreground:   210 20% 96%;
 
-  --color-success:        #4ade80;
-  --color-success-subtle: rgb(74 222 128 / 0.10);
-  --color-success-ink:    #86efac;
+  --popover:           222 22% 11%;
+  --popover-foreground: 210 20% 96%;
 
-  --color-warning:        #fbbf24;
-  --color-warning-subtle: rgb(251 191 36 / 0.10);
-  --color-warning-ink:    #fcd34d;
+  --primary:           217 91% 65%;    /* lighter blue in dark */
+  --primary-foreground: 222 47% 11%;
 
-  --color-danger:         #f87171;
-  --color-danger-subtle:  rgb(248 113 113 / 0.10);
-  --color-danger-ink:     #fca5a5;
+  --secondary:         222 18% 16%;
+  --secondary-foreground: 210 20% 96%;
 
-  --color-info:           #38bdf8;
-  --color-info-subtle:    rgb(56 189 248 / 0.10);
-  --color-info-ink:       #7dd3fc;
+  --muted:             222 18% 16%;
+  --muted-foreground:  217 10% 65%;
 
-  --color-accent:         #c084fc;
-  --color-accent-subtle:  rgb(192 132 252 / 0.12);
-  --color-accent-ink:     #d8b4fe;
+  --accent:            222 18% 16%;
+  --accent-foreground: 210 20% 96%;
 
-  /* Soften frappe-ui's pitch-black surfaces — same overrides as before
-     but now a first-class part of the design system. */
-  --surface-white:     #1a1a1e;
-  --surface-gray-1:    #222228;
-  --surface-gray-2:    #2a2a30;
-  --surface-gray-3:    #343438;
-  --surface-menu-bar:  #18181c;
-  --surface-cards:     #242428;
-  --surface-modal:     #2a2a30;
-  --surface-selected:  rgb(96 165 250 / 0.15);
+  --destructive:       0 73% 60%;
+  --destructive-foreground: 210 20% 98%;
 
-  --shadow-xs: 0 1px 2px 0 rgb(0 0 0 / 0.24);
-  --shadow-sm: 0 1px 3px 0 rgb(0 0 0 / 0.32), 0 1px 2px -1px rgb(0 0 0 / 0.24);
-  --shadow-md: 0 4px 8px -2px rgb(0 0 0 / 0.36), 0 2px 4px -2px rgb(0 0 0 / 0.24);
-  --shadow-lg: 0 10px 20px -4px rgb(0 0 0 / 0.42), 0 4px 8px -4px rgb(0 0 0 / 0.28);
-  --shadow-xl: 0 20px 40px -8px rgb(0 0 0 / 0.50), 0 8px 16px -8px rgb(0 0 0 / 0.32);
-  --shadow-pop: 0 12px 32px -8px rgb(0 0 0 / 0.60);
+  --success:           142 71% 55%;
+  --success-muted:     142 40% 14%;
+  --success-ink:       142 71% 75%;
+
+  --warning:           38 92% 60%;
+  --warning-muted:     28 60% 14%;
+  --warning-ink:       38 92% 75%;
+
+  --info:              199 89% 60%;
+  --info-muted:        199 60% 14%;
+  --info-ink:          199 89% 80%;
+
+  --plus:              271 91% 75%;
+  --plus-muted:        271 60% 14%;
+  --plus-ink:          271 91% 82%;
+
+  --border:            222 18% 20%;
+  --input:             222 18% 20%;
+  --ring:              217 91% 65%;
+
+  --sidebar:                  222 22% 6%;
+  --sidebar-foreground:       210 20% 96%;
+  --sidebar-muted:            217 10% 55%;
+  --sidebar-border:           222 18% 16%;
+  --sidebar-accent:           222 18% 14%;
+  --sidebar-accent-foreground: 210 20% 96%;
+  --sidebar-primary:          217 91% 65%;
+  --sidebar-primary-foreground: 222 47% 11%;
 }
 
-/* ─── Scrollbar polish ────────────────────────────────────────────────
- * Subtle scrollbars that don't fight with content density. Applied
- * globally so every app gets consistent chrome. */
+/* ─── Frappe-ui variable bridge ──────────────────────────────────
+ * frappe-ui components (Avatar, FormControl, Tooltip, Dialog etc.)
+ * read their own CSS variables. We map them to our semantic tokens
+ * so frappe-ui elements blend with shadcn-vue components and both
+ * track dark mode in sync.
+ */
+:root {
+  --surface-white:    hsl(var(--background));
+  --surface-gray-1:   hsl(var(--muted));
+  --surface-gray-2:   hsl(var(--border));
+  --surface-gray-3:   hsl(var(--border));
+  --surface-menu-bar: hsl(var(--sidebar));
+  --surface-modal:    hsl(var(--card));
+  --surface-cards:    hsl(var(--card));
+  --surface-selected: hsl(var(--sidebar-accent));
+
+  --ink-gray-9: hsl(var(--foreground));
+  --ink-gray-8: hsl(var(--foreground) / 0.85);
+  --ink-gray-7: hsl(var(--foreground) / 0.70);
+  --ink-gray-6: hsl(var(--muted-foreground));
+  --ink-gray-5: hsl(var(--muted-foreground));
+  --ink-gray-4: hsl(var(--muted-foreground) / 0.70);
+  --ink-gray-3: hsl(var(--muted-foreground) / 0.45);
+
+  --outline-gray-3: hsl(var(--border));
+  --outline-gray-4: hsl(var(--border));
+}
+
+/* ─── Base type rendering ────────────────────────────────────── */
+html {
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+}
+
+body {
+  background: hsl(var(--background));
+  color: hsl(var(--foreground));
+  /*
+   * Reka UI (and Radix under it) sets `body { pointer-events: none }`
+   * when a modal Dialog or DropdownMenu is open. When two modals
+   * overlap (a menu that opens a dialog) the cleanup handlers can
+   * race and leave the lock on after every overlay has unmounted —
+   * the page then looks frozen (mouse moves but clicks do nothing).
+   *
+   * Our overlays each render their own `fixed inset-0` backdrop so
+   * the body-level lock is redundant. Forcing pointer-events:auto
+   * eliminates the whole class of frozen-page bugs.
+   */
+  pointer-events: auto !important;
+}
+
+/* ─── Scrollbar polish (unobtrusive) ─────────────────────────── */
 *::-webkit-scrollbar { width: 10px; height: 10px; }
 *::-webkit-scrollbar-track { background: transparent; }
 *::-webkit-scrollbar-thumb {
-  background: var(--surface-gray-3);
+  background: hsl(var(--border));
   border-radius: 999px;
   border: 2px solid transparent;
   background-clip: padding-box;
 }
 *::-webkit-scrollbar-thumb:hover {
-  background: var(--ink-gray-3, #cbd5e1);
+  background: hsl(var(--muted-foreground) / 0.35);
   background-clip: padding-box;
   border: 2px solid transparent;
 }
 
-/* ─── Focus ring ──────────────────────────────────────────────────────
- * Consistent focus style across every interactive element in the
- * design system. Visible but not harsh. */
-.eui-focusable:focus-visible,
-button:focus-visible,
-a:focus-visible,
-[role="button"]:focus-visible,
-input:focus-visible,
-textarea:focus-visible,
-select:focus-visible {
-  outline: 2px solid var(--color-primary);
+/* ─── Consistent focus ring ──────────────────────────────────── */
+.eui-focus-ring {
+  outline: 2px solid hsl(var(--ring));
   outline-offset: 2px;
-  border-radius: var(--radius-sm);
 }
 
-/* ─── Frappe-ui Dialog in dark mode ──────────────────────────────────
- * Dialogs default to --surface-modal which we've darkened. */
-[data-theme="dark"] .rounded-xl.bg-surface-white,
-[data-theme="dark"] .rounded-lg.bg-surface-white,
-[data-theme="dark"] .bg-surface-white.rounded-xl,
-[data-theme="dark"] .bg-surface-white.rounded-lg {
-  background-color: var(--surface-cards) !important;
-}
-
-/* ─── Firefox tab-bar paint fix (carry-over from enirman_connect) ──── */
+/* ─── Firefox tab-bar paint fix (from v1) ────────────────────── */
 [role="tablist"] { overflow: clip; }
 [data-reka-tabs-indicator] { will-change: transform, width; }

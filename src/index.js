@@ -1,39 +1,54 @@
 /*
- * enirman-ui — single-entry exports.
+ * enirman-ui v2 — single-entry exports.
+ *
+ * Primitives are re-exported from the shadcn-vue "ui/" components and
+ * the enirman-specific "app/" composed layer sits on top. Layout
+ * scaffolding (AppShell, SidebarItem, SidebarSection) ships alongside.
  *
  * Usage:
- *   import { EuiButton, EuiCard, useTheme } from 'enirman-ui'
+ *   import { Button, Card, CardHeader, CardTitle } from 'enirman-ui'
+ *   import { AppShell, PageHeader, StatCard } from 'enirman-ui'
  *   import 'enirman-ui/theme.css'
- *
- * We use explicit named exports (rather than a plugin with auto-register)
- * so tree-shaking works and IDE auto-imports are precise. Consumers can
- * also cherry-pick via subpath exports — see package.json `exports`.
  */
 
-// Components
-export { default as EuiButton }      from './components/EuiButton.vue'
-export { default as EuiIconButton }  from './components/EuiIconButton.vue'
-export { default as EuiCard }        from './components/EuiCard.vue'
-export { default as EuiSectionCard } from './components/EuiSectionCard.vue'
-export { default as EuiBadge }       from './components/EuiBadge.vue'
-export { default as EuiStatusDot }   from './components/EuiStatusDot.vue'
-export { default as EuiInput }       from './components/EuiInput.vue'
-export { default as EuiSearchInput } from './components/EuiSearchInput.vue'
-export { default as EuiEmptyState }  from './components/EuiEmptyState.vue'
-export { default as EuiMetricCard }  from './components/EuiMetricCard.vue'
-export { default as EuiDialog }      from './components/EuiDialog.vue'
-export { default as EuiTabs }        from './components/EuiTabs.vue'
-export { default as EuiDropdown }    from './components/EuiDropdown.vue'
-export { default as EuiSkeleton }    from './components/EuiSkeleton.vue'
-export { default as EuiProgressBar } from './components/EuiProgressBar.vue'
-export { default as EuiListRow }     from './components/EuiListRow.vue'
-export { default as EuiPageHeader }  from './components/EuiPageHeader.vue'
+// ─── Primitive components (shadcn-vue style) ─────────────────────
+export * from './components/ui/button/index.js'
+export * from './components/ui/card/index.js'
+export * from './components/ui/badge/index.js'
+export * from './components/ui/input/index.js'
+export * from './components/ui/label/index.js'
+export * from './components/ui/avatar/index.js'
+export * from './components/ui/dialog/index.js'
+export * from './components/ui/tabs/index.js'
+export * from './components/ui/dropdown-menu/index.js'
+export * from './components/ui/tooltip/index.js'
+export * from './components/ui/separator/index.js'
+export * from './components/ui/skeleton/index.js'
+export * from './components/ui/popover/index.js'
+export * from './components/ui/sheet/index.js'
+export * from './components/ui/command/index.js'
+export * from './components/ui/switch/index.js'
+export * from './components/ui/table/index.js'
+export * from './components/ui/scroll-area/index.js'
+export * from './components/ui/sonner/index.js'
 
-// Layouts
-export { default as EuiAppShell }       from './layouts/EuiAppShell.vue'
-export { default as EuiSidebarItem }    from './layouts/EuiSidebarItem.vue'
-export { default as EuiSidebarSection } from './layouts/EuiSidebarSection.vue'
+// ─── eNirman composed components ──────────────────────────────────
+export { default as PageHeader }    from './components/app/PageHeader.vue'
+export { default as PageContainer } from './components/app/PageContainer.vue'
+export { default as StatCard }      from './components/app/StatCard.vue'
+export { default as StatusBadge }   from './components/app/StatusBadge.vue'
+export { default as EmptyState }    from './components/app/EmptyState.vue'
+export { default as CommandPalette }from './components/app/CommandPalette.vue'
 
-// Composables
-export { useTheme }      from './composables/useTheme.js'
-export { useBreakpoint } from './composables/useBreakpoint.js'
+// ─── Layouts ──────────────────────────────────────────────────────
+export { default as AppShell }        from './layouts/AppShell.vue'
+export { default as SidebarItem }     from './layouts/SidebarItem.vue'
+export { default as SidebarSection }  from './layouts/SidebarSection.vue'
+
+// ─── Composables ─────────────────────────────────────────────────
+export { useTheme }           from './composables/useTheme.js'
+export { useBreakpoint }      from './composables/useBreakpoint.js'
+export { useCommandPalette }  from './composables/useCommandPalette.js'
+
+// ─── Utilities ───────────────────────────────────────────────────
+export { cn } from './lib/utils.js'

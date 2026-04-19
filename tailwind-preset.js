@@ -1,10 +1,10 @@
 /*
- * enirman-ui Tailwind preset.
+ * enirman-ui v2 Tailwind preset (shadcn-vue compatible)
  *
- * Usage in a consumer app's tailwind.config.js:
+ * Usage in a consumer app:
  *
  *   import frappeUIPreset from 'frappe-ui/tailwind'
- *   import enirmanPreset from 'enirman-ui/tailwind-preset'
+ *   import enirmanPreset  from 'enirman-ui/tailwind-preset'
  *
  *   export default {
  *     presets: [frappeUIPreset, enirmanPreset],
@@ -12,84 +12,137 @@
  *       './index.html',
  *       './src/**\/*.{vue,js,ts,jsx,tsx}',
  *       './node_modules/frappe-ui/src/**\/*.{vue,js,ts,jsx,tsx}',
- *       '../../enirman_ui/src/**\/*.{vue,js,ts,jsx,tsx}',
+ *       './node_modules/enirman-ui/src/**\/*.{vue,js,ts,jsx,tsx}',
  *     ],
  *   }
  *
- * This preset wires Tailwind color utilities to our CSS variables so
- * `bg-brand-500`, `text-success`, etc. respect dark mode automatically.
+ * The dark variant targets [data-theme="dark"] (frappe-ui convention)
+ * so both component libraries respond to the same attribute switch.
  */
 
+import animate from 'tailwindcss-animate'
+
 export default {
+  darkMode: ['class', '[data-theme="dark"]'],
   theme: {
+    container: {
+      center: true,
+      padding: '1rem',
+      screens: {
+        '2xl': '1440px',
+      },
+    },
     extend: {
       colors: {
-        brand: {
-          50:  'var(--brand-50)',
-          100: 'var(--brand-100)',
-          300: 'var(--brand-300)',
-          500: 'var(--brand-500)',
-          600: 'var(--brand-600)',
-          700: 'var(--brand-700)',
-          DEFAULT: 'var(--color-primary)',
-        },
+        border:      'hsl(var(--border))',
+        input:       'hsl(var(--input))',
+        ring:        'hsl(var(--ring))',
+        background:  'hsl(var(--background))',
+        foreground:  'hsl(var(--foreground))',
+
         primary: {
-          DEFAULT: 'var(--color-primary)',
-          hover:   'var(--color-primary-hover)',
-          subtle:  'var(--color-primary-subtle)',
-          ink:     'var(--color-primary-ink)',
+          DEFAULT:    'hsl(var(--primary))',
+          foreground: 'hsl(var(--primary-foreground))',
         },
-        success: {
-          DEFAULT: 'var(--color-success)',
-          subtle:  'var(--color-success-subtle)',
-          ink:     'var(--color-success-ink)',
+        secondary: {
+          DEFAULT:    'hsl(var(--secondary))',
+          foreground: 'hsl(var(--secondary-foreground))',
         },
-        warning: {
-          DEFAULT: 'var(--color-warning)',
-          subtle:  'var(--color-warning-subtle)',
-          ink:     'var(--color-warning-ink)',
-        },
-        danger: {
-          DEFAULT: 'var(--color-danger)',
-          subtle:  'var(--color-danger-subtle)',
-          ink:     'var(--color-danger-ink)',
-        },
-        info: {
-          DEFAULT: 'var(--color-info)',
-          subtle:  'var(--color-info-subtle)',
-          ink:     'var(--color-info-ink)',
+        muted: {
+          DEFAULT:    'hsl(var(--muted))',
+          foreground: 'hsl(var(--muted-foreground))',
         },
         accent: {
-          DEFAULT: 'var(--color-accent)',
-          subtle:  'var(--color-accent-subtle)',
-          ink:     'var(--color-accent-ink)',
+          DEFAULT:    'hsl(var(--accent))',
+          foreground: 'hsl(var(--accent-foreground))',
+        },
+        destructive: {
+          DEFAULT:    'hsl(var(--destructive))',
+          foreground: 'hsl(var(--destructive-foreground))',
+        },
+
+        success: {
+          DEFAULT:    'hsl(var(--success))',
+          foreground: 'hsl(var(--success-foreground))',
+          muted:      'hsl(var(--success-muted))',
+          ink:        'hsl(var(--success-ink))',
+        },
+        warning: {
+          DEFAULT:    'hsl(var(--warning))',
+          foreground: 'hsl(var(--warning-foreground))',
+          muted:      'hsl(var(--warning-muted))',
+          ink:        'hsl(var(--warning-ink))',
+        },
+        info: {
+          DEFAULT:    'hsl(var(--info))',
+          foreground: 'hsl(var(--info-foreground))',
+          muted:      'hsl(var(--info-muted))',
+          ink:        'hsl(var(--info-ink))',
+        },
+        plus: {
+          DEFAULT:    'hsl(var(--plus))',
+          foreground: 'hsl(var(--plus-foreground))',
+          muted:      'hsl(var(--plus-muted))',
+          ink:        'hsl(var(--plus-ink))',
+        },
+
+        card: {
+          DEFAULT:    'hsl(var(--card))',
+          foreground: 'hsl(var(--card-foreground))',
+        },
+        popover: {
+          DEFAULT:    'hsl(var(--popover))',
+          foreground: 'hsl(var(--popover-foreground))',
+        },
+        sidebar: {
+          DEFAULT:      'hsl(var(--sidebar))',
+          foreground:   'hsl(var(--sidebar-foreground))',
+          muted:        'hsl(var(--sidebar-muted))',
+          border:       'hsl(var(--sidebar-border))',
+          accent:       'hsl(var(--sidebar-accent))',
+          'accent-foreground': 'hsl(var(--sidebar-accent-foreground))',
+          primary:      'hsl(var(--sidebar-primary))',
+          'primary-foreground': 'hsl(var(--sidebar-primary-foreground))',
         },
       },
       borderRadius: {
-        xs:  'var(--radius-xs)',
-        sm:  'var(--radius-sm)',
-        md:  'var(--radius-md)',
-        lg:  'var(--radius-lg)',
+        lg:  'var(--radius)',
+        md:  'calc(var(--radius) - 2px)',
+        sm:  'calc(var(--radius) - 4px)',
         xl:  'var(--radius-xl)',
-        '2xl': 'var(--radius-2xl)',
       },
-      boxShadow: {
-        xs:  'var(--shadow-xs)',
-        sm:  'var(--shadow-sm)',
-        md:  'var(--shadow-md)',
-        lg:  'var(--shadow-lg)',
-        xl:  'var(--shadow-xl)',
-        pop: 'var(--shadow-pop)',
+      fontFamily: {
+        sans: ['var(--font-sans)'],
+        mono: ['var(--font-mono)'],
       },
-      fontSize: {
-        // Match existing enirman_connect sizing: bumped by ~1px vs Tailwind default
-        xs:   ['0.8125rem', { lineHeight: '1.125rem' }],
-        sm:   ['0.9375rem', { lineHeight: '1.375rem' }],
-        base: ['1.0625rem', { lineHeight: '1.625rem' }],
+      keyframes: {
+        'accordion-down': {
+          from: { height: '0' },
+          to:   { height: 'var(--reka-accordion-content-height)' },
+        },
+        'accordion-up': {
+          from: { height: 'var(--reka-accordion-content-height)' },
+          to:   { height: '0' },
+        },
+        'collapsible-down': {
+          from: { height: '0' },
+          to:   { height: 'var(--reka-collapsible-content-height)' },
+        },
+        'collapsible-up': {
+          from: { height: 'var(--reka-collapsible-content-height)' },
+          to:   { height: '0' },
+        },
+      },
+      animation: {
+        'accordion-down':  'accordion-down 0.2s ease-out',
+        'accordion-up':    'accordion-up 0.2s ease-out',
+        'collapsible-down':'collapsible-down 0.2s ease-out',
+        'collapsible-up':  'collapsible-up 0.2s ease-out',
       },
       screens: {
         xs: '480px',
       },
     },
   },
+  plugins: [animate],
 }
