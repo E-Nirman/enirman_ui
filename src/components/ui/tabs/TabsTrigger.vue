@@ -12,7 +12,7 @@ const props = defineProps({
 
 const variants = cva(
   [
-    'inline-flex items-center justify-center gap-1.5 whitespace-nowrap text-xs font-medium transition-all',
+    'inline-flex items-center justify-center gap-1.5 whitespace-nowrap text-sm font-medium transition-all',
     'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring',
     'disabled:pointer-events-none disabled:opacity-50 [&_svg]:size-3.5',
   ],
