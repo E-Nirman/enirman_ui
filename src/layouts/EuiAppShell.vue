@@ -2,7 +2,7 @@
   <div class="eui-shell" :class="{ 'eui-shell--collapsed': collapsed }">
     <!-- Desktop sidebar -->
     <aside v-if="isDesktop" class="eui-shell__sidebar" :aria-expanded="!collapsed">
-      <slot name="sidebar" :collapsed="collapsed" :toggle="toggleCollapse" />
+      <slot name="sidebar" :collapsed="collapsed" :toggle="toggleCollapse" :mobile="false" />
     </aside>
 
     <!-- Mobile drawer overlay -->
@@ -147,7 +147,8 @@ defineExpose({ collapsed, toggleCollapse, mobileOpen })
   border-right: 1px solid var(--surface-gray-2);
   display: flex;
   flex-direction: column;
-  overflow: hidden;
+  overflow: visible;
+  position: relative;
   transition: width .22s cubic-bezier(.4,0,.2,1);
 }
 .eui-shell--collapsed .eui-shell__sidebar {

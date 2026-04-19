@@ -80,7 +80,9 @@ const iconSizeClass = computed(() => {
   transition: background-color .15s, border-color .15s, color .15s, box-shadow .15s;
   text-decoration: none;
   user-select: none;
+  flex-shrink: 0;
 }
+.eui-btn__label { white-space: nowrap; }
 .eui-btn:focus-visible { outline: 2px solid var(--color-primary); outline-offset: 2px; }
 .eui-btn:disabled, .eui-btn--loading { opacity: .55; cursor: not-allowed; }
 .eui-btn--block { width: 100%; }

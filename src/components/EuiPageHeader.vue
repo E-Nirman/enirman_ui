@@ -108,7 +108,9 @@ a.eui-page-header__crumb:hover { color: var(--color-primary-ink); }
   align-items: center;
   gap: 8px;
   flex-wrap: wrap;
+  row-gap: 8px;
 }
+.eui-page-header__actions > * { flex-shrink: 0; }
 .eui-page-header__extra { margin-top: 6px; }
 
 @media (max-width: 640px) {
