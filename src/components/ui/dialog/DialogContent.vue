@@ -34,6 +34,42 @@ const variants = cva(
     defaultVariants: { size: 'md' },
   },
 )
+
+/*
+ * Popover / select / autocomplete menus opened inside a Dialog often
+ * portal their list to `document.body`, outside the Dialog's DOM.
+ * Reka/Radix then counts a click on one of those options as an
+ * "outside click" and dismisses the Dialog.
+ *
+ * Guard: if the event target is inside any of the common menu portals
+ * we know about, cancel Reka's default close. This covers:
+ *   - frappe-ui autocomplete (Element Plus, .el-popper / .el-dropdown-menu)
+ *   - Reka/Radix popovers ([data-reka-popper-content-wrapper])
+ *   - shadcn-vue command menu / select / dropdown popovers
+ *
+ * The default dismiss behaviour (clicking the true backdrop, pressing
+ * Escape) is preserved.
+ */
+const PORTAL_SELECTORS = [
+  '.el-popper',
+  '.el-dropdown-menu',
+  '.el-select-dropdown',
+  '.el-picker-panel',
+  '[data-reka-popper-content-wrapper]',
+  '[data-reka-menu-content]',
+  '[data-reka-select-content]',
+  '[data-reka-popover-content]',
+  '[data-reka-combobox-content]',
+  '[data-reka-dropdown-menu-content]',
+  '[data-sonner-toaster]',
+].join(',')
+
+function guardOutside(event) {
+  const target = event.target
+  if (target && typeof target.closest === 'function' && target.closest(PORTAL_SELECTORS)) {
+    event.preventDefault()
+  }
+}
 </script>
 
 <template>
@@ -43,7 +79,11 @@ const variants = cva(
              data-[state=open]:animate-in data-[state=closed]:animate-out
              data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0"
     />
-    <DialogContent :class="cn(variants({ size }), props.class)">
+    <DialogContent
+      :class="cn(variants({ size }), props.class)"
+      @pointer-down-outside="guardOutside"
+      @interact-outside="guardOutside"
+    >
       <slot />
       <DialogClose
         v-if="showClose"

@@ -28,6 +28,25 @@ const variants = cva(
     defaultVariants: { side: 'right' },
   },
 )
+
+// Same guard as DialogContent — keeps the sheet open when the user
+// clicks an option in a portaled menu/select opened inside it.
+const PORTAL_SELECTORS = [
+  '.el-popper', '.el-dropdown-menu', '.el-select-dropdown', '.el-picker-panel',
+  '[data-reka-popper-content-wrapper]',
+  '[data-reka-menu-content]',
+  '[data-reka-select-content]',
+  '[data-reka-popover-content]',
+  '[data-reka-combobox-content]',
+  '[data-reka-dropdown-menu-content]',
+  '[data-sonner-toaster]',
+].join(',')
+function guardOutside(event) {
+  const target = event.target
+  if (target && typeof target.closest === 'function' && target.closest(PORTAL_SELECTORS)) {
+    event.preventDefault()
+  }
+}
 </script>
 
 <template>
@@ -35,7 +54,11 @@ const variants = cva(
     <DialogOverlay class="fixed inset-0 z-50 bg-foreground/40 backdrop-blur-sm
                           data-[state=open]:animate-in data-[state=closed]:animate-out
                           data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0" />
-    <DialogContent :class="cn(variants({ side }), props.class)">
+    <DialogContent
+      :class="cn(variants({ side }), props.class)"
+      @pointer-down-outside="guardOutside"
+      @interact-outside="guardOutside"
+    >
       <slot />
       <DialogClose
         v-if="showClose"
