@@ -1,6 +1,5 @@
 <script setup>
 import { Toaster, toast } from 'vue-sonner'
-import 'vue-sonner/style.css'
 
 defineExpose({ toast })
 
