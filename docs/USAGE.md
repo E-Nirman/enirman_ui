@@ -7,14 +7,15 @@ walks through wiring it into a fresh frontend package.
 
 ## 1. Install
 
-The package lives at `~/frappe-bench/apps/enirman_ui/`. Add it as a `file:`
-dependency from your app's frontend:
+The package is published on GitHub at
+[E-Nirman/enirman_ui](https://github.com/E-Nirman/enirman_ui). Install it
+via yarn's git-protocol support — no npm publishing required:
 
 ```json
 // apps/<your-app>/frontend/package.json
 {
   "dependencies": {
-    "enirman-ui": "file:../../enirman_ui",
+    "enirman-ui": "git+https://github.com/E-Nirman/enirman_ui.git#master",
     "frappe-ui": "latest",
     "vue": "^3.4.0",
     "vue-router": "^4.0.0",
@@ -23,8 +24,24 @@ dependency from your app's frontend:
 }
 ```
 
-Then `yarn install`. Yarn will symlink the package, so changes to
-`enirman_ui` files are picked up immediately in dev.
+Pin to a tag (`#v0.1.0`) or commit SHA for reproducible deploys.
+
+Then `yarn install`. Yarn clones the repo into `node_modules/enirman-ui`.
+
+### Local development against a branch of enirman_ui
+
+When you're actively editing `enirman_ui` and want instant updates in a
+consumer app without pushing, use `yarn link`:
+
+```bash
+cd ~/frappe-bench/apps/enirman_ui
+yarn link
+
+cd ~/frappe-bench/apps/<your-app>/frontend
+yarn link enirman-ui
+```
+
+`yarn unlink enirman-ui` + `yarn install` reverts to the pinned version.
 
 ## 2. Wire Tailwind
 
@@ -42,7 +59,7 @@ export default {
     './index.html',
     './src/**/*.{vue,js,ts,jsx,tsx}',
     './node_modules/frappe-ui/src/**/*.{vue,js,ts,jsx,tsx}',
-    '../../enirman_ui/src/**/*.{vue,js,ts,jsx,tsx}',
+    './node_modules/enirman-ui/src/**/*.{vue,js,ts,jsx,tsx}',
   ],
   plugins: [],
 }
