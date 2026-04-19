@@ -45,6 +45,10 @@ function guardOutside(event) {
   const target = event.target
   if (target && typeof target.closest === 'function' && target.closest(PORTAL_SELECTORS)) {
     event.preventDefault()
+    return
+  }
+  if (typeof document !== 'undefined' && document.querySelector(PORTAL_SELECTORS)) {
+    event.preventDefault()
   }
 }
 </script>

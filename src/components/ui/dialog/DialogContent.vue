@@ -36,19 +36,23 @@ const variants = cva(
 )
 
 /*
- * Popover / select / autocomplete menus opened inside a Dialog often
- * portal their list to `document.body`, outside the Dialog's DOM.
- * Reka/Radix then counts a click on one of those options as an
- * "outside click" and dismisses the Dialog.
+ * Popover / select / autocomplete menus opened inside a Dialog portal
+ * their list to `document.body`, outside the Dialog's DOM subtree. Two
+ * failure modes follow:
  *
- * Guard: if the event target is inside any of the common menu portals
- * we know about, cancel Reka's default close. This covers:
- *   - frappe-ui autocomplete (Element Plus, .el-popper / .el-dropdown-menu)
- *   - Reka/Radix popovers ([data-reka-popper-content-wrapper])
- *   - shadcn-vue command menu / select / dropdown popovers
+ *   1. The click lands inside the portal (selecting an option). Reka
+ *      sees a click outside DialogContent and dismisses the Dialog.
+ *   2. The click lands inside the Dialog but outside the popper while
+ *      the popper is still open. The popper closes, but because
+ *      frappe-ui ships its own reka-ui copy the DismissableLayer stacks
+ *      don't coordinate across package boundaries — so the Dialog's
+ *      pointer-down-outside still fires.
  *
- * The default dismiss behaviour (clicking the true backdrop, pressing
- * Escape) is preserved.
+ * Guard: swallow the Dialog's dismiss whenever either the event target
+ * is inside a known popper *or* any popper is currently mounted in the
+ * DOM. The user's second click (after the popper has closed) still
+ * dismisses the Dialog normally, and Escape / true backdrop clicks are
+ * untouched.
  */
 const PORTAL_SELECTORS = [
   '.el-popper',
@@ -67,6 +71,10 @@ const PORTAL_SELECTORS = [
 function guardOutside(event) {
   const target = event.target
   if (target && typeof target.closest === 'function' && target.closest(PORTAL_SELECTORS)) {
+    event.preventDefault()
+    return
+  }
+  if (typeof document !== 'undefined' && document.querySelector(PORTAL_SELECTORS)) {
     event.preventDefault()
   }
 }
