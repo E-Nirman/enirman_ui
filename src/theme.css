@@ -196,6 +196,18 @@ html {
 body {
   background: hsl(var(--background));
   color: hsl(var(--foreground));
+  /*
+   * Reka UI (and Radix under it) sets `body { pointer-events: none }`
+   * when a modal Dialog or DropdownMenu is open. When two modals
+   * overlap (a menu that opens a dialog) the cleanup handlers can
+   * race and leave the lock on after every overlay has unmounted —
+   * the page then looks frozen (mouse moves but clicks do nothing).
+   *
+   * Our overlays each render their own `fixed inset-0` backdrop so
+   * the body-level lock is redundant. Forcing pointer-events:auto
+   * eliminates the whole class of frozen-page bugs.
+   */
+  pointer-events: auto !important;
 }
 
 /* ─── Scrollbar polish (unobtrusive) ─────────────────────────── */
