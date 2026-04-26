@@ -51,6 +51,9 @@ export { EuiDesignItemList }        from './components/app/EuiDesignItemList'
 export { EuiDesignItemPane }        from './components/app/EuiDesignItemPane'
 export { EuiPhaseKanban }           from './components/app/EuiPhaseKanban'
 export { EuiPhaseTable }            from './components/app/EuiPhaseTable'
+export { EuiReviewCard }            from './components/app/EuiReviewCard'
+export { EuiHandoffCard }           from './components/app/EuiHandoffCard'
+export { EuiActivityFeed }          from './components/app/EuiActivityFeed'
 
 // ─── Layouts ──────────────────────────────────────────────────────
 export { default as AppShell }        from './layouts/AppShell.vue'
