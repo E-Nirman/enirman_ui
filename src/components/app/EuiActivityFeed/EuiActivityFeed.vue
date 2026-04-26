@@ -23,6 +23,17 @@ const sorted = computed(() =>
         <div class="text-xs text-muted-foreground mb-1">{{ entry.owner }} · {{ entry.creation }}</div>
         <div class="text-sm whitespace-pre-wrap" v-html="entry.content" />
       </div>
+      <div v-else-if="entry.kind === 'rfi'" class="rounded-md border border-amber-500/40 bg-amber-500/5 p-3">
+        <div class="flex flex-wrap items-center gap-1.5 mb-1">
+          <span class="text-[10px] font-bold uppercase text-amber-600 tracking-wider">RFI</span>
+          <span class="text-[10px] font-medium px-2 py-0.5 rounded-full border border-amber-500/30 text-amber-700">{{ entry.priority || 'Normal' }}</span>
+          <span class="text-[10px] font-medium px-2 py-0.5 rounded-full border border-border text-muted-foreground">{{ entry.status }}</span>
+        </div>
+        <div class="text-sm font-medium">{{ entry.question_summary }}</div>
+        <div class="text-xs text-muted-foreground mt-1">
+          {{ entry.raised_by }}<span v-if="entry.timestamp"> · {{ entry.timestamp }}</span>
+        </div>
+      </div>
       <div v-else-if="entry.kind === 'event'" class="text-xs text-muted-foreground flex items-center gap-2 pl-3">
         <span class="size-1.5 rounded-full bg-muted-foreground/50" />
         <span>{{ entry.text }}<span v-if="entry.timestamp"> · {{ entry.timestamp }}</span></span>
