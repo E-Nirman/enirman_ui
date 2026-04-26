@@ -49,6 +49,8 @@ export { EuiPhaseRail }             from './components/app/EuiPhaseRail'
 export { EuiCategoryRail }          from './components/app/EuiCategoryRail'
 export { EuiDesignItemList }        from './components/app/EuiDesignItemList'
 export { EuiDesignItemPane }        from './components/app/EuiDesignItemPane'
+export { EuiPhaseKanban }           from './components/app/EuiPhaseKanban'
+export { EuiPhaseTable }            from './components/app/EuiPhaseTable'
 
 // ─── Layouts ──────────────────────────────────────────────────────
 export { default as AppShell }        from './layouts/AppShell.vue'
