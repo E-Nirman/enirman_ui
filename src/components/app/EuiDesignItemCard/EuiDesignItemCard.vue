@@ -2,6 +2,7 @@
 import { computed } from 'vue'
 import { Badge } from '../../ui/badge'
 import EuiBlockBadge from '../EuiBadges/EuiBlockBadge.vue'
+import EuiCdeStateBadge from '../EuiCdeStateBadge/EuiCdeStateBadge.vue'
 
 defineOptions({ name: 'EuiDesignItemCard' })
 
@@ -62,6 +63,7 @@ const statusVariant = computed(() => {
         </Badge>
         <Badge variant="outline" class="font-mono text-[9px]">{{ item.version_label || 'v1' }}</Badge>
         <Badge :variant="statusVariant" class="text-[9px]">{{ item.status }}</Badge>
+        <EuiCdeStateBadge v-if="item.cde_state" :state="item.cde_state" />
       </span>
       <span class="block text-sm font-medium truncate">{{ item.title }}</span>
       <span v-if="density !== 'compact'" class="block text-[11px] text-muted-foreground mt-0.5 truncate">

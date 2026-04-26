@@ -2,6 +2,7 @@
 import { computed } from 'vue'
 import { Badge } from '../../ui/badge'
 import EuiBlockBadge from '../EuiBadges/EuiBlockBadge.vue'
+import EuiCdeStateBadge from '../EuiCdeStateBadge/EuiCdeStateBadge.vue'
 
 defineOptions({ name: 'EuiDesignItemPane' })
 
@@ -58,6 +59,7 @@ const fileSlots = computed(() => {
           <EuiBlockBadge :block="item.block" v-if="item.project_block" />
           <Badge variant="outline" class="font-mono text-[10px]">{{ item.version_label }}</Badge>
           <Badge variant="outline" class="text-[10px]">{{ item.status }}</Badge>
+          <EuiCdeStateBadge v-if="item.cde_state" :state="item.cde_state" />
         </div>
       </div>
 
