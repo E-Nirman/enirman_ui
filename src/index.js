@@ -41,6 +41,10 @@ export { default as EmptyState }    from './components/app/EmptyState.vue'
 export { default as CommandPalette }from './components/app/CommandPalette.vue'
 export { EuiDwgViewer }             from './components/app/EuiDwgViewer'
 export { EuiFileViewer }            from './components/app/EuiFileViewer'
+export { EuiStageBadge, EuiBlockBadge } from './components/app/EuiBadges'
+export { EuiDesignItemCard }        from './components/app/EuiDesignItemCard'
+export { EuiVersionTimeline }       from './components/app/EuiVersionTimeline'
+export { EuiStatusFlow }            from './components/app/EuiStatusFlow'
 
 // ─── Layouts ──────────────────────────────────────────────────────
 export { default as AppShell }        from './layouts/AppShell.vue'
