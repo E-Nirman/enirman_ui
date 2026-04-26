@@ -1,14 +1,14 @@
 /*
- * enirman-ui v2 — single-entry exports.
+ * @enirman/ui — single-entry exports.
  *
  * Primitives are re-exported from the shadcn-vue "ui/" components and
  * the enirman-specific "app/" composed layer sits on top. Layout
  * scaffolding (AppShell, SidebarItem, SidebarSection) ships alongside.
  *
  * Usage:
- *   import { Button, Card, CardHeader, CardTitle } from 'enirman-ui'
- *   import { AppShell, PageHeader, StatCard } from 'enirman-ui'
- *   import 'enirman-ui/theme.css'
+ *   import { Button, Card, CardHeader, CardTitle } from '@enirman/ui'
+ *   import { AppShell, PageHeader, StatCard } from '@enirman/ui'
+ *   import '@enirman/ui/theme.css'
  */
 
 // ─── Primitive components (shadcn-vue style) ─────────────────────
@@ -55,6 +55,10 @@ export { EuiReviewCard }            from './components/app/EuiReviewCard'
 export { EuiHandoffCard }           from './components/app/EuiHandoffCard'
 export { EuiActivityFeed }          from './components/app/EuiActivityFeed'
 export { EuiCdeStateBadge }         from './components/app/EuiCdeStateBadge'
+export { EuiStatCard }        from './components/app/EuiStatCard'
+export { EuiPriorityMark }    from './components/app/EuiPriorityMark'
+export { EuiApprovalRow }     from './components/app/EuiApprovalRow'
+export { EuiActivityRow }     from './components/app/EuiActivityRow'
 
 // ─── Layouts ──────────────────────────────────────────────────────
 export { default as AppShell }        from './layouts/AppShell.vue'
