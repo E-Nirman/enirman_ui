@@ -45,6 +45,10 @@ export { EuiStageBadge, EuiBlockBadge } from './components/app/EuiBadges'
 export { EuiDesignItemCard }        from './components/app/EuiDesignItemCard'
 export { EuiVersionTimeline }       from './components/app/EuiVersionTimeline'
 export { EuiStatusFlow }            from './components/app/EuiStatusFlow'
+export { EuiPhaseRail }             from './components/app/EuiPhaseRail'
+export { EuiCategoryRail }          from './components/app/EuiCategoryRail'
+export { EuiDesignItemList }        from './components/app/EuiDesignItemList'
+export { EuiDesignItemPane }        from './components/app/EuiDesignItemPane'
 
 // ─── Layouts ──────────────────────────────────────────────────────
 export { default as AppShell }        from './layouts/AppShell.vue'
