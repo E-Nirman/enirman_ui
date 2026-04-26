@@ -39,6 +39,8 @@ export { default as StatCard }      from './components/app/StatCard.vue'
 export { default as StatusBadge }   from './components/app/StatusBadge.vue'
 export { default as EmptyState }    from './components/app/EmptyState.vue'
 export { default as CommandPalette }from './components/app/CommandPalette.vue'
+export { EuiDwgViewer }             from './components/app/EuiDwgViewer'
+export { EuiFileViewer }            from './components/app/EuiFileViewer'
 
 // ─── Layouts ──────────────────────────────────────────────────────
 export { default as AppShell }        from './layouts/AppShell.vue'
