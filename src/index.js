@@ -54,6 +54,7 @@ export { EuiPhaseTable }            from './components/app/EuiPhaseTable'
 export { EuiReviewCard }            from './components/app/EuiReviewCard'
 export { EuiHandoffCard }           from './components/app/EuiHandoffCard'
 export { EuiActivityFeed }          from './components/app/EuiActivityFeed'
+export { EuiCdeStateBadge }         from './components/app/EuiCdeStateBadge'
 
 // ─── Layouts ──────────────────────────────────────────────────────
 export { default as AppShell }        from './layouts/AppShell.vue'
