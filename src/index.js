@@ -65,6 +65,13 @@ export { EuiPriorityMark }    from './components/app/EuiPriorityMark'
 export { EuiApprovalRow }     from './components/app/EuiApprovalRow'
 export { EuiActivityRow }     from './components/app/EuiActivityRow'
 export { EuiTopTabs }         from './components/app/EuiTopTabs/index.js'
+export { EuiKpiTile }         from './components/app/EuiKpiTile/index.js'
+export { EuiDrawingCanvas }   from './components/app/EuiDrawingCanvas/index.js'
+export { EuiMarkupOverlay }   from './components/app/EuiMarkupOverlay/index.js'
+export { EuiMarkupTools }     from './components/app/EuiMarkupTools/index.js'
+export { EuiKanbanColumn }    from './components/app/EuiKanbanColumn/index.js'
+export { EuiKanbanCard }      from './components/app/EuiKanbanCard/index.js'
+export { EuiTransmittalCover } from './components/app/EuiTransmittalCover/index.js'
 
 // ─── Layouts ──────────────────────────────────────────────────────
 export { default as AppShell }        from './layouts/AppShell.vue'
