@@ -64,6 +64,7 @@ export { EuiStatCard }        from './components/app/EuiStatCard'
 export { EuiPriorityMark }    from './components/app/EuiPriorityMark'
 export { EuiApprovalRow }     from './components/app/EuiApprovalRow'
 export { EuiActivityRow }     from './components/app/EuiActivityRow'
+export { EuiTopTabs }         from './components/app/EuiTopTabs/index.js'
 
 // ─── Layouts ──────────────────────────────────────────────────────
 export { default as AppShell }        from './layouts/AppShell.vue'
