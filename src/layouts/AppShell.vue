@@ -28,11 +28,12 @@ import { Button } from '../components/ui/button/index.js'
  *   page title / project switcher / actions inline with the topbar.
  *
  * Slots:
- *   #sidebar  (scoped: { collapsed, toggle, mobile })
- *   #topbar   (scoped: { collapsed, toggleSidebar })
- *   #banner   (full-width strip under topbar — for payment banners)
- *   default   (page content)
- *   #overlay  (teleport target for page-level popovers/toasts)
+ *   #sidebar      (scoped: { collapsed, toggle, mobile })
+ *   #topbar       (scoped: { collapsed, toggleSidebar })
+ *   #topbar-sub   (36px sub-row beneath topbar — for tab strips / page filters)
+ *   #banner       (full-width strip under topbar — for payment banners)
+ *   default       (page content)
+ *   #overlay      (teleport target for page-level popovers/toasts)
  */
 
 const props = defineProps({
@@ -144,6 +145,14 @@ const sidebarWidth = computed(() =>
         <div id="riba-topbar-page-slot" class="flex flex-1 items-center gap-2 min-w-0"></div>
         <slot name="topbar" :collapsed="collapsed" :toggleSidebar="toggleCollapse" />
       </header>
+
+      <!-- Topbar sub-row (36px) — page-scoped tab strips / per-page filters -->
+      <div
+        v-if="$slots['topbar-sub']"
+        class="flex h-9 shrink-0 items-center gap-3 border-b border-border bg-background px-3 sm:px-4"
+      >
+        <slot name="topbar-sub" />
+      </div>
 
       <!-- Banner zone -->
       <div v-if="$slots.banner" class="shrink-0">
