@@ -16,6 +16,17 @@ import { Button } from '../components/ui/button/index.js'
  * Sidebar collapse state persists in localStorage; can be toggled by
  * user or forced collapsed via prop.
  *
+ * Route-driven collapse:
+ *   Pages can set `meta.collapseSidebar = true` on their route to force
+ *   the sidebar closed (with a deliberate ~700ms ease-out transition).
+ *   On exit the user's prior collapse choice is restored.
+ *
+ * Teleport target:
+ *   `#riba-topbar-page-slot` is rendered inside the topbar between the
+ *   left chrome (logo / hamburger / topbar slot) and the right chrome.
+ *   Pages may `<Teleport to="#riba-topbar-page-slot">` to render the
+ *   page title / project switcher / actions inline with the topbar.
+ *
  * Slots:
  *   #sidebar  (scoped: { collapsed, toggle, mobile })
  *   #topbar   (scoped: { collapsed, toggleSidebar })
@@ -36,16 +47,21 @@ const route = useRoute()
 const collapsed = ref(props.defaultCollapsed)
 const mobileOpen = ref(false)
 
+// Remembers the user's manual collapse preference so we can restore it
+// when leaving a route that forced the sidebar closed.
+let lastUserChoice = props.defaultCollapsed
+
 onMounted(() => {
   try {
     const stored = localStorage.getItem(props.storageKey)
-    if (stored === 'true') collapsed.value = true
-    else if (stored === 'false') collapsed.value = false
+    if (stored === 'true') { collapsed.value = true; lastUserChoice = true }
+    else if (stored === 'false') { collapsed.value = false; lastUserChoice = false }
   } catch {}
 })
 
 function toggleCollapse() {
   collapsed.value = !collapsed.value
+  lastUserChoice = collapsed.value
   try { localStorage.setItem(props.storageKey, String(collapsed.value)) } catch {}
 }
 
@@ -53,6 +69,25 @@ function openMobile() { mobileOpen.value = true }
 
 // Close mobile sheet on route change
 watch(() => route.fullPath, () => { mobileOpen.value = false })
+
+// Route-driven collapse: when the active route opts in via
+// `meta.collapseSidebar`, force-collapse with the slow transition.
+// On exit, restore whatever the user had picked manually before.
+watch(
+  () => route.meta?.collapseSidebar,
+  (forceCollapse, prev) => {
+    if (forceCollapse) {
+      if (!collapsed.value) {
+        // record current preference, then collapse
+        lastUserChoice = collapsed.value
+        collapsed.value = true
+      }
+    } else if (prev) {
+      collapsed.value = lastUserChoice
+    }
+  },
+  { immediate: true },
+)
 
 // Close on Escape
 function onKey(e) {
@@ -72,7 +107,7 @@ const sidebarWidth = computed(() =>
     <aside
       v-if="isDesktop"
       :class="[
-        'group relative flex shrink-0 flex-col bg-sidebar border-r border-sidebar-border transition-[width] duration-200 ease-out',
+        'group relative flex shrink-0 flex-col overflow-hidden bg-sidebar border-r border-sidebar-border transition-[width] duration-700 ease-out',
         sidebarWidth,
       ]"
       :data-collapsed="collapsed"
@@ -103,6 +138,10 @@ const sidebarWidth = computed(() =>
         >
           <Menu />
         </Button>
+        <!-- Per-page teleport target. Pages opt in via
+             <Teleport to="#riba-topbar-page-slot"> to render their title
+             + filters + actions inline with the topbar chrome. -->
+        <div id="riba-topbar-page-slot" class="flex flex-1 items-center gap-2 min-w-0"></div>
         <slot name="topbar" :collapsed="collapsed" :toggleSidebar="toggleCollapse" />
       </header>
 
