@@ -139,6 +139,8 @@ const sidebarWidth = computed(() =>
         >
           <Menu />
         </Button>
+        <!-- Left chrome — pinned content (e.g. project switcher) -->
+        <slot name="topbar-left" />
         <!-- Per-page teleport target. Pages opt in via
              <Teleport to="#riba-topbar-page-slot"> to render their title
              + filters + actions inline with the topbar chrome. -->
