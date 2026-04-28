@@ -1,5 +1,5 @@
 /*
- * enirman-ui v2 — design tokens
+ * @enirman/ui v2 — design tokens
  *
  * shadcn-vue compatible HSL tokens. Every component reads these; swap
  * the values to rebrand the entire design system.
@@ -101,58 +101,67 @@
 }
 
 /* ─── Dark mode ──────────────────────────────────────────────── */
+/*
+ * Contrast tuning notes:
+ *  - foreground bumped 96% → 98% (near-white primary text)
+ *  - muted-foreground 65% → 76% (secondary text now visibly contrasts
+ *    against the 8% background — old value sat at WCAG AA edge)
+ *  - card 11% → 13% to lift it visibly off the 8% background
+ *  - border 20% → 28% so 1px hairlines actually read
+ *  - sidebar palette tracks the same brightening
+ */
 [data-theme="dark"] {
   --background:        222 22% 8%;     /* soft near-black, not pitch */
-  --foreground:        210 20% 96%;
+  --foreground:        210 20% 98%;
 
-  --card:              222 22% 11%;    /* elevated vs background */
-  --card-foreground:   210 20% 96%;
+  --card:              222 22% 13%;    /* elevated vs background */
+  --card-foreground:   210 20% 98%;
 
-  --popover:           222 22% 11%;
-  --popover-foreground: 210 20% 96%;
+  --popover:           222 22% 13%;
+  --popover-foreground: 210 20% 98%;
 
-  --primary:           217 91% 65%;    /* lighter blue in dark */
+  --primary:           217 91% 70%;    /* lighter blue in dark */
   --primary-foreground: 222 47% 11%;
 
-  --secondary:         222 18% 16%;
-  --secondary-foreground: 210 20% 96%;
+  --secondary:         222 18% 18%;
+  --secondary-foreground: 210 20% 98%;
 
-  --muted:             222 18% 16%;
-  --muted-foreground:  217 10% 65%;
+  --muted:             222 18% 18%;
+  --muted-foreground:  217 14% 76%;
 
-  --accent:            222 18% 16%;
-  --accent-foreground: 210 20% 96%;
+  --accent:            222 18% 20%;
+  --accent-foreground: 210 20% 98%;
 
-  --destructive:       0 73% 60%;
+  --destructive:       0 78% 65%;
   --destructive-foreground: 210 20% 98%;
 
-  --success:           142 71% 55%;
-  --success-muted:     142 40% 14%;
-  --success-ink:       142 71% 75%;
+  --success:           142 71% 60%;
+  --success-muted:     142 40% 16%;
+  --success-ink:       142 71% 80%;
 
-  --warning:           38 92% 60%;
-  --warning-muted:     28 60% 14%;
-  --warning-ink:       38 92% 75%;
+  --warning:           38 95% 65%;
+  --warning-muted:     28 60% 16%;
+  --warning-ink:       38 95% 80%;
 
-  --info:              199 89% 60%;
-  --info-muted:        199 60% 14%;
-  --info-ink:          199 89% 80%;
+  --info:              199 95% 65%;
+  --info-muted:        199 60% 16%;
+  --info-ink:          199 95% 82%;
 
-  --plus:              271 91% 75%;
-  --plus-muted:        271 60% 14%;
-  --plus-ink:          271 91% 82%;
+  --plus:              271 91% 78%;
+  --plus-muted:        271 60% 16%;
+  --plus-ink:          271 91% 84%;
 
-  --border:            222 18% 20%;
-  --input:             222 18% 20%;
-  --ring:              217 91% 65%;
+  --border:            222 18% 28%;
+  --input:             222 18% 28%;
+  --ring:              217 91% 70%;
 
   --sidebar:                  222 22% 6%;
-  --sidebar-foreground:       210 20% 96%;
-  --sidebar-muted:            217 10% 55%;
-  --sidebar-border:           222 18% 16%;
-  --sidebar-accent:           222 18% 14%;
-  --sidebar-accent-foreground: 210 20% 96%;
-  --sidebar-primary:          217 91% 65%;
+  --sidebar-foreground:       210 20% 98%;
+  --sidebar-muted:            217 14% 70%;
+  --sidebar-border:           222 18% 22%;
+  --sidebar-accent:           222 18% 16%;
+  --sidebar-accent-foreground: 210 20% 98%;
+  --sidebar-primary:          217 91% 70%;
   --sidebar-primary-foreground: 222 47% 11%;
 }
 
@@ -191,6 +200,15 @@ html {
   -moz-osx-font-smoothing: grayscale;
   text-rendering: optimizeLegibility;
   font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+
+  /*
+   * Density adjustment: the AEC density (12.5px tables, 11px labels)
+   * reads too compact on standard 1080p / 1440p displays. Apply a
+   * subtle global zoom so the platform reads at a comfortable size
+   * without restyling every component. CSS `zoom` is supported in
+   * Chromium, WebKit, and Firefox 126+.
+   */
+  zoom: 1.15;
 }
 
 body {
