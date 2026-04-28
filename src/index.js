@@ -72,6 +72,7 @@ export { EuiMarkupTools }     from './components/app/EuiMarkupTools/index.js'
 export { EuiKanbanColumn }    from './components/app/EuiKanbanColumn/index.js'
 export { EuiKanbanCard }      from './components/app/EuiKanbanCard/index.js'
 export { EuiTransmittalCover } from './components/app/EuiTransmittalCover/index.js'
+export { EuiStatusPill }      from './components/app/EuiStatusPill/index.js'
 
 // ─── Layouts ──────────────────────────────────────────────────────
 export { default as AppShell }        from './layouts/AppShell.vue'

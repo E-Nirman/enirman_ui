@@ -1,4 +1,6 @@
 <script setup>
+import { EuiStatusPill } from '../EuiStatusPill/index.js'
+
 defineOptions({ name: 'EuiSheetTable' })
 defineProps({
   rows: { type: Array, required: true },
@@ -43,13 +45,7 @@ const emit = defineEmits(['select', 'view'])
             <span class="font-mono text-[13px] px-2 py-0.5 bg-muted border border-border rounded-full text-foreground font-medium">{{ r.revision || 'A' }}</span>
           </td>
           <td class="px-4 py-3 align-middle">
-            <span class="text-[13px] font-medium px-2 py-0.5 rounded-full border whitespace-nowrap"
-                  :class="{
-                    'text-success bg-success/10 border-success/30': r.status === 'Approved' || r.status === 'Issued',
-                    'text-warning bg-warning/10 border-warning/30': r.status === 'In review',
-                    'text-destructive bg-destructive/10 border-destructive/30': r.status === 'Revise',
-                    'text-muted-foreground bg-muted border-border': !['Approved','Issued','In review','Revise'].includes(r.status),
-                  }">{{ r.status }}</span>
+            <EuiStatusPill :status="r.status || '—'" />
           </td>
           <td class="hidden lg:table-cell px-4 py-3 align-middle text-muted-foreground text-[13px]">{{ r.updated_label }}</td>
         </tr>

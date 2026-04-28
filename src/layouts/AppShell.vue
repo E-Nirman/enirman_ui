@@ -127,34 +127,25 @@ const sidebarWidth = computed(() =>
 
     <!-- Main column -->
     <div class="flex min-w-0 flex-1 flex-col">
-      <!-- Topbar -->
-      <header class="flex h-[52px] shrink-0 items-center gap-2 border-b border-border bg-background px-3 sm:px-4">
+      <!-- Topbar — single 48px row matching Plumb's layout:
+           [hamburger] [topbar-left: project switcher] [topbar-tabs: 7 tabs]
+           [riba-topbar-page-slot: per-page filters] [topbar: search/icons/avatar] -->
+      <header class="flex h-12 shrink-0 items-center gap-3 border-b border-border bg-background px-3 sm:px-4 overflow-x-auto">
         <Button
           v-if="!isDesktop"
           variant="ghost"
           size="icon-sm"
-          class="-ml-1"
+          class="-ml-1 shrink-0"
           aria-label="Open menu"
           @click="openMobile"
         >
           <Menu />
         </Button>
-        <!-- Left chrome — pinned content (e.g. project switcher) -->
         <slot name="topbar-left" />
-        <!-- Per-page teleport target. Pages opt in via
-             <Teleport to="#riba-topbar-page-slot"> to render their title
-             + filters + actions inline with the topbar chrome. -->
+        <slot name="topbar-tabs" />
         <div id="riba-topbar-page-slot" class="flex flex-1 items-center gap-2 min-w-0"></div>
         <slot name="topbar" :collapsed="collapsed" :toggleSidebar="toggleCollapse" />
       </header>
-
-      <!-- Topbar sub-row (36px) — page-scoped tab strips / per-page filters -->
-      <div
-        v-if="$slots['topbar-sub']"
-        class="flex h-9 shrink-0 items-center gap-3 border-b border-border bg-background px-3 sm:px-4"
-      >
-        <slot name="topbar-sub" />
-      </div>
 
       <!-- Banner zone -->
       <div v-if="$slots.banner" class="shrink-0">
