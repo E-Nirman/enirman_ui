@@ -25,7 +25,7 @@ const text = computed(() => props.block?.block_name || 'Project-wide')
 
 <template>
   <span
-    class="inline-flex items-center gap-1 rounded-full border px-2 py-0.5 text-[10px] font-semibold"
+    class="inline-flex items-center gap-1 rounded-full border px-2 py-0.5 text-[11.5px] font-semibold"
     :style="{ background: palette.bg, color: palette.fg, borderColor: palette.border }"
   >
     {{ text }}

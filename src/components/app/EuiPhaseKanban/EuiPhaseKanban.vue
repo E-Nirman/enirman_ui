@@ -47,9 +47,9 @@ function statusBorder(status) {
         <div class="flex items-center gap-2">
           <EuiStageBadge :stage="g.phase.riba_stage" />
           <h3 class="font-semibold text-sm flex-1 truncate">{{ g.phase.phase_name }}</h3>
-          <Badge variant="outline" class="text-[10px]">{{ g.phase.status }}</Badge>
+          <Badge variant="outline" class="text-[11.5px]">{{ g.phase.status }}</Badge>
         </div>
-        <p class="text-[10px] text-muted-foreground mt-0.5">{{ g.categoryColumns.length }} categories</p>
+        <p class="text-[11.5px] text-muted-foreground mt-0.5">{{ g.categoryColumns.length }} categories</p>
       </header>
       <div class="flex divide-x divide-border flex-1 min-h-0">
         <div
@@ -58,8 +58,8 @@ function statusBorder(status) {
           class="w-[230px] flex-shrink-0 flex flex-col min-h-0"
         >
           <div class="px-3 py-2 border-b border-border bg-muted/30 flex items-center justify-between">
-            <span class="text-[10px] uppercase tracking-wider text-muted-foreground font-semibold truncate">{{ col.category.label }}</span>
-            <span class="text-[10px] text-muted-foreground">{{ col.items.length }}</span>
+            <span class="text-[11.5px] uppercase tracking-wider text-muted-foreground font-semibold truncate">{{ col.category.label }}</span>
+            <span class="text-[11.5px] text-muted-foreground">{{ col.items.length }}</span>
           </div>
           <div class="flex-1 overflow-y-auto p-2 space-y-2">
             <EuiDesignItemCard

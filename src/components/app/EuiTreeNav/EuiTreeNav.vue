@@ -40,7 +40,7 @@ function pickFromMobile(e) {
         v-for="i in s.items"
         :key="i.key"
         type="button"
-        class="w-full flex items-center gap-2 px-2 py-1.5 rounded-md text-[12.5px] text-foreground transition-colors"
+        class="w-full flex items-center gap-2 px-2 py-1.5 rounded-md text-[14px] text-foreground transition-colors"
         :class="[
           selected === i.key ? 'bg-primary/10 text-primary font-medium' : 'hover:bg-muted',
           i.nested ? 'pl-7' : '',
@@ -49,7 +49,7 @@ function pickFromMobile(e) {
       >
         <span class="flex-1 text-left truncate">{{ i.label }}</span>
         <span v-if="i.count !== undefined && i.count !== null"
-              class="font-mono text-[11px] text-muted-foreground/70">
+              class="font-mono text-[12.5px] text-muted-foreground/70">
           {{ i.count }}
         </span>
       </button>

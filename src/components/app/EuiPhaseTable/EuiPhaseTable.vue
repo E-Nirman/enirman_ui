@@ -45,7 +45,7 @@ function categoryLabel(name) {
             <td colspan="7" class="px-3 py-2 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
               <EuiStageBadge :stage="g.phase.riba_stage" class="mr-2" />
               {{ g.phase.phase_name }} ·
-              <Badge variant="outline" class="ml-1 text-[10px]">{{ g.phase.status }}</Badge>
+              <Badge variant="outline" class="ml-1 text-[11.5px]">{{ g.phase.status }}</Badge>
             </td>
           </tr>
           <tr
@@ -61,7 +61,7 @@ function categoryLabel(name) {
             <td class="px-3 py-2 text-muted-foreground">{{ categoryLabel(item.design_category) }}</td>
             <td class="px-3 py-2"><EuiBlockBadge :block="item.block" /></td>
             <td class="px-3 py-2 font-mono text-xs">{{ item.version_label }}</td>
-            <td class="px-3 py-2"><Badge variant="outline" class="text-[10px]">{{ item.status }}</Badge></td>
+            <td class="px-3 py-2"><Badge variant="outline" class="text-[11.5px]">{{ item.status }}</Badge></td>
             <td class="px-3 py-2 text-xs">{{ item.assigned_designer || '—' }}</td>
             <td class="px-3 py-2 text-xs text-muted-foreground">{{ item.modified }}</td>
           </tr>

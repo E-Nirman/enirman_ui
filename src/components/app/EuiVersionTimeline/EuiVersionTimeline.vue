@@ -30,12 +30,12 @@ const emit = defineEmits(['select'])
       <div class="min-w-0 flex-1">
         <div class="flex items-center gap-1.5 flex-wrap mb-0.5">
           <span class="font-mono text-xs font-semibold">{{ v.version_label }}</span>
-          <span class="text-[10px] text-muted-foreground">{{ v.status }}</span>
-          <span v-if="v.branched_from" class="text-[10px] text-violet-400">
+          <span class="text-[11.5px] text-muted-foreground">{{ v.status }}</span>
+          <span v-if="v.branched_from" class="text-[11.5px] text-violet-400">
             ← branched from {{ v.branched_from_status || '?' }}
           </span>
         </div>
-        <div class="text-[10px] text-muted-foreground">{{ v.modified }}</div>
+        <div class="text-[11.5px] text-muted-foreground">{{ v.modified }}</div>
       </div>
     </li>
   </ol>

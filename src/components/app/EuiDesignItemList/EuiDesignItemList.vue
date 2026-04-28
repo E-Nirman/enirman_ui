@@ -30,7 +30,7 @@ const showSubheaders = computed(() => groupedByBlock.value.length >= 2)
   <main class="flex-1 overflow-y-auto min-w-0">
     <div class="px-5 py-3 border-b border-border flex items-center justify-between">
       <div class="min-w-0">
-        <div class="flex items-center gap-2 text-[11px] text-muted-foreground">
+        <div class="flex items-center gap-2 text-[12.5px] text-muted-foreground">
           <span>{{ phaseLabel }}</span>
           <span>›</span>
           <span class="text-foreground font-medium">{{ category?.label }}</span>
@@ -44,7 +44,7 @@ const showSubheaders = computed(() => groupedByBlock.value.length >= 2)
     </div>
     <div class="p-4 space-y-3">
       <template v-for="group in groupedByBlock" :key="group.block?.name || '__none__'">
-        <div v-if="showSubheaders" class="text-[10px] uppercase tracking-wider text-muted-foreground font-semibold flex items-center gap-2">
+        <div v-if="showSubheaders" class="text-[11.5px] uppercase tracking-wider text-muted-foreground font-semibold flex items-center gap-2">
           <span class="size-1.5 rounded-full bg-muted-foreground/50" />
           {{ group.block?.block_name || 'Project-wide' }} · {{ group.items.length }} items
         </div>

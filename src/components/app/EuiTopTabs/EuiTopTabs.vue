@@ -40,7 +40,7 @@ function go(tab) {
       role="tab"
       :aria-selected="isActive(tab)"
       :class="cn(
-        'h-7 px-3 inline-flex items-center gap-1.5 rounded-md text-[12.5px] font-medium whitespace-nowrap',
+        'h-7 px-3 inline-flex items-center gap-1.5 rounded-md text-[14px] font-medium whitespace-nowrap',
         'border border-transparent transition-colors',
         'hover:bg-accent hover:text-accent-foreground',
         isActive(tab)
@@ -53,7 +53,7 @@ function go(tab) {
       <span
         v-if="tab.badge"
         :class="cn(
-          'inline-flex h-4 min-w-4 items-center justify-center rounded-full px-1 text-[10px] font-mono',
+          'inline-flex h-4 min-w-4 items-center justify-center rounded-full px-1 text-[11.5px] font-mono',
           isActive(tab) ? 'bg-background text-foreground' : 'bg-muted text-foreground',
         )"
       >{{ tab.badge }}</span>

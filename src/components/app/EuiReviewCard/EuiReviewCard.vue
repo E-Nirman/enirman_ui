@@ -29,9 +29,9 @@ const reviewerLabel = computed(() => {
     <div class="flex items-start justify-between gap-3">
       <div class="flex-1 min-w-0">
         <div class="flex flex-wrap items-center gap-1.5 mb-1.5">
-          <Badge variant="outline" class="text-[10px]">{{ review.review_type }} review</Badge>
-          <Badge variant="outline" class="text-[10px]">Round {{ review.round }}</Badge>
-          <Badge :variant="decisionVariant" class="text-[10px]">{{ review.decision }}</Badge>
+          <Badge variant="outline" class="text-[11.5px]">{{ review.review_type }} review</Badge>
+          <Badge variant="outline" class="text-[11.5px]">Round {{ review.round }}</Badge>
+          <Badge :variant="decisionVariant" class="text-[11.5px]">{{ review.decision }}</Badge>
         </div>
         <div class="text-xs text-muted-foreground mb-1">
           By {{ reviewerLabel }}<span v-if="review.decision_date"> · {{ review.decision_date }}</span>

@@ -13,7 +13,7 @@ defineProps({
 
 <template>
   <div class="p-4 rounded-md border border-border bg-card flex flex-col gap-1">
-    <span class="text-[11px] uppercase tracking-wide text-muted-foreground">{{ label }}</span>
+    <span class="text-[12.5px] uppercase tracking-wide text-muted-foreground">{{ label }}</span>
     <span
       :class="cn(
         'text-2xl font-semibold font-mono',
@@ -23,6 +23,6 @@ defineProps({
         tone === 'info'    && 'text-primary',
       )"
     >{{ value }}</span>
-    <span v-if="trend" class="text-[11px] text-muted-foreground">{{ trend }}</span>
+    <span v-if="trend" class="text-[12.5px] text-muted-foreground">{{ trend }}</span>
   </div>
 </template>

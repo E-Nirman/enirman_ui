@@ -15,7 +15,7 @@ const currentIdx = computed(() => props.statuses.indexOf(props.current))
   <div class="flex items-center gap-1.5 flex-wrap">
     <template v-for="(s, idx) in statuses" :key="s">
       <span
-        class="inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-[11px] font-medium border"
+        class="inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-[12.5px] font-medium border"
         :class="
           idx === currentIdx ? 'bg-warning/10 text-warning-foreground border-warning/40 font-semibold'
           : idx < currentIdx ? 'bg-success/10 text-success border-success/30'

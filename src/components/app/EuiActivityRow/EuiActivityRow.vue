@@ -21,13 +21,13 @@ const avatarBg = computed(() => ({
 <template>
   <div class="flex gap-2.5 px-4 sm:px-[18px] py-2.5 border-b border-border/50 last:border-b-0 items-start">
     <span
-      class="w-6 h-6 rounded-full text-white grid place-items-center text-[10px] font-semibold flex-shrink-0"
+      class="w-6 h-6 rounded-full text-white grid place-items-center text-[11.5px] font-semibold flex-shrink-0"
       :class="avatarBg"
     >
       {{ entry.initials }}
     </span>
     <div class="flex-1 min-w-0">
-      <div class="text-[12.5px] text-foreground leading-relaxed">
+      <div class="text-[14px] text-foreground leading-relaxed">
         <slot>{{ entry.body }}</slot>
       </div>
       <div v-if="entry.time" class="font-mono text-[10.5px] text-muted-foreground/70 mt-0.5">{{ entry.time }}</div>

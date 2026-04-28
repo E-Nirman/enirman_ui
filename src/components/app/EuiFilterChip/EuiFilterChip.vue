@@ -9,7 +9,7 @@ defineProps({
 <template>
   <button
     type="button"
-    class="inline-flex items-center gap-1.5 h-7 px-2.5 border rounded-md text-[12px] transition-colors"
+    class="inline-flex items-center gap-1.5 h-7 px-2.5 border rounded-md text-[13.5px] transition-colors"
     :class="active
       ? 'border-primary bg-primary/10 text-primary'
       : 'border-border bg-card text-muted-foreground hover:bg-muted hover:text-foreground'"

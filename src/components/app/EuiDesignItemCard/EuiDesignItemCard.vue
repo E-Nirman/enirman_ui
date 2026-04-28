@@ -66,7 +66,7 @@ const statusVariant = computed(() => {
         <EuiCdeStateBadge v-if="item.cde_state" :state="item.cde_state" />
       </span>
       <span class="block text-sm font-medium truncate">{{ item.title }}</span>
-      <span v-if="density !== 'compact'" class="block text-[11px] text-muted-foreground mt-0.5 truncate">
+      <span v-if="density !== 'compact'" class="block text-[12.5px] text-muted-foreground mt-0.5 truncate">
         {{ item.assigned_designer || '—' }}
       </span>
     </span>

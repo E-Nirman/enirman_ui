@@ -16,7 +16,7 @@ const t = computed(() => tones[props.tone] || tones.default)
 
 <template>
   <span
-    class="inline-grid place-items-center w-[22px] h-[22px] text-white text-[10px] font-bold cursor-pointer transition-transform border-2 border-card hover:scale-110"
+    class="inline-grid place-items-center w-[22px] h-[22px] text-white text-[11.5px] font-bold cursor-pointer transition-transform border-2 border-card hover:scale-110"
     style="border-radius: 50% 50% 50% 4px; transform: rotate(-45deg);"
     :class="[t.bg, t.shadow]"
   >

@@ -18,7 +18,7 @@ const display = computed(() => map[props.state] || map.WIP)
 </script>
 
 <template>
-  <span class="inline-flex items-center gap-1 rounded-full border px-2 py-0.5 text-[10px] font-semibold"
+  <span class="inline-flex items-center gap-1 rounded-full border px-2 py-0.5 text-[11.5px] font-semibold"
         :style="{ background: display.bg, color: display.fg, borderColor: display.border }">
     {{ display.label }}
   </span>

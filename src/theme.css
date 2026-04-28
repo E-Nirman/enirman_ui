@@ -200,15 +200,6 @@ html {
   -moz-osx-font-smoothing: grayscale;
   text-rendering: optimizeLegibility;
   font-feature-settings: "cv02", "cv03", "cv04", "cv11";
-
-  /*
-   * Density adjustment: the AEC density (12.5px tables, 11px labels)
-   * reads too compact on standard 1080p / 1440p displays. Apply a
-   * subtle global zoom so the platform reads at a comfortable size
-   * without restyling every component. CSS `zoom` is supported in
-   * Chromium, WebKit, and Firefox 126+.
-   */
-  zoom: 1.15;
 }
 
 body {

@@ -75,8 +75,8 @@ function handleSelect(item) {
               >
                 <component v-if="item.icon" :is="item.icon" class="size-4" />
                 <span class="flex-1">{{ item.label }}</span>
-                <span v-if="item.description" class="text-[11px] text-muted-foreground">{{ item.description }}</span>
-                <span v-if="item.shortcut" class="ml-auto text-[10px] tracking-widest text-muted-foreground">
+                <span v-if="item.description" class="text-[12.5px] text-muted-foreground">{{ item.description }}</span>
+                <span v-if="item.shortcut" class="ml-auto text-[11.5px] tracking-widest text-muted-foreground">
                   {{ item.shortcut }}
                 </span>
               </CommandItem>
@@ -84,7 +84,7 @@ function handleSelect(item) {
           </template>
         </CommandList>
       </Command>
-      <div class="flex items-center justify-between border-t border-border bg-muted/30 px-3 py-2 text-[10px] text-muted-foreground">
+      <div class="flex items-center justify-between border-t border-border bg-muted/30 px-3 py-2 text-[11.5px] text-muted-foreground">
         <div class="flex items-center gap-3">
           <span class="flex items-center gap-1"><kbd class="rounded border border-border bg-card px-1.5 py-0.5 font-mono">↑↓</kbd> Navigate</span>
           <span class="flex items-center gap-1"><kbd class="rounded border border-border bg-card px-1.5 py-0.5 font-mono">↵</kbd> Select</span>

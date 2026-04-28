@@ -22,9 +22,9 @@ const statusVariant = computed(() => ({
     <div class="flex items-start justify-between gap-3">
       <div class="flex-1 min-w-0">
         <div class="flex flex-wrap items-center gap-1.5 mb-1.5">
-          <Badge :variant="statusVariant" class="text-[10px]">{{ handoff.handoff_status }}</Badge>
-          <Badge variant="outline" class="text-[10px]">{{ handoff.from_discipline }} → {{ handoff.to_discipline }}</Badge>
-          <Badge v-if="handoff.item_count" variant="outline" class="text-[10px]">{{ handoff.item_count }} items</Badge>
+          <Badge :variant="statusVariant" class="text-[11.5px]">{{ handoff.handoff_status }}</Badge>
+          <Badge variant="outline" class="text-[11.5px]">{{ handoff.from_discipline }} → {{ handoff.to_discipline }}</Badge>
+          <Badge v-if="handoff.item_count" variant="outline" class="text-[11.5px]">{{ handoff.item_count }} items</Badge>
         </div>
         <div class="text-sm font-medium">From {{ handoff.from_user }} → {{ handoff.to_user }}</div>
         <div class="text-xs text-muted-foreground mt-0.5">

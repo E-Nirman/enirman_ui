@@ -21,14 +21,14 @@ const emit = defineEmits(['click'])
     <EuiPriorityMark :priority="item.priority || 'none'" />
 
     <div class="min-w-0">
-      <div class="font-mono text-[11px] text-muted-foreground/80 mb-0.5 truncate">{{ item.id }}</div>
-      <div class="text-[13px] font-medium text-foreground mb-0.5 truncate">{{ item.title }}</div>
-      <div class="text-[11.5px] text-muted-foreground truncate">{{ item.meta }}</div>
+      <div class="font-mono text-[12.5px] text-muted-foreground/80 mb-0.5 truncate">{{ item.id }}</div>
+      <div class="text-[14.5px] font-medium text-foreground mb-0.5 truncate">{{ item.title }}</div>
+      <div class="text-[13px] text-muted-foreground truncate">{{ item.meta }}</div>
     </div>
 
     <span
       v-if="item.status"
-      class="text-[11.5px] font-medium px-2 py-0.5 rounded-full border whitespace-nowrap"
+      class="text-[13px] font-medium px-2 py-0.5 rounded-full border whitespace-nowrap"
       :class="{
         'text-warning bg-warning/10 border-warning/30': item.status === 'In review' || item.status === 'Awaiting response',
         'text-success bg-success/10 border-success/30': item.status === 'Approved',
@@ -41,7 +41,7 @@ const emit = defineEmits(['click'])
 
     <div class="text-right font-mono whitespace-nowrap">
       <div
-        class="text-[12px] font-semibold"
+        class="text-[13.5px] font-semibold"
         :class="(item.days || '').toString().startsWith('-') || (item.days || '').toString().startsWith('−') ? 'text-destructive' : 'text-foreground'"
       >
         {{ item.days }}

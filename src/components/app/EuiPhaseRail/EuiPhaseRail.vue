@@ -13,8 +13,8 @@ const emit = defineEmits(['select', 'add'])
 <template>
   <aside class="w-[230px] border-r border-border bg-muted/30 flex-shrink-0 overflow-y-auto">
     <div class="px-4 py-2.5 border-b border-border flex items-center justify-between">
-      <h4 class="text-[10px] uppercase tracking-wider text-muted-foreground font-semibold">Phases · {{ phases.length }}</h4>
-      <button class="text-[10px] text-primary" @click="emit('add')">+ Add</button>
+      <h4 class="text-[11.5px] uppercase tracking-wider text-muted-foreground font-semibold">Phases · {{ phases.length }}</h4>
+      <button class="text-[11.5px] text-primary" @click="emit('add')">+ Add</button>
     </div>
     <button
       v-for="p in phases"
@@ -26,7 +26,7 @@ const emit = defineEmits(['select', 'add'])
       <EuiStageBadge :stage="p.riba_stage" />
       <span class="flex-1 min-w-0">
         <span class="block text-sm font-medium truncate">{{ p.phase_name }}</span>
-        <span class="block text-[10px] text-muted-foreground mt-0.5">{{ p.status }} · {{ p.item_count || 0 }}</span>
+        <span class="block text-[11.5px] text-muted-foreground mt-0.5">{{ p.status }} · {{ p.item_count || 0 }}</span>
       </span>
     </button>
   </aside>
