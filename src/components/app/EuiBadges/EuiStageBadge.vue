@@ -3,20 +3,28 @@ import { computed } from 'vue'
 
 defineOptions({ name: 'EuiStageBadge' })
 
+/*
+ * EuiStageBadge — RIBA stage code chip (S0…S7).
+ *
+ * Compact, monospace code on the brand info palette so it reads as a
+ * structured identifier rather than a status. Pass an object form
+ * `{code, label}` to surface the full label inline.
+ */
+
 const props = defineProps({
-  stage: { type: [String, Object], required: true }, // either "S3" or {code:'S3', label:'...'}
+  stage:     { type: [String, Object], required: true },
   showLabel: { type: Boolean, default: false },
 })
 
-const code = computed(() => typeof props.stage === 'string' ? props.stage : props.stage?.code)
+const code  = computed(() => typeof props.stage === 'string' ? props.stage : props.stage?.code)
 const label = computed(() => typeof props.stage === 'object' ? props.stage?.label : null)
 </script>
 
 <template>
   <span
-    class="inline-flex items-center gap-1 rounded-full border px-2 py-0.5 text-[10px] font-bold bg-blue-500/10 text-blue-400 border-blue-500/25"
+    class="inline-flex h-[22px] items-center gap-1 rounded-pill bg-info-muted px-2 text-2xs font-bold text-info-ink whitespace-nowrap"
     :title="label || code"
   >
-    {{ code }}<template v-if="showLabel && label"> · {{ label }}</template>
+    <span class="font-mono">{{ code }}</span><template v-if="showLabel && label"><span class="opacity-70">·</span> {{ label }}</template>
   </span>
 </template>

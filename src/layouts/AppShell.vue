@@ -11,17 +11,21 @@ import { Button } from '../components/ui/button/index.js'
  *
  * Layout:
  *   Desktop: [sidebar (collapsible to icons) | [topbar / content]]
- *   Mobile:  [topbar w/ hamburger] → tapping opens sidebar in a sheet
+ *   Mobile:  [topbar w/ hamburger] → sidebar opens in a sheet
  *
- * Sidebar collapse state persists in localStorage; can be toggled by
- * user or forced collapsed via prop.
+ * The sidebar is dark (navy 800) in both light and dark themes — the
+ * navy lockup is part of the brand. Override `--sidebar-*` in app
+ * scope if a particular surface needs a light sidebar.
+ *
+ * The topbar uses card surface (white in light mode, navy 800 in
+ * dark mode) with a subtle bottom border.
  *
  * Slots:
  *   #sidebar  (scoped: { collapsed, toggle, mobile })
  *   #topbar   (scoped: { collapsed, toggleSidebar })
- *   #banner   (full-width strip under topbar — for payment banners)
+ *   #banner   (full-width strip under topbar — payment / system banners)
  *   default   (page content)
- *   #overlay  (teleport target for page-level popovers/toasts)
+ *   #overlay  (teleport target for page-level popovers / toasts)
  */
 
 const props = defineProps({
@@ -51,10 +55,8 @@ function toggleCollapse() {
 
 function openMobile() { mobileOpen.value = true }
 
-// Close mobile sheet on route change
 watch(() => route.fullPath, () => { mobileOpen.value = false })
 
-// Close on Escape
 function onKey(e) {
   if (e.key === 'Escape' && mobileOpen.value) mobileOpen.value = false
 }
@@ -67,12 +69,13 @@ const sidebarWidth = computed(() =>
 </script>
 
 <template>
-  <div class="relative flex h-dvh w-screen bg-background text-foreground">
-    <!-- Desktop sidebar -->
+  <div :class="['relative flex h-dvh w-screen bg-background text-foreground', props.class]">
+    <!-- Desktop sidebar (dark navy in both themes) -->
     <aside
       v-if="isDesktop"
       :class="[
-        'group relative flex shrink-0 flex-col bg-sidebar border-r border-sidebar-border transition-[width] duration-200 ease-out',
+        'group relative flex shrink-0 flex-col bg-sidebar text-sidebar-foreground',
+        'transition-[width] duration-base ease-out-expo',
         sidebarWidth,
       ]"
       :data-collapsed="collapsed"
@@ -82,8 +85,12 @@ const sidebarWidth = computed(() =>
 
     <!-- Mobile sidebar sheet -->
     <Sheet v-if="!isDesktop" :open="mobileOpen" @update:open="mobileOpen = $event">
-      <SheetContent side="left" class="p-0 w-[260px]" :show-close="false">
-        <div class="flex h-full flex-col bg-sidebar text-sidebar-foreground">
+      <SheetContent
+        side="left"
+        class="p-0 w-[260px] bg-sidebar text-sidebar-foreground border-r-0"
+        :show-close="false"
+      >
+        <div class="flex h-full flex-col">
           <slot name="sidebar" :collapsed="false" :toggle="() => {}" :mobile="true" />
         </div>
       </SheetContent>
@@ -92,7 +99,7 @@ const sidebarWidth = computed(() =>
     <!-- Main column -->
     <div class="flex min-w-0 flex-1 flex-col">
       <!-- Topbar -->
-      <header class="flex h-[52px] shrink-0 items-center gap-2 border-b border-border bg-background px-3 sm:px-4">
+      <header class="flex h-[52px] shrink-0 items-center gap-3 border-b border-border-subtle bg-card px-4 sm:px-5">
         <Button
           v-if="!isDesktop"
           variant="ghost"

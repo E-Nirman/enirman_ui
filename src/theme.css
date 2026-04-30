@@ -1,166 +1,288 @@
 /*
- * enirman-ui v2 — design tokens
+ * @enirman/ui v2 — Enirman Design System tokens
  *
- * shadcn-vue compatible HSL tokens. Every component reads these; swap
- * the values to rebrand the entire design system.
+ * Brand: Engineering Blueprint.
+ *   navy 700 (#16304D)  → primary brand surface, deep ink
+ *   blue 500 (#1B73D8)  → interactive (links, primary buttons, focus)
+ *   amber 400 (#E5A41C) → safety accent, sparingly
+ *
+ * Type:
+ *   Manrope (sans + display via weight)
+ *   JetBrains Mono (IDs, currency, tabular numerics, code)
+ *
+ * Density:
+ *   App base = 14px (ERP density, dense tables)
+ *   Marketing layouts opt up via .ds-marketing { font-size: 16px }
+ *
+ * Sidebar is DARK by default in both light and dark themes — the navy
+ * lockup is the brand. Apps that want a light sidebar override the
+ * --sidebar-* variables themselves.
+ *
+ * Shadows are navy-tinted (rgba(15, 34, 56, ...)) — subtle, layered,
+ * never grey. They tie back to the brand even at low opacity.
  *
  * Conventions:
- *   - HSL components (no hsl() wrapper) so consumers can compose with
- *     alpha: hsl(var(--primary) / 0.5)
- *   - Dark mode keys off [data-theme="dark"] on <html> (matching frappe-ui)
- *
- * Categories:
- *   - Surface / foreground pairs (background, card, popover)
- *   - Semantic roles (primary, secondary, muted, accent, destructive)
- *   - Chart / status tones (success, warning, info, plus)
- *   - Chrome (border, input, ring)
- *   - Sidebar-specific (its own palette so you can tune sidebar without
- *     touching the rest of the app)
- *   - Layout constants (sidebar widths, topbar height, radii)
+ *   - HSL components for shadcn-vue / tailwind composition
+ *   - Raw hex variables for the brand scales (so SVGs / inline styles
+ *     can pick exact swatches without HSL conversion)
+ *   - Dark mode keys off [data-theme="dark"] on <html>
  */
 
+@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap');
+
 :root {
-  /* ─── Surfaces ────────────────────────────────────────────────── */
-  --background:        0 0% 100%;
-  --foreground:        222 25% 11%;
+  /* ─── Brand scales (raw hex, source of truth) ────────────────── */
+  --brand-navy-50:  #EEF2F7;
+  --brand-navy-100: #D5DEEA;
+  --brand-navy-200: #A9BCD3;
+  --brand-navy-300: #7995B6;
+  --brand-navy-400: #4E6F95;
+  --brand-navy-500: #2E4F77;
+  --brand-navy-600: #1F3D60;
+  --brand-navy-700: #16304D;   /* primary brand */
+  --brand-navy-800: #0F2238;   /* sidebar / dark surfaces */
+  --brand-navy-900: #07142A;
+
+  --brand-blue-50:  #EAF4FE;
+  --brand-blue-100: #C7E1FC;
+  --brand-blue-200: #8FC2F8;
+  --brand-blue-300: #56A3F4;
+  --brand-blue-400: #2A8AF0;
+  --brand-blue-500: #1B73D8;   /* primary action */
+  --brand-blue-600: #155CAE;
+  --brand-blue-700: #104785;
+  --brand-blue-800: #0B335E;
+  --brand-blue-900: #061F3A;
+
+  --brand-amber-50:  #FEF6E7;
+  --brand-amber-100: #FDE7B6;
+  --brand-amber-200: #FAD278;
+  --brand-amber-300: #F6BC3A;
+  --brand-amber-400: #E5A41C;   /* safety accent */
+  --brand-amber-500: #BF8410;
+  --brand-amber-600: #95650A;
+  --brand-amber-700: #6B4806;
+
+  /* Concrete grays — slight cool tint, matched to navy */
+  --gray-0:   #FFFFFF;
+  --gray-25:  #FBFCFD;
+  --gray-50:  #F6F8FA;
+  --gray-100: #ECEFF3;
+  --gray-150: #DFE3EA;
+  --gray-200: #CFD5DE;
+  --gray-300: #B5BDC9;
+  --gray-400: #8B95A4;
+  --gray-500: #6B7585;
+  --gray-600: #4F5868;
+  --gray-700: #3A4250;
+  --gray-800: #252B36;
+  --gray-900: #131722;
+  --gray-950: #0A0D14;
+
+  /* ─── Surfaces (HSL components for composition) ──────────────── */
+  --background:        210 33% 97%;     /* gray-50  #F6F8FA */
+  --foreground:        222 27% 10%;     /* gray-900 #131722 */
 
   --card:              0 0% 100%;
-  --card-foreground:   222 25% 11%;
+  --card-foreground:   222 27% 10%;
 
   --popover:           0 0% 100%;
-  --popover-foreground: 222 25% 11%;
+  --popover-foreground: 222 27% 10%;
 
   /* ─── Semantic roles ─────────────────────────────────────────── */
-  --primary:           221 83% 53%;    /* brand blue */
+  --primary:           212 78% 48%;    /* blue 500 */
   --primary-foreground: 0 0% 100%;
 
-  --secondary:         220 14% 96%;
-  --secondary-foreground: 222 25% 11%;
+  --secondary:         220 19% 95%;    /* gray-100 */
+  --secondary-foreground: 222 27% 10%;
 
-  --muted:             220 14% 96%;
-  --muted-foreground:  220 9% 46%;
+  --muted:             220 19% 95%;
+  --muted-foreground:  219 11% 47%;    /* gray-500 */
 
-  --accent:            220 14% 96%;
-  --accent-foreground: 222 25% 11%;
+  --accent:            210 91% 96%;    /* blue 50 */
+  --accent-foreground: 213 78% 28%;    /* blue 700 */
 
-  --destructive:       0 84% 60%;
+  --destructive:       0 64% 47%;      /* danger #C32A2A */
   --destructive-foreground: 0 0% 100%;
 
-  /* ─── Status tones (apps use these for project / design states) ── */
-  --success:           142 71% 45%;
+  /* ─── Status tones ────────────────────────────────────────────
+   * `*-muted` = subtle bg fill;  `*-ink` = strong fg over muted.
+   */
+  --success:           149 63% 33%;    /* #1F8B53 */
   --success-foreground: 0 0% 100%;
-  --success-muted:     142 76% 96%;   /* subtle fill */
-  --success-ink:       142 72% 29%;   /* ink over subtle */
+  --success-muted:     145 47% 94%;    /* #E8F6EE */
+  --success-ink:       147 65% 25%;    /* #176D40 */
 
-  --warning:           38 92% 50%;
+  --warning:           39 78% 50%;     /* amber 400 */
   --warning-foreground: 0 0% 100%;
-  --warning-muted:     48 96% 94%;
-  --warning-ink:       28 80% 36%;
+  --warning-muted:     42 95% 95%;     /* amber 50 */
+  --warning-ink:       33 88% 22%;     /* amber 700 */
 
-  --info:              199 89% 48%;
+  --danger-muted:      0 86% 95%;      /* #FDECEC */
+  --danger-ink:        0 67% 36%;      /* #9C1F1F */
+
+  --info:              212 78% 48%;
   --info-foreground:   0 0% 100%;
-  --info-muted:        204 94% 94%;
-  --info-ink:          201 90% 32%;
+  --info-muted:        212 95% 95%;    /* blue 50 */
+  --info-ink:          213 79% 29%;    /* blue 700 */
 
-  --plus:              271 91% 65%;   /* eNirman Plus accent */
+  --plus:              39 78% 50%;     /* re-routed to amber for premium tier */
   --plus-foreground:   0 0% 100%;
-  --plus-muted:        270 96% 96%;
-  --plus-ink:          272 72% 40%;
+  --plus-muted:        42 95% 95%;
+  --plus-ink:          33 88% 22%;
 
   /* ─── Chrome ─────────────────────────────────────────────────── */
-  --border:            220 13% 91%;
-  --input:             220 13% 91%;
-  --ring:              221 83% 53%;
+  --border:            218 19% 89%;    /* gray-150 */
+  --border-subtle:     218 19% 89%;
+  --border-strong:     218 17% 80%;    /* gray-300 */
+  --input:             218 19% 89%;
+  --ring:              212 78% 48%;
 
-  /* ─── Sidebar palette ────────────────────────────────────────── */
-  --sidebar:                  220 20% 98%;
-  --sidebar-foreground:       222 25% 11%;
-  --sidebar-muted:            220 9% 46%;
-  --sidebar-border:           220 13% 91%;
-  --sidebar-accent:           220 14% 94%;     /* hover */
-  --sidebar-accent-foreground: 222 25% 11%;
-  --sidebar-primary:          221 83% 53%;     /* active */
+  /* ─── Sidebar palette — DARK in both themes ──────────────────── */
+  --sidebar:                  217 58% 14%;     /* navy 800 */
+  --sidebar-foreground:       0 0% 100%;
+  --sidebar-muted:            0 0% 100%;       /* used with /60 alpha */
+  --sidebar-border:           0 0% 100%;       /* used with /6  alpha */
+  --sidebar-accent:           0 0% 100%;       /* hover — used with /6 alpha */
+  --sidebar-accent-foreground: 0 0% 100%;
+  --sidebar-primary:          212 78% 48%;     /* blue 500 — active row bg */
   --sidebar-primary-foreground: 0 0% 100%;
 
   /* ─── Layout ─────────────────────────────────────────────────── */
-  --radius: 0.625rem;            /* 10px — soft but not rounded */
-  --radius-sm: 0.375rem;         /* 6px  — buttons, inputs */
-  --radius-lg: 0.75rem;          /* 12px — cards */
-  --radius-xl: 1rem;             /* 16px — dialogs */
+  --radius:    0.5rem;     /* 8px  — cards (default) */
+  --radius-sm: 0.375rem;   /* 6px  — buttons, inputs */
+  --radius-xs: 0.25rem;    /* 4px  — tag badges */
+  --radius-lg: 0.75rem;    /* 12px — large containers */
+  --radius-xl: 1rem;       /* 16px — dialogs */
+  --radius-pill: 999px;
 
   --sidebar-width:        240px;
   --sidebar-width-icon:   56px;
   --topbar-height:        52px;
 
-  /* ─── Font stack ─────────────────────────────────────────────── */
-  --font-sans: "Inter", ui-sans-serif, system-ui, -apple-system, "Segoe UI",
-    Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji",
-    "Segoe UI Emoji";
-  --font-mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas,
-    "Liberation Mono", monospace;
+  /* ─── Density ────────────────────────────────────────────────── */
+  --font-size-base: 14px;
+
+  /* ─── Type stack ─────────────────────────────────────────────── */
+  --font-sans: 'Manrope', ui-sans-serif, system-ui, -apple-system, 'Segoe UI',
+    Roboto, 'Helvetica Neue', Arial, sans-serif, 'Apple Color Emoji',
+    'Segoe UI Emoji';
+  --font-display: 'Manrope', ui-sans-serif, system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, 'SF Mono', Menlo,
+    Consolas, 'Liberation Mono', monospace;
+
+  /* Tracking presets */
+  --tracking-tighter: -0.03em;
+  --tracking-tight:   -0.015em;
+  --tracking-normal:  0;
+  --tracking-wide:    0.02em;
+  --tracking-wider:   0.06em;
+  --tracking-caps:    0.08em;
+
+  /* ─── Shadows — navy-tinted, layered ─────────────────────────── */
+  --shadow-xs: 0 1px 1px rgba(15, 34, 56, 0.04);
+  --shadow-sm: 0 1px 2px rgba(15, 34, 56, 0.06), 0 1px 1px rgba(15, 34, 56, 0.04);
+  --shadow-md: 0 4px 8px -2px rgba(15, 34, 56, 0.08), 0 2px 4px -2px rgba(15, 34, 56, 0.05);
+  --shadow-lg: 0 12px 24px -8px rgba(15, 34, 56, 0.12), 0 4px 8px -4px rgba(15, 34, 56, 0.06);
+  --shadow-xl: 0 24px 48px -12px rgba(15, 34, 56, 0.18), 0 8px 16px -8px rgba(15, 34, 56, 0.08);
+  --shadow-inner: inset 0 1px 2px rgba(15, 34, 56, 0.06);
+  --shadow-focus: 0 0 0 3px rgba(27, 115, 216, 0.25);
+
+  /* Soft-materiality button shadows. Kept separate from card shadows
+     so tweaking button feel doesn't bleed into elevation. */
+  --button-shadow-soft:
+    inset 0 1px 0 rgba(255, 255, 255, 0.20),
+    0 1px 2px rgba(15, 34, 56, 0.10),
+    0 4px 8px -2px rgba(15, 34, 56, 0.10);
+  --button-shadow-soft-hover:
+    inset 0 1px 0 rgba(255, 255, 255, 0.24),
+    0 2px 4px rgba(15, 34, 56, 0.12),
+    0 8px 16px -4px rgba(15, 34, 56, 0.14);
+  --button-shadow-soft-neutral:
+    inset 0 1px 0 rgba(255, 255, 255, 0.80),
+    0 1px 2px rgba(15, 34, 56, 0.06),
+    0 4px 8px -2px rgba(15, 34, 56, 0.08);
+  --button-shadow-soft-neutral-hover:
+    inset 0 1px 0 rgba(255, 255, 255, 0.90),
+    0 2px 4px rgba(15, 34, 56, 0.08),
+    0 8px 16px -4px rgba(15, 34, 56, 0.12);
+
+  /* ─── Motion ─────────────────────────────────────────────────── */
+  --ease-out:    cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+  --duration-fast: 120ms;
+  --duration-base: 180ms;
+  --duration-slow: 280ms;
 }
 
-/* ─── Dark mode ──────────────────────────────────────────────── */
+/* ─── Dark mode ──────────────────────────────────────────────────
+ * Sidebar deepens to navy 900 to keep separation from the navy 900
+ * canvas. Cards lift to navy 800. Primary lightens to blue 400 for
+ * AA contrast on dark surfaces.
+ */
 [data-theme="dark"] {
-  --background:        222 22% 8%;     /* soft near-black, not pitch */
-  --foreground:        210 20% 96%;
+  --background:        217 65% 9%;     /* navy 900 */
+  --foreground:        210 16% 96%;
 
-  --card:              222 22% 11%;    /* elevated vs background */
-  --card-foreground:   210 20% 96%;
+  --card:              217 58% 14%;    /* navy 800 — elevated */
+  --card-foreground:   210 16% 96%;
 
-  --popover:           222 22% 11%;
-  --popover-foreground: 210 20% 96%;
+  --popover:           217 58% 14%;
+  --popover-foreground: 210 16% 96%;
 
-  --primary:           217 91% 65%;    /* lighter blue in dark */
-  --primary-foreground: 222 47% 11%;
+  --primary:           211 87% 56%;    /* blue 400 */
+  --primary-foreground: 0 0% 100%;
 
-  --secondary:         222 18% 16%;
-  --secondary-foreground: 210 20% 96%;
+  --secondary:         220 25% 18%;
+  --secondary-foreground: 210 16% 96%;
 
-  --muted:             222 18% 16%;
-  --muted-foreground:  217 10% 65%;
+  --muted:             220 25% 18%;
+  --muted-foreground:  219 12% 70%;
 
-  --accent:            222 18% 16%;
-  --accent-foreground: 210 20% 96%;
+  --accent:            214 78% 22%;    /* blue 800 */
+  --accent-foreground: 210 91% 90%;
 
-  --destructive:       0 73% 60%;
-  --destructive-foreground: 210 20% 98%;
+  --destructive:       0 65% 60%;
+  --destructive-foreground: 0 0% 100%;
 
-  --success:           142 71% 55%;
-  --success-muted:     142 40% 14%;
-  --success-ink:       142 71% 75%;
+  --success:           149 53% 45%;
+  --success-muted:     149 30% 18%;
+  --success-ink:       145 45% 80%;
 
-  --warning:           38 92% 60%;
-  --warning-muted:     28 60% 14%;
-  --warning-ink:       38 92% 75%;
+  --warning:           39 88% 60%;
+  --warning-muted:     33 60% 18%;
+  --warning-ink:       42 95% 85%;
 
-  --info:              199 89% 60%;
-  --info-muted:        199 60% 14%;
-  --info-ink:          199 89% 80%;
+  --danger-muted:      0 50% 22%;
+  --danger-ink:        0 75% 82%;
 
-  --plus:              271 91% 75%;
-  --plus-muted:        271 60% 14%;
-  --plus-ink:          271 91% 82%;
+  --info:              211 87% 56%;
+  --info-muted:        213 60% 18%;
+  --info-ink:          212 95% 85%;
 
-  --border:            222 18% 20%;
-  --input:             222 18% 20%;
-  --ring:              217 91% 65%;
+  --plus:              39 88% 60%;
+  --plus-muted:        33 60% 18%;
+  --plus-ink:          42 95% 85%;
 
-  --sidebar:                  222 22% 6%;
-  --sidebar-foreground:       210 20% 96%;
-  --sidebar-muted:            217 10% 55%;
-  --sidebar-border:           222 18% 16%;
-  --sidebar-accent:           222 18% 14%;
-  --sidebar-accent-foreground: 210 20% 96%;
-  --sidebar-primary:          217 91% 65%;
-  --sidebar-primary-foreground: 222 47% 11%;
+  --border:            220 25% 22%;
+  --border-subtle:     220 25% 22%;
+  --border-strong:     220 25% 32%;
+  --input:             220 25% 22%;
+  --ring:              211 87% 56%;
+
+  --sidebar:                  217 65% 9%;     /* navy 900 in dark */
+  --sidebar-foreground:       0 0% 100%;
+  --sidebar-muted:            0 0% 100%;
+  --sidebar-border:           0 0% 100%;
+  --sidebar-accent:           0 0% 100%;
+  --sidebar-accent-foreground: 0 0% 100%;
+  --sidebar-primary:          211 87% 56%;
+  --sidebar-primary-foreground: 0 0% 100%;
 }
 
 /* ─── Frappe-ui variable bridge ──────────────────────────────────
- * frappe-ui components (Avatar, FormControl, Tooltip, Dialog etc.)
- * read their own CSS variables. We map them to our semantic tokens
- * so frappe-ui elements blend with shadcn-vue components and both
- * track dark mode in sync.
+ * frappe-ui components read their own CSS variables. Map them to
+ * our semantic tokens so frappe-ui elements blend with shadcn-vue.
  */
 :root {
   --surface-white:    hsl(var(--background));
@@ -170,7 +292,7 @@
   --surface-menu-bar: hsl(var(--sidebar));
   --surface-modal:    hsl(var(--card));
   --surface-cards:    hsl(var(--card));
-  --surface-selected: hsl(var(--sidebar-accent));
+  --surface-selected: hsl(var(--accent));
 
   --ink-gray-9: hsl(var(--foreground));
   --ink-gray-8: hsl(var(--foreground) / 0.85);
@@ -184,30 +306,47 @@
   --outline-gray-4: hsl(var(--border));
 }
 
-/* ─── Base type rendering ────────────────────────────────────── */
-html {
-  font-family: var(--font-sans);
+/* ─── Base type rendering ────────────────────────────────────────
+ * Manrope must beat:
+ *   1. frappe-ui's themePlugin which emits
+ *      `:root { font-family: InterVar, var(--font-sans) }`,
+ *      prepending InterVar to whatever fontFamily.sans resolves to.
+ *   2. @mlightcad/cad-viewer's leaky body rule that hardcodes
+ *      `body { font-family: Inter, system-ui, Avenir, … }` and is
+ *      injected via JS at runtime, so it wins source order.
+ *
+ * Both are 3rd-party leaks we don't own. Using !important here is
+ * the pragmatic shield — font-family is inherited, so descendants
+ * (mono, display) still pick up their explicit overrides.
+ */
+html,
+body {
+  font-family: var(--font-sans) !important;
+  font-size: var(--font-size-base);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-rendering: optimizeLegibility;
-  font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+  font-feature-settings: 'cv02', 'cv03', 'cv04', 'cv11';
 }
 
 body {
   background: hsl(var(--background));
   color: hsl(var(--foreground));
   /*
-   * Reka UI (and Radix under it) sets `body { pointer-events: none }`
-   * when a modal Dialog or DropdownMenu is open. When two modals
-   * overlap (a menu that opens a dialog) the cleanup handlers can
-   * race and leave the lock on after every overlay has unmounted —
-   * the page then looks frozen (mouse moves but clicks do nothing).
-   *
-   * Our overlays each render their own `fixed inset-0` backdrop so
-   * the body-level lock is redundant. Forcing pointer-events:auto
-   * eliminates the whole class of frozen-page bugs.
+   * Reka UI sets `body { pointer-events: none }` while overlays are
+   * open; race conditions can leave that lock in place after the
+   * overlay unmounts. Our overlays each render their own backdrop,
+   * so the body-level lock is redundant — forcing pointer-events:auto
+   * eliminates the frozen-page bug.
    */
   pointer-events: auto !important;
+}
+
+/* Tabular numerics on demand */
+.t-num,
+[data-tabular] {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
 }
 
 /* ─── Scrollbar polish (unobtrusive) ─────────────────────────── */
@@ -225,12 +364,140 @@ body {
   border: 2px solid transparent;
 }
 
-/* ─── Consistent focus ring ──────────────────────────────────── */
+/* ─── Focus ring helper ─────────────────────────────────────── */
 .eui-focus-ring {
   outline: 2px solid hsl(var(--ring));
   outline-offset: 2px;
 }
 
-/* ─── Firefox tab-bar paint fix (from v1) ────────────────────── */
+/* ─── Firefox tab-bar paint fix ─────────────────────────────── */
 [role="tablist"] { overflow: clip; }
 [data-reka-tabs-indicator] { will-change: transform, width; }
+
+/* ─── Marketing-density opt-in ──────────────────────────────── */
+.ds-marketing { font-size: 16px; }
+
+/* =============================================================
+   BUTTON MATERIALITY — Enirman Design System "Soft" preset
+   Tailwind's JIT can't safely parse arbitrary `bg-[linear-gradient(…)]`
+   classes when the value contains nested hsl()/var() with parens, so
+   the gradient + layered shadow + inset highlight live here as named
+   classes that Button.vue toggles via CVA.
+   ============================================================= */
+
+.eui-btn {
+  /* Heights: 28 / 32 / 34 / 42 px. Real values, not arbitrary. */
+  --eui-btn-h-xs: 24px;
+  --eui-btn-h-sm: 28px;
+  --eui-btn-h-md: 34px;
+  --eui-btn-h-lg: 42px;
+}
+
+.eui-btn-h-xs { height: var(--eui-btn-h-xs); }
+.eui-btn-h-sm { height: var(--eui-btn-h-sm); }
+.eui-btn-h-md { height: var(--eui-btn-h-md); }
+.eui-btn-h-lg { height: var(--eui-btn-h-lg); }
+
+/* ── Soft primary: navy-tinted gradient + inset highlight ────── */
+.eui-btn-soft-primary {
+  background-image: linear-gradient(
+    180deg,
+    hsl(var(--primary) / 0.92) 0%,
+    hsl(var(--primary)) 100%
+  );
+  color: hsl(var(--primary-foreground));
+  box-shadow: var(--button-shadow-soft);
+  border: 0;
+}
+.eui-btn-soft-primary:hover {
+  background-image: linear-gradient(
+    180deg,
+    hsl(var(--primary)) 0%,
+    hsl(var(--primary) / 0.86) 100%
+  );
+  box-shadow: var(--button-shadow-soft-hover);
+}
+.eui-btn-soft-primary:active {
+  box-shadow: var(--shadow-sm);
+}
+
+/* ── Soft neutral: white-to-gray gradient with crisp inset ───── */
+.eui-btn-soft-neutral {
+  background-image: linear-gradient(
+    180deg,
+    hsl(var(--card)) 0%,
+    hsl(var(--muted)) 100%
+  );
+  color: hsl(var(--foreground));
+  border: 1px solid hsl(var(--border-subtle));
+  box-shadow: var(--button-shadow-soft-neutral);
+}
+.eui-btn-soft-neutral:hover {
+  background-image: linear-gradient(
+    180deg,
+    hsl(var(--card)) 0%,
+    hsl(var(--secondary)) 100%
+  );
+  box-shadow: var(--button-shadow-soft-neutral-hover);
+}
+.eui-btn-soft-neutral:active {
+  box-shadow: var(--shadow-sm);
+}
+
+/* ── Soft destructive ───────────────────────────────────────── */
+.eui-btn-soft-destructive {
+  background-image: linear-gradient(
+    180deg,
+    hsl(var(--destructive) / 0.92) 0%,
+    hsl(var(--destructive)) 100%
+  );
+  color: hsl(var(--destructive-foreground));
+  box-shadow: var(--button-shadow-soft);
+  border: 0;
+}
+.eui-btn-soft-destructive:hover {
+  background-image: linear-gradient(
+    180deg,
+    hsl(var(--destructive)) 0%,
+    hsl(var(--destructive) / 0.86) 100%
+  );
+  box-shadow: var(--button-shadow-soft-hover);
+}
+.eui-btn-soft-destructive:active {
+  box-shadow: var(--shadow-sm);
+}
+
+/* ── Soft success ───────────────────────────────────────────── */
+.eui-btn-soft-success {
+  background-image: linear-gradient(
+    180deg,
+    hsl(var(--success) / 0.92) 0%,
+    hsl(var(--success)) 100%
+  );
+  color: hsl(var(--success-foreground));
+  box-shadow: var(--button-shadow-soft);
+  border: 0;
+}
+.eui-btn-soft-success:hover {
+  background-image: linear-gradient(
+    180deg,
+    hsl(var(--success)) 0%,
+    hsl(var(--success) / 0.86) 100%
+  );
+  box-shadow: var(--button-shadow-soft-hover);
+}
+.eui-btn-soft-success:active {
+  box-shadow: var(--shadow-sm);
+}
+
+/* Disabled override — kill the active translate so disabled
+   buttons don't bounce when tapped through. */
+.eui-btn:disabled,
+.eui-btn[disabled] {
+  opacity: 0.45;
+  pointer-events: none;
+}
+.eui-btn:disabled:active,
+.eui-btn[disabled]:active {
+  transform: none;
+}

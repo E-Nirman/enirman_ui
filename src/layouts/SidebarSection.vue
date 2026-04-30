@@ -22,7 +22,7 @@ function toggle() { if (props.collapsible) expanded.value = !expanded.value }
       type="button"
       :disabled="!collapsible"
       :class="cn(
-        'mx-3 flex h-6 items-center justify-between px-1 text-[10px] font-semibold uppercase tracking-wider text-sidebar-muted',
+        'mx-3 flex h-6 items-center justify-between px-1 text-[10px] font-semibold uppercase tracking-caps text-sidebar-foreground/55',
         collapsible ? 'cursor-pointer hover:text-sidebar-foreground' : 'cursor-default',
       )"
       @click="toggle"

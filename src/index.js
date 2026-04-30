@@ -31,6 +31,7 @@ export * from './components/ui/switch/index.js'
 export * from './components/ui/table/index.js'
 export * from './components/ui/scroll-area/index.js'
 export * from './components/ui/sonner/index.js'
+export * from './components/ui/progress/index.js'
 
 // ─── eNirman composed components ──────────────────────────────────
 export { default as PageHeader }    from './components/app/PageHeader.vue'
@@ -55,6 +56,8 @@ export { EuiReviewCard }            from './components/app/EuiReviewCard'
 export { EuiHandoffCard }           from './components/app/EuiHandoffCard'
 export { EuiActivityFeed }          from './components/app/EuiActivityFeed'
 export { EuiCdeStateBadge }         from './components/app/EuiCdeStateBadge'
+export { EuiSparkline }             from './components/app/EuiSparkline'
+export { EuiAvatarStack }           from './components/app/EuiAvatarStack'
 
 // ─── Layouts ──────────────────────────────────────────────────────
 export { default as AppShell }        from './layouts/AppShell.vue'
@@ -68,3 +71,6 @@ export { useCommandPalette }  from './composables/useCommandPalette.js'
 
 // ─── Utilities ───────────────────────────────────────────────────
 export { cn } from './lib/utils.js'
+
+// ─── Brand assets (logo URLs, ready for <img :src>) ──────────────
+export { logo, logoLight, logoMark } from './assets/index.js'

@@ -1,25 +1,34 @@
 <script setup>
 import { computed } from 'vue'
+import { Badge } from '../../ui/badge/index.js'
 
 defineOptions({ name: 'EuiCdeStateBadge' })
 
+/*
+ * EuiCdeStateBadge — CDE (Common Data Environment) state.
+ *
+ * Routes through the design-system Badge so colors live in tokens.
+ * State → variant mapping:
+ *   WIP        → draft   (neutral; "in progress, not yet shared")
+ *   Shared     → pending (warning; "needs review")
+ *   Published  → success
+ *   Archived   → default (muted)
+ */
+
 const props = defineProps({
-  state: { type: String, required: true }, // WIP / Shared / Published / Archived
+  state: { type: String, required: true },
 })
 
-const map = {
-  WIP:       { label: 'Work in Progress',   bg: 'rgba(148,163,184,.15)', fg: '#cbd5e1', border: 'rgba(148,163,184,.3)' },
-  Shared:    { label: 'Shared for Review',  bg: 'rgba(245,158,11,.15)',  fg: '#fbbf24', border: 'rgba(245,158,11,.3)' },
-  Published: { label: 'Approved & Issued',  bg: 'rgba(16,185,129,.15)',  fg: '#34d399', border: 'rgba(16,185,129,.3)' },
-  Archived:  { label: 'Archived',           bg: 'rgba(100,116,139,.12)', fg: '#94a3b8', border: 'rgba(100,116,139,.25)' },
+const config = {
+  WIP:       { label: 'Work in Progress',  variant: 'draft' },
+  Shared:    { label: 'Shared for Review', variant: 'pending' },
+  Published: { label: 'Approved & Issued', variant: 'success' },
+  Archived:  { label: 'Archived',          variant: 'default' },
 }
 
-const display = computed(() => map[props.state] || map.WIP)
+const display = computed(() => config[props.state] || config.WIP)
 </script>
 
 <template>
-  <span class="inline-flex items-center gap-1 rounded-full border px-2 py-0.5 text-[10px] font-semibold"
-        :style="{ background: display.bg, color: display.fg, borderColor: display.border }">
-    {{ display.label }}
-  </span>
+  <Badge :variant="display.variant">{{ display.label }}</Badge>
 </template>

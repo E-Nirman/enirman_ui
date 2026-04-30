@@ -3,21 +3,21 @@ import { computed } from 'vue'
 import { cva } from 'class-variance-authority'
 import { cn } from '../../lib/utils.js'
 import { ArrowUpRight, TrendingUp, TrendingDown } from 'lucide-vue-next'
+import { EuiSparkline } from './EuiSparkline/index.js'
 
 /*
- * StatCard — clean, compact metric tile.
+ * StatCard — KPI tile for dashboards.
  *
- * Design moves away from the v1 colored-stripe look toward a Linear-
- * style minimal card: muted label, large tabular value, optional delta
- * chip, and a small icon tile in the corner. Click-through is opt-in
- * via `to` / `href`.
+ * Layout per the Enirman web-app Shell:
+ *   [eyebrow label]  ........  [icon, optional]
+ *   [big display value]
+ *   [Δdelta chip] [optional sparkline] [description]
  *
- * Props:
- *   label, value (string or number), description, icon (lucide)
- *   tone:   default | primary | success | warning | destructive | plus
- *   delta:  signed number; auto-colors positive green / negative red
- *   deltaSuffix: default '%'; pass '' for counts
- *   to / href: makes the card a link
+ * Display values use the sans display face (Manrope 700 / 28px),
+ * NOT the mono — mono is reserved for IDs, dates, and dense table
+ * numerics. The sparkline tone follows the delta sign by default.
+ *
+ * Click-through is opt-in via `to` / `href`.
  */
 
 const props = defineProps({
@@ -28,6 +28,7 @@ const props = defineProps({
   tone:        { type: String, default: 'default' },
   delta:       { type: Number, default: null },
   deltaSuffix: { type: String, default: '%' },
+  spark:       { type: Array, default: null },
   to:          { type: [String, Object], default: null },
   href:        { type: String, default: null },
   class:       { type: [String, Array, Object], default: '' },
@@ -36,15 +37,15 @@ const props = defineProps({
 const tag = computed(() => (props.to ? 'router-link' : props.href ? 'a' : 'div'))
 
 const iconWrap = cva(
-  'flex size-8 items-center justify-center rounded-md',
+  'flex size-8 items-center justify-center rounded-md flex-shrink-0',
   {
     variants: {
       tone: {
         default:     'bg-muted text-muted-foreground',
-        primary:     'bg-primary/10 text-primary',
+        primary:     'bg-info-muted text-info-ink',
         success:     'bg-success-muted text-success-ink',
         warning:     'bg-warning-muted text-warning-ink',
-        destructive: 'bg-destructive/10 text-destructive',
+        destructive: 'bg-destructive-muted text-destructive-ink',
         info:        'bg-info-muted text-info-ink',
         plus:        'bg-plus-muted text-plus-ink',
       },
@@ -54,6 +55,10 @@ const iconWrap = cva(
 )
 
 const deltaPositive = computed(() => (props.delta ?? 0) >= 0)
+const sparkTone = computed(() => {
+  if (props.delta === null || props.delta === undefined) return 'positive'
+  return deltaPositive.value ? 'positive' : 'negative'
+})
 </script>
 
 <template>
@@ -62,37 +67,38 @@ const deltaPositive = computed(() => (props.delta ?? 0) >= 0)
     :to="to"
     :href="href"
     :class="cn(
-      'group relative flex flex-col gap-3 rounded-lg border border-border bg-card p-4 transition-all',
+      'group relative flex flex-col gap-3 rounded-lg border border-border-subtle bg-card p-4 shadow-sm transition-all duration-fast ease-out-expo',
       (to || href) && 'cursor-pointer hover:border-ring/40 hover:shadow-md',
       props.class,
     )"
   >
     <!-- Top row: label + icon -->
     <div class="flex items-start justify-between gap-2">
-      <p class="text-xs font-medium text-muted-foreground">{{ label }}</p>
+      <p class="text-xs font-medium uppercase tracking-caps text-muted-foreground">{{ label }}</p>
       <span v-if="icon" :class="iconWrap({ tone })">
         <component :is="icon" class="size-4" />
       </span>
     </div>
 
-    <!-- Value -->
-    <p class="font-mono text-[26px] font-semibold leading-none tracking-tight text-foreground tabular-nums">
+    <!-- Value (display sans, not mono) -->
+    <p class="font-display text-[28px] font-bold leading-none tracking-tight text-foreground">
       {{ value }}
     </p>
 
-    <!-- Footer: delta + description -->
-    <div v-if="description || delta !== null" class="flex items-center gap-2 text-xs text-muted-foreground">
+    <!-- Footer: delta + sparkline + description -->
+    <div v-if="description || delta !== null || spark" class="flex items-center gap-2 text-xs text-muted-foreground">
       <span
         v-if="delta !== null && delta !== undefined"
         :class="cn(
-          'inline-flex items-center gap-0.5 rounded px-1.5 py-0.5 font-medium tabular-nums',
-          deltaPositive ? 'bg-success-muted text-success-ink' : 'bg-destructive/10 text-destructive',
+          'inline-flex items-center gap-0.5 rounded px-1.5 py-0.5 font-semibold tabular-nums',
+          deltaPositive ? 'bg-success-muted text-success-ink' : 'bg-destructive-muted text-destructive-ink',
         )"
       >
         <TrendingUp v-if="deltaPositive" class="size-3" />
         <TrendingDown v-else class="size-3" />
         {{ Math.abs(delta) }}{{ deltaSuffix }}
       </span>
+      <EuiSparkline v-if="spark && spark.length" :points="spark" :tone="sparkTone" />
       <span v-if="description" class="truncate">{{ description }}</span>
     </div>
 

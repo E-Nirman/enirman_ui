@@ -1,0 +1,1134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>enirman · v2 Design System</title>
+
+  <!-- v2 design tokens (Manrope, navy/blue/amber, navy-tinted shadows, …) -->
+  <link rel="stylesheet" href="../src/theme.css">
+
+  <style>
+    /* ═══════════════════════════════════════════════════════════
+       Demo-page chrome — kept minimal, all visuals come from
+       theme.css tokens. Anything that LOOKS like a component is
+       hand-built using the same tokens enirman-ui's Vue components
+       use, so this page is faithful to what the live app renders.
+       ═══════════════════════════════════════════════════════════ */
+    *, *::before, *::after { box-sizing: border-box; }
+    html, body { margin: 0; }
+    body {
+      background: hsl(var(--background));
+      color: hsl(var(--foreground));
+      padding: 56px 48px 96px;
+      max-width: 1240px;
+      margin: 0 auto;
+    }
+
+    .demo-header {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      padding-bottom: 24px;
+      margin-bottom: 56px;
+      border-bottom: 1px solid hsl(var(--border-subtle));
+    }
+    .demo-header h1 {
+      font-family: var(--font-display);
+      font-size: 64px;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      line-height: 1;
+      margin: 0;
+      color: var(--brand-navy-700);
+    }
+    .demo-header h1 .dot { color: var(--brand-blue-500); }
+    .demo-header .meta {
+      font-family: var(--font-mono);
+      font-size: 12px;
+      color: hsl(var(--muted-foreground));
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+    .demo-header .meta strong { color: hsl(var(--foreground)); font-weight: 600; }
+
+    section { margin-bottom: 80px; }
+    section > .section-head {
+      margin-bottom: 24px;
+      padding-bottom: 12px;
+      border-bottom: 1px dashed hsl(var(--border-subtle));
+    }
+    section > .section-head .eyebrow {
+      display: block;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: hsl(var(--muted-foreground));
+      margin-bottom: 6px;
+    }
+    section > .section-head h2 {
+      font-family: var(--font-sans);
+      font-size: 28px;
+      font-weight: 700;
+      letter-spacing: -0.015em;
+      line-height: 1.2;
+      margin: 0;
+      color: hsl(var(--foreground));
+    }
+    section > .section-head p {
+      margin: 8px 0 0;
+      font-size: 14px;
+      line-height: 1.5;
+      color: hsl(var(--muted-foreground));
+      max-width: 64ch;
+    }
+
+    .row-label {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: hsl(var(--muted-foreground));
+      margin-bottom: 12px;
+    }
+
+    .demo-row {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      flex-wrap: wrap;
+      margin-bottom: 24px;
+    }
+
+    .swatch-grid {
+      display: grid;
+      grid-template-columns: repeat(10, minmax(0, 1fr));
+      gap: 6px;
+    }
+    .swatch-grid.amber { grid-template-columns: repeat(8, minmax(0, 1fr)); }
+    .swatch-grid.gray  { grid-template-columns: repeat(11, minmax(0, 1fr)); }
+    .swatch {
+      aspect-ratio: 1;
+      border-radius: 6px;
+      border: 1px solid hsl(var(--border-subtle));
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: 6px 8px;
+      font-family: var(--font-mono);
+      font-size: 9px;
+      font-weight: 600;
+    }
+    .swatch .stop { display: block; opacity: 0.7; }
+    .swatch .hex  { display: block; }
+
+    .scale-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 16px; }
+    .scale-card {
+      padding: 16px;
+      background: hsl(var(--card));
+      border: 1px solid hsl(var(--border-subtle));
+      border-radius: 8px;
+    }
+    .scale-card .scale-name {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      font-weight: 600;
+      color: hsl(var(--muted-foreground));
+      margin-bottom: 6px;
+    }
+    .scale-card .scale-value {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      color: hsl(var(--muted-foreground));
+    }
+
+    .shadow-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 24px; }
+    .shadow-card {
+      height: 120px;
+      background: hsl(var(--card));
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--font-mono);
+      font-size: 11px;
+      color: hsl(var(--muted-foreground));
+    }
+
+    /* ─── BUTTONS (same classes Vue Button.vue applies) ───────── */
+    .demo-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      font-family: var(--font-sans);
+      font-weight: 500;
+      letter-spacing: -0.015em;
+      border-radius: var(--radius-sm);
+      border: 0;
+      cursor: pointer;
+      user-select: none;
+      transition: transform var(--duration-fast) var(--ease-out),
+                  box-shadow var(--duration-fast) var(--ease-out),
+                  background-color var(--duration-fast) var(--ease-out);
+      padding: 0 14px;
+    }
+    .demo-btn:active:not(:disabled) { transform: translateY(1px); }
+    .demo-btn:disabled { opacity: 0.45; pointer-events: none; }
+    .demo-btn:focus-visible { outline: none; box-shadow: var(--shadow-focus); }
+
+    .demo-btn.size-xs { height: var(--eui-btn-h-xs); padding: 0 8px;  font-size: 11px; }
+    .demo-btn.size-sm { height: var(--eui-btn-h-sm); padding: 0 10px; font-size: 12px; }
+    .demo-btn.size-md { height: var(--eui-btn-h-md); padding: 0 14px; font-size: 13px; }
+    .demo-btn.size-lg { height: var(--eui-btn-h-lg); padding: 0 20px; font-size: 14px; }
+
+    .demo-btn-outline {
+      background: transparent;
+      border: 1px solid hsl(var(--border));
+      color: hsl(var(--foreground));
+    }
+    .demo-btn-outline:hover { background: hsl(var(--accent)); color: hsl(var(--accent-foreground)); }
+
+    .demo-btn-ghost {
+      background: transparent;
+      color: hsl(var(--foreground));
+    }
+    .demo-btn-ghost:hover { background: hsl(var(--muted)); }
+
+    .demo-btn-link {
+      background: transparent;
+      color: hsl(var(--primary));
+      padding: 0;
+    }
+    .demo-btn-link:hover { text-decoration: underline; text-underline-offset: 4px; }
+    .demo-btn-link:active { transform: none; }
+
+    /* ─── INPUTS ───────────────────────────────────────────── */
+    .demo-input-row { display: flex; flex-direction: column; gap: 6px; max-width: 320px; }
+    .demo-input-row label {
+      font-size: 12px;
+      font-weight: 500;
+      color: hsl(var(--foreground));
+    }
+    .demo-input {
+      height: 32px;
+      padding: 0 10px;
+      border: 1px solid hsl(var(--input));
+      border-radius: var(--radius-sm);
+      background: hsl(var(--card));
+      color: hsl(var(--foreground));
+      font-size: 13px;
+      font-family: var(--font-sans);
+      box-shadow: var(--shadow-xs);
+      transition: border-color var(--duration-fast) var(--ease-out),
+                  box-shadow var(--duration-fast) var(--ease-out);
+    }
+    .demo-input:focus { outline: none; border-color: hsl(var(--ring)); box-shadow: var(--shadow-focus); }
+    .demo-input.error { border-color: hsl(var(--destructive)); box-shadow: 0 0 0 3px hsl(var(--destructive) / 0.18); }
+    .demo-input::placeholder { color: hsl(var(--muted-foreground)); }
+    .demo-input:disabled { opacity: 0.5; background: hsl(var(--muted)); cursor: not-allowed; }
+    .demo-input-help { font-size: 11px; color: hsl(var(--muted-foreground)); }
+    .demo-input-help.error { color: hsl(var(--destructive)); }
+
+    /* ─── BADGES ───────────────────────────────────────────── */
+    .demo-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      height: 22px;
+      padding: 0 9px;
+      font-family: var(--font-sans);
+      font-size: 11px;
+      font-weight: 600;
+      white-space: nowrap;
+      border-radius: 999px;
+    }
+    .demo-badge.tag { border-radius: var(--radius-xs); }
+    .demo-badge .dot { width: 6px; height: 6px; border-radius: 999px; flex: none; }
+
+    .badge-approved { background: hsl(var(--success-muted)); color: hsl(var(--success-ink)); }
+    .badge-approved .dot { background: hsl(var(--success)); }
+    .badge-pending { background: hsl(var(--warning-muted)); color: hsl(var(--warning-ink)); }
+    .badge-pending .dot { background: hsl(var(--warning)); }
+    .badge-overdue { background: hsl(var(--danger-muted)); color: hsl(var(--danger-ink)); }
+    .badge-overdue .dot { background: hsl(var(--destructive)); }
+    .badge-info { background: hsl(var(--info-muted)); color: hsl(var(--info-ink)); }
+    .badge-info .dot { background: hsl(var(--info)); }
+    .badge-draft { background: hsl(var(--muted)); color: hsl(var(--foreground)); }
+    .badge-draft .dot { background: hsl(var(--muted-foreground)); }
+
+    /* ─── CARDS ────────────────────────────────────────────── */
+    .demo-card {
+      background: hsl(var(--card));
+      border: 1px solid hsl(var(--border-subtle));
+      border-radius: var(--radius);
+      padding: 16px 18px;
+      box-shadow: var(--shadow-sm);
+    }
+    .card-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 16px;
+    }
+    .card-title {
+      font-family: var(--font-sans);
+      font-size: 14px;
+      font-weight: 600;
+      letter-spacing: -0.015em;
+      color: hsl(var(--foreground));
+      margin: 0 0 4px;
+    }
+    .card-desc {
+      font-size: 13px;
+      line-height: 1.5;
+      color: hsl(var(--muted-foreground));
+      margin: 0;
+    }
+    .card-elevated { box-shadow: var(--shadow-md); }
+
+    /* ─── STAT TILE (KPI) ──────────────────────────────────── */
+    .stat-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 12px;
+    }
+    .stat-tile {
+      background: hsl(var(--card));
+      border: 1px solid hsl(var(--border-subtle));
+      border-radius: 10px;
+      padding: 16px;
+      box-shadow: var(--shadow-sm);
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .stat-tile .stat-label {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: hsl(var(--muted-foreground));
+    }
+    .stat-tile .stat-value {
+      font-family: var(--font-display);
+      font-size: 28px;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      line-height: 1;
+      color: hsl(var(--foreground));
+    }
+    .stat-tile .stat-meta {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 12px;
+      color: hsl(var(--muted-foreground));
+    }
+    .delta-up, .delta-down {
+      display: inline-flex;
+      align-items: center;
+      gap: 2px;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-weight: 600;
+      font-variant-numeric: tabular-nums;
+    }
+    .delta-up { background: hsl(var(--success-muted)); color: hsl(var(--success-ink)); }
+    .delta-down { background: hsl(var(--danger-muted)); color: hsl(var(--danger-ink)); }
+
+    /* ─── PROGRESS ─────────────────────────────────────────── */
+    .progress-row { display: flex; flex-direction: column; gap: 16px; max-width: 460px; }
+    .progress-bar {
+      height: 4px;
+      background: hsl(var(--muted));
+      border-radius: 999px;
+      overflow: hidden;
+    }
+    .progress-bar .fill { display: block; height: 100%; border-radius: 999px; }
+    .progress-bar.lg { height: 6px; }
+    .progress-row > .row { display: flex; align-items: center; gap: 12px; }
+    .progress-row .pct {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      font-weight: 500;
+      font-variant-numeric: tabular-nums;
+      color: hsl(var(--muted-foreground));
+      min-width: 36px;
+    }
+
+    /* ─── AVATAR STACK ─────────────────────────────────────── */
+    .avatar-stack { display: inline-flex; align-items: center; }
+    .avatar-stack .av {
+      width: 26px;
+      height: 26px;
+      border-radius: 999px;
+      background: var(--brand-blue-500);
+      color: #fff;
+      font-family: var(--font-sans);
+      font-weight: 600;
+      font-size: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 0 0 2px hsl(var(--card));
+      margin-left: -8px;
+    }
+    .avatar-stack .av:first-child { margin-left: 0; }
+    .avatar-stack .av.overflow {
+      background: hsl(var(--muted));
+      color: hsl(var(--muted-foreground));
+    }
+
+    /* ─── SIDEBAR (preview slice of AppShell) ──────────────── */
+    .shell-preview {
+      display: grid;
+      grid-template-columns: 240px 1fr;
+      border: 1px solid hsl(var(--border-subtle));
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: var(--shadow-md);
+      background: hsl(var(--card));
+      min-height: 480px;
+    }
+    .shell-sidebar {
+      background: var(--brand-navy-800);
+      color: rgba(255, 255, 255, 0.85);
+      padding: 16px 0;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+    .shell-sidebar .lockup {
+      padding: 0 18px 16px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+      font-family: var(--font-sans);
+      font-weight: 700;
+      font-size: 18px;
+      letter-spacing: -0.03em;
+      color: #fff;
+    }
+    .shell-sidebar .lockup .dot { color: var(--brand-blue-300); }
+    .shell-sidebar .ws {
+      margin: 0 12px;
+      padding: 8px 10px;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 12px;
+      font-weight: 500;
+      color: #fff;
+    }
+    .shell-sidebar .ws .av {
+      width: 26px;
+      height: 26px;
+      border-radius: 6px;
+      background: var(--brand-blue-500);
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 11px;
+    }
+    .shell-sidebar .nav-section {
+      padding: 0 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+    .shell-sidebar .nav-section .label {
+      padding: 0 10px 6px;
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: rgba(255, 255, 255, 0.55);
+    }
+    .shell-sidebar .nav-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 7px 10px;
+      border-radius: 6px;
+      font-size: 13px;
+      font-weight: 500;
+      color: rgba(255, 255, 255, 0.7);
+      cursor: pointer;
+      transition: background var(--duration-fast) var(--ease-out),
+                  color var(--duration-fast) var(--ease-out);
+    }
+    .shell-sidebar .nav-item .icon {
+      width: 16px;
+      height: 16px;
+      border-radius: 3px;
+      background: currentColor;
+      opacity: 0.9;
+      flex: none;
+    }
+    .shell-sidebar .nav-item .badge {
+      margin-left: auto;
+      font-family: var(--font-mono);
+      font-size: 10px;
+      font-weight: 600;
+      padding: 1px 6px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.12);
+      color: rgba(255, 255, 255, 0.85);
+    }
+    .shell-sidebar .nav-item:hover { background: rgba(255, 255, 255, 0.06); color: #fff; }
+    .shell-sidebar .nav-item.active {
+      background: var(--brand-blue-500);
+      color: #fff;
+      font-weight: 600;
+    }
+    .shell-sidebar .nav-item.active .badge { background: rgba(255, 255, 255, 0.22); }
+
+    .shell-main {
+      display: flex;
+      flex-direction: column;
+      background: hsl(var(--background));
+    }
+    .shell-topbar {
+      height: 52px;
+      background: hsl(var(--card));
+      border-bottom: 1px solid hsl(var(--border-subtle));
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      padding: 0 20px;
+    }
+    .shell-topbar .crumbs {
+      font-size: 13px;
+      font-weight: 500;
+      color: hsl(var(--muted-foreground));
+    }
+    .shell-topbar .crumbs strong { color: hsl(var(--foreground)); font-weight: 600; }
+    .shell-topbar .search {
+      margin-left: auto;
+      width: 280px;
+      height: 32px;
+      background: hsl(var(--muted));
+      border: 1px solid hsl(var(--border-subtle));
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      padding: 0 10px;
+      font-size: 12px;
+      color: hsl(var(--muted-foreground));
+    }
+    .shell-topbar .icon-btn {
+      width: 32px;
+      height: 32px;
+      border-radius: 6px;
+      border: 1px solid hsl(var(--border-subtle));
+      background: hsl(var(--card));
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      position: relative;
+    }
+    .shell-topbar .icon-btn::after {
+      content: '';
+      position: absolute;
+      top: 6px;
+      right: 6px;
+      width: 7px;
+      height: 7px;
+      border-radius: 999px;
+      background: hsl(var(--destructive));
+      border: 1.5px solid hsl(var(--card));
+    }
+    .shell-content { padding: 24px; }
+    .shell-content h3 {
+      font-family: var(--font-sans);
+      font-size: 22px;
+      font-weight: 700;
+      letter-spacing: -0.015em;
+      margin: 0 0 4px;
+      color: hsl(var(--foreground));
+    }
+    .shell-content .eyebrow {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: hsl(var(--muted-foreground));
+    }
+
+    /* ─── TYPE SCALE ───────────────────────────────────────── */
+    .type-row {
+      display: grid;
+      grid-template-columns: 120px 1fr;
+      gap: 24px;
+      align-items: baseline;
+      padding: 12px 0;
+      border-bottom: 1px dashed hsl(var(--border-subtle));
+    }
+    .type-row:last-child { border-bottom: 0; }
+    .type-row .meta {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      color: hsl(var(--muted-foreground));
+      letter-spacing: 0.04em;
+    }
+    .type-display-xl { font-family: var(--font-display); font-size: 80px; font-weight: 800; letter-spacing: -0.03em; line-height: 1; }
+    .type-display-lg { font-family: var(--font-display); font-size: 64px; font-weight: 700; letter-spacing: -0.025em; line-height: 1.05; }
+    .type-display-md { font-family: var(--font-display); font-size: 48px; font-weight: 700; letter-spacing: -0.02em; line-height: 1.1; }
+    .type-h1 { font-family: var(--font-sans); font-size: 36px; font-weight: 700; letter-spacing: -0.02em; line-height: 1.15; }
+    .type-h2 { font-family: var(--font-sans); font-size: 28px; font-weight: 700; letter-spacing: -0.015em; line-height: 1.2; }
+    .type-h3 { font-family: var(--font-sans); font-size: 22px; font-weight: 600; letter-spacing: -0.015em; line-height: 1.3; }
+    .type-h4 { font-family: var(--font-sans); font-size: 18px; font-weight: 600; line-height: 1.3; }
+    .type-body { font-family: var(--font-sans); font-size: 14px; line-height: 1.5; color: hsl(var(--muted-foreground)); }
+    .type-mono { font-family: var(--font-mono); font-size: 13px; font-variant-numeric: tabular-nums; }
+    .type-caps { font-family: var(--font-sans); font-size: 11px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: hsl(var(--muted-foreground)); }
+
+    /* ─── TWO-COLUMN GRID for the showcase ───────────────── */
+    .two-col {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 32px;
+      align-items: start;
+    }
+
+    /* ─── LOGO BANNER ──────────────────────────────────────── */
+    .logo-banners {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+    .logo-banner {
+      padding: 48px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--font-sans);
+      font-weight: 700;
+      font-size: 40px;
+      letter-spacing: -0.04em;
+      line-height: 1;
+    }
+    .logo-banner.light {
+      background: hsl(var(--card));
+      border: 1px solid hsl(var(--border-subtle));
+      color: var(--brand-navy-700);
+    }
+    .logo-banner.dark {
+      background: var(--brand-navy-800);
+      color: #fff;
+    }
+    .logo-banner .dot { color: var(--brand-blue-500); }
+    .logo-banner.dark .dot { color: var(--brand-blue-300); }
+  </style>
+</head>
+<body>
+
+  <!-- ════════════════════════════════════════════════════════
+       HEADER
+       ════════════════════════════════════════════════════════ -->
+  <header class="demo-header">
+    <h1>enirman<span class="dot">.</span></h1>
+    <div class="meta">
+      <strong>v2 design system</strong> ·
+      manrope · jetbrains&nbsp;mono ·
+      navy&nbsp;700 / blue&nbsp;500 / amber&nbsp;400
+    </div>
+  </header>
+
+  <!-- ════════════════════════════════════════════════════════
+       BRAND COLORS
+       ════════════════════════════════════════════════════════ -->
+  <section>
+    <div class="section-head">
+      <span class="eyebrow">01 · color</span>
+      <h2>Brand scales</h2>
+      <p>Navy is the primary brand surface. Blue is the action color (links, primary buttons, focus rings). Amber is the safety accent — used sparingly for warnings and inspection moments.</p>
+    </div>
+
+    <div class="row-label">Navy — &laquo;blueprint&raquo;</div>
+    <div class="swatch-grid">
+      <div class="swatch" style="background: var(--brand-navy-50);  color: var(--brand-navy-900);"><span class="stop">50</span><span class="hex">#EEF2F7</span></div>
+      <div class="swatch" style="background: var(--brand-navy-100); color: var(--brand-navy-900);"><span class="stop">100</span><span class="hex">#D5DEEA</span></div>
+      <div class="swatch" style="background: var(--brand-navy-200); color: var(--brand-navy-900);"><span class="stop">200</span><span class="hex">#A9BCD3</span></div>
+      <div class="swatch" style="background: var(--brand-navy-300); color: var(--brand-navy-900);"><span class="stop">300</span><span class="hex">#7995B6</span></div>
+      <div class="swatch" style="background: var(--brand-navy-400); color: #fff;"><span class="stop">400</span><span class="hex">#4E6F95</span></div>
+      <div class="swatch" style="background: var(--brand-navy-500); color: #fff;"><span class="stop">500</span><span class="hex">#2E4F77</span></div>
+      <div class="swatch" style="background: var(--brand-navy-600); color: #fff;"><span class="stop">600</span><span class="hex">#1F3D60</span></div>
+      <div class="swatch" style="background: var(--brand-navy-700); color: #fff; outline: 2px solid hsl(var(--ring)); outline-offset: 2px;"><span class="stop">700&nbsp;★</span><span class="hex">#16304D</span></div>
+      <div class="swatch" style="background: var(--brand-navy-800); color: #fff;"><span class="stop">800</span><span class="hex">#0F2238</span></div>
+      <div class="swatch" style="background: var(--brand-navy-900); color: #fff;"><span class="stop">900</span><span class="hex">#07142A</span></div>
+    </div>
+
+    <div style="height: 24px;"></div>
+
+    <div class="row-label">Blue — interactive</div>
+    <div class="swatch-grid">
+      <div class="swatch" style="background: var(--brand-blue-50);  color: var(--brand-blue-900);"><span class="stop">50</span><span class="hex">#EAF4FE</span></div>
+      <div class="swatch" style="background: var(--brand-blue-100); color: var(--brand-blue-900);"><span class="stop">100</span><span class="hex">#C7E1FC</span></div>
+      <div class="swatch" style="background: var(--brand-blue-200); color: var(--brand-blue-900);"><span class="stop">200</span><span class="hex">#8FC2F8</span></div>
+      <div class="swatch" style="background: var(--brand-blue-300); color: var(--brand-blue-900);"><span class="stop">300</span><span class="hex">#56A3F4</span></div>
+      <div class="swatch" style="background: var(--brand-blue-400); color: #fff;"><span class="stop">400</span><span class="hex">#2A8AF0</span></div>
+      <div class="swatch" style="background: var(--brand-blue-500); color: #fff; outline: 2px solid hsl(var(--ring)); outline-offset: 2px;"><span class="stop">500&nbsp;★</span><span class="hex">#1B73D8</span></div>
+      <div class="swatch" style="background: var(--brand-blue-600); color: #fff;"><span class="stop">600</span><span class="hex">#155CAE</span></div>
+      <div class="swatch" style="background: var(--brand-blue-700); color: #fff;"><span class="stop">700</span><span class="hex">#104785</span></div>
+      <div class="swatch" style="background: var(--brand-blue-800); color: #fff;"><span class="stop">800</span><span class="hex">#0B335E</span></div>
+      <div class="swatch" style="background: var(--brand-blue-900); color: #fff;"><span class="stop">900</span><span class="hex">#061F3A</span></div>
+    </div>
+
+    <div style="height: 24px;"></div>
+
+    <div class="row-label">Amber — safety accent</div>
+    <div class="swatch-grid amber">
+      <div class="swatch" style="background: var(--brand-amber-50);  color: var(--brand-amber-700);"><span class="stop">50</span><span class="hex">#FEF6E7</span></div>
+      <div class="swatch" style="background: var(--brand-amber-100); color: var(--brand-amber-700);"><span class="stop">100</span><span class="hex">#FDE7B6</span></div>
+      <div class="swatch" style="background: var(--brand-amber-200); color: var(--brand-amber-700);"><span class="stop">200</span><span class="hex">#FAD278</span></div>
+      <div class="swatch" style="background: var(--brand-amber-300); color: var(--brand-amber-700);"><span class="stop">300</span><span class="hex">#F6BC3A</span></div>
+      <div class="swatch" style="background: var(--brand-amber-400); color: #fff; outline: 2px solid hsl(var(--ring)); outline-offset: 2px;"><span class="stop">400&nbsp;★</span><span class="hex">#E5A41C</span></div>
+      <div class="swatch" style="background: var(--brand-amber-500); color: #fff;"><span class="stop">500</span><span class="hex">#BF8410</span></div>
+      <div class="swatch" style="background: var(--brand-amber-600); color: #fff;"><span class="stop">600</span><span class="hex">#95650A</span></div>
+      <div class="swatch" style="background: var(--brand-amber-700); color: #fff;"><span class="stop">700</span><span class="hex">#6B4806</span></div>
+    </div>
+
+    <div style="height: 24px;"></div>
+
+    <div class="row-label">Concrete grays</div>
+    <div class="swatch-grid gray">
+      <div class="swatch" style="background: var(--gray-0);  color: var(--gray-900); border: 1px solid hsl(var(--border));"><span class="stop">0</span><span class="hex">#FFFFFF</span></div>
+      <div class="swatch" style="background: var(--gray-25);  color: var(--gray-900);"><span class="stop">25</span><span class="hex">#FBFCFD</span></div>
+      <div class="swatch" style="background: var(--gray-50);  color: var(--gray-900);"><span class="stop">50</span><span class="hex">#F6F8FA</span></div>
+      <div class="swatch" style="background: var(--gray-100); color: var(--gray-900);"><span class="stop">100</span><span class="hex">#ECEFF3</span></div>
+      <div class="swatch" style="background: var(--gray-150); color: var(--gray-900);"><span class="stop">150</span><span class="hex">#DFE3EA</span></div>
+      <div class="swatch" style="background: var(--gray-200); color: var(--gray-900);"><span class="stop">200</span><span class="hex">#CFD5DE</span></div>
+      <div class="swatch" style="background: var(--gray-300); color: var(--gray-900);"><span class="stop">300</span><span class="hex">#B5BDC9</span></div>
+      <div class="swatch" style="background: var(--gray-400); color: #fff;"><span class="stop">400</span><span class="hex">#8B95A4</span></div>
+      <div class="swatch" style="background: var(--gray-500); color: #fff;"><span class="stop">500</span><span class="hex">#6B7585</span></div>
+      <div class="swatch" style="background: var(--gray-600); color: #fff;"><span class="stop">600</span><span class="hex">#4F5868</span></div>
+      <div class="swatch" style="background: var(--gray-700); color: #fff;"><span class="stop">700</span><span class="hex">#3A4250</span></div>
+    </div>
+  </section>
+
+  <!-- ════════════════════════════════════════════════════════
+       TYPOGRAPHY
+       ════════════════════════════════════════════════════════ -->
+  <section>
+    <div class="section-head">
+      <span class="eyebrow">02 · type</span>
+      <h2>Typography</h2>
+      <p>Manrope as the system face — UI, body, and display via weight. JetBrains Mono is reserved for IDs, dates, currency, code, and tabular numerics.</p>
+    </div>
+
+    <div class="type-row">
+      <div class="meta">display-xl<br>80 / 800</div>
+      <div class="type-display-xl">Build it once.</div>
+    </div>
+    <div class="type-row">
+      <div class="meta">display-lg<br>64 / 700</div>
+      <div class="type-display-lg">Run it from one place.</div>
+    </div>
+    <div class="type-row">
+      <div class="meta">display-md<br>48 / 700</div>
+      <div class="type-display-md">Construction ERP, on Frappe.</div>
+    </div>
+    <div class="type-row">
+      <div class="meta">h1<br>36 / 700</div>
+      <div class="type-h1">Project dashboard</div>
+    </div>
+    <div class="type-row">
+      <div class="meta">h2<br>28 / 700</div>
+      <div class="type-h2">RA bills due this fortnight</div>
+    </div>
+    <div class="type-row">
+      <div class="meta">h3<br>22 / 600</div>
+      <div class="type-h3">Stage S3 — Concept Design</div>
+    </div>
+    <div class="type-row">
+      <div class="meta">h4<br>18 / 600</div>
+      <div class="type-h4">Site engineer · Mumbai metro line 4</div>
+    </div>
+    <div class="type-row">
+      <div class="meta">body<br>14 / 400</div>
+      <div class="type-body">The default UI body size. 14 px gives ERP-appropriate density without going cramped — pair with mono on numeric columns for instant tabular legibility. Manrope's 400 weight reads cleanly even at small sizes.</div>
+    </div>
+    <div class="type-row">
+      <div class="meta">caps<br>11 / 600</div>
+      <div class="type-caps">Pending review</div>
+    </div>
+    <div class="type-row">
+      <div class="meta">mono<br>13 / 400</div>
+      <div class="type-mono">DPR-37411-26-0017 · ₹3,08,00,000 · 27 Apr 2026 · 14:32</div>
+    </div>
+  </section>
+
+  <!-- ════════════════════════════════════════════════════════
+       RADII / SHADOWS / SPACING
+       ════════════════════════════════════════════════════════ -->
+  <section>
+    <div class="section-head">
+      <span class="eyebrow">03 · primitives</span>
+      <h2>Radii, shadows, spacing</h2>
+      <p>Subtle radii (4–16 px). Layered, navy-tinted shadows. 4 px spacing baseline.</p>
+    </div>
+
+    <div class="row-label">Radii</div>
+    <div class="scale-grid" style="grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));">
+      <div class="scale-card" style="border-radius: 0;"><div class="scale-name">none</div><div class="scale-value">0</div></div>
+      <div class="scale-card" style="border-radius: 2px;"><div class="scale-name">xs</div><div class="scale-value">2px</div></div>
+      <div class="scale-card" style="border-radius: 4px;"><div class="scale-name">sm</div><div class="scale-value">4px</div></div>
+      <div class="scale-card" style="border-radius: 6px;"><div class="scale-name">md</div><div class="scale-value">6px · buttons / inputs</div></div>
+      <div class="scale-card" style="border-radius: 8px;"><div class="scale-name">lg</div><div class="scale-value">8px · cards</div></div>
+      <div class="scale-card" style="border-radius: 12px;"><div class="scale-name">xl</div><div class="scale-value">12px · containers</div></div>
+      <div class="scale-card" style="border-radius: 16px;"><div class="scale-name">2xl</div><div class="scale-value">16px · dialogs</div></div>
+      <div class="scale-card" style="border-radius: 999px;"><div class="scale-name">pill</div><div class="scale-value">999px · badges</div></div>
+    </div>
+
+    <div style="height: 32px;"></div>
+
+    <div class="row-label">Shadows — navy-tinted (rgba 15 34 56)</div>
+    <div class="shadow-grid">
+      <div class="shadow-card" style="box-shadow: var(--shadow-xs);">xs</div>
+      <div class="shadow-card" style="box-shadow: var(--shadow-sm);">sm</div>
+      <div class="shadow-card" style="box-shadow: var(--shadow-md);">md</div>
+      <div class="shadow-card" style="box-shadow: var(--shadow-lg);">lg</div>
+      <div class="shadow-card" style="box-shadow: var(--shadow-xl);">xl</div>
+      <div class="shadow-card" style="box-shadow: var(--shadow-inner);">inner</div>
+      <div class="shadow-card" style="box-shadow: var(--shadow-focus);">focus ring</div>
+    </div>
+  </section>
+
+  <!-- ════════════════════════════════════════════════════════
+       BUTTONS — Soft materiality
+       ════════════════════════════════════════════════════════ -->
+  <section>
+    <div class="section-head">
+      <span class="eyebrow">04 · buttons · soft materiality</span>
+      <h2>Buttons</h2>
+      <p>The default Soft preset: vertical gradient, navy-tinted layered shadow, 1 px white inset highlight, 1 px translate on press. Refined and tactile, not glossy.</p>
+    </div>
+
+    <div class="row-label">Variants · default size (md, 34 px)</div>
+    <div class="demo-row">
+      <button class="demo-btn size-md eui-btn-soft-primary">Primary action</button>
+      <button class="demo-btn size-md eui-btn-soft-neutral">Secondary</button>
+      <button class="demo-btn size-md demo-btn-outline">Outline</button>
+      <button class="demo-btn size-md demo-btn-ghost">Ghost</button>
+      <button class="demo-btn size-md eui-btn-soft-destructive">Delete</button>
+      <button class="demo-btn size-md eui-btn-soft-success">Approve</button>
+      <button class="demo-btn size-md demo-btn-link">Open file</button>
+    </div>
+
+    <div class="row-label">Sizes · primary</div>
+    <div class="demo-row">
+      <button class="demo-btn size-xs eui-btn-soft-primary">xs · 24 px</button>
+      <button class="demo-btn size-sm eui-btn-soft-primary">sm · 28 px</button>
+      <button class="demo-btn size-md eui-btn-soft-primary">md · 34 px</button>
+      <button class="demo-btn size-lg eui-btn-soft-primary">lg · 42 px</button>
+    </div>
+
+    <div class="row-label">Sizes · secondary</div>
+    <div class="demo-row">
+      <button class="demo-btn size-xs eui-btn-soft-neutral">xs · 24 px</button>
+      <button class="demo-btn size-sm eui-btn-soft-neutral">sm · 28 px</button>
+      <button class="demo-btn size-md eui-btn-soft-neutral">md · 34 px</button>
+      <button class="demo-btn size-lg eui-btn-soft-neutral">lg · 42 px</button>
+    </div>
+
+    <div class="row-label">Disabled</div>
+    <div class="demo-row">
+      <button class="demo-btn size-md eui-btn-soft-primary" disabled>Send for approval</button>
+      <button class="demo-btn size-md eui-btn-soft-neutral" disabled>Cancel</button>
+      <button class="demo-btn size-md eui-btn-soft-destructive" disabled>Delete</button>
+    </div>
+  </section>
+
+  <!-- ════════════════════════════════════════════════════════
+       INPUTS
+       ════════════════════════════════════════════════════════ -->
+  <section>
+    <div class="section-head">
+      <span class="eyebrow">05 · inputs</span>
+      <h2>Form inputs</h2>
+      <p>32 px tall, 6 px radius. Focus ring is a 3 px blue glow at 25% alpha; error state flips border + glow to danger.</p>
+    </div>
+
+    <div class="two-col">
+      <div class="demo-input-row">
+        <label for="i-text">Project name</label>
+        <input id="i-text" class="demo-input" type="text" placeholder="Mumbai Metro Line 4 Civil Works">
+      </div>
+
+      <div class="demo-input-row">
+        <label for="i-focus">Focused</label>
+        <input id="i-focus" class="demo-input" type="text" value="DPR-37411-26-0017" autofocus>
+      </div>
+
+      <div class="demo-input-row">
+        <label for="i-err">RA bill amount (error)</label>
+        <input id="i-err" class="demo-input error" type="text" value="abcd" aria-invalid="true">
+        <div class="demo-input-help error">Must be a numeric value in rupees (₹).</div>
+      </div>
+
+      <div class="demo-input-row">
+        <label for="i-disabled">Locked field</label>
+        <input id="i-disabled" class="demo-input" type="text" value="Issued — cannot edit" disabled>
+        <div class="demo-input-help">Field locked after BBS publish.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ════════════════════════════════════════════════════════
+       BADGES
+       ════════════════════════════════════════════════════════ -->
+  <section>
+    <div class="section-head">
+      <span class="eyebrow">06 · badges</span>
+      <h2>Status badges</h2>
+      <p>Pill shape with a 6 px dot indicator. Five status tones cover the full ERP spectrum. Tag shape (4 px radius) is reserved for taxonomy chips like RIBA stage codes.</p>
+    </div>
+
+    <div class="row-label">Pill · status</div>
+    <div class="demo-row">
+      <span class="demo-badge badge-approved"><span class="dot"></span>Approved</span>
+      <span class="demo-badge badge-pending"><span class="dot"></span>Pending review</span>
+      <span class="demo-badge badge-overdue"><span class="dot"></span>Overdue</span>
+      <span class="demo-badge badge-info"><span class="dot"></span>In progress</span>
+      <span class="demo-badge badge-draft"><span class="dot"></span>Draft</span>
+    </div>
+
+    <div class="row-label">Tag · taxonomy</div>
+    <div class="demo-row">
+      <span class="demo-badge tag badge-info" style="font-family: var(--font-mono);">S3</span>
+      <span class="demo-badge tag badge-info" style="font-family: var(--font-mono);">S4</span>
+      <span class="demo-badge tag" style="background: var(--brand-amber-50); color: var(--brand-amber-700); border: 1px solid var(--brand-amber-200);">Tower B</span>
+      <span class="demo-badge tag" style="background: var(--brand-blue-50); color: var(--brand-blue-700); border: 1px solid var(--brand-blue-200);">Tower A</span>
+      <span class="demo-badge tag" style="background: var(--brand-navy-50); color: var(--brand-navy-700); border: 1px solid var(--brand-navy-200);">Podium</span>
+      <span class="demo-badge tag badge-draft">Project-wide</span>
+    </div>
+  </section>
+
+  <!-- ════════════════════════════════════════════════════════
+       CARDS
+       ════════════════════════════════════════════════════════ -->
+  <section>
+    <div class="section-head">
+      <span class="eyebrow">07 · cards</span>
+      <h2>Cards</h2>
+      <p>White surface, 1 px subtle border, 8 px radius, navy-tinted <code>--shadow-sm</code>. Hover lifts to <code>--shadow-md</code>.</p>
+    </div>
+
+    <div class="card-grid">
+      <div class="demo-card">
+        <h3 class="card-title">Plain card</h3>
+        <p class="card-desc">Surface, border, subtle shadow. The everyday container for grouped content.</p>
+      </div>
+
+      <div class="demo-card card-elevated">
+        <h3 class="card-title">Elevated card</h3>
+        <p class="card-desc">Hover or sticky surfaces lift to <code>--shadow-md</code>. Same border, deeper navy tint.</p>
+      </div>
+
+      <div class="demo-card" style="cursor: pointer;">
+        <h3 class="card-title" style="display: flex; justify-content: space-between; align-items: center;">
+          Linked card
+          <span style="font-size: 13px; color: hsl(var(--muted-foreground)); font-weight: 400;">↗</span>
+        </h3>
+        <p class="card-desc">Click-through cards add a chevron and elevate on hover. Avoid the "card-as-button" anti-pattern unless the whole tile is the action.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ════════════════════════════════════════════════════════
+       STAT TILES + SPARKLINES + AVATAR STACK + PROGRESS
+       ════════════════════════════════════════════════════════ -->
+  <section>
+    <div class="section-head">
+      <span class="eyebrow">08 · KPI tile · sparkline · avatar stack · progress</span>
+      <h2>Data display primitives</h2>
+      <p>Stat tiles use Manrope display weight at 28 px (sans, not mono — mono is for IDs and tabular table cells, not headline metrics). Optional sparkline + delta chip.</p>
+    </div>
+
+    <div class="stat-grid">
+      <div class="stat-tile">
+        <div class="stat-label">RA bills due · 14d</div>
+        <div class="stat-value">₹3.08 Cr</div>
+        <div class="stat-meta">
+          <span class="delta-up">▲ 12%</span>
+          <svg viewBox="0 0 60 18" width="60" height="18">
+            <path d="M 0 14 L 7.5 11 L 15 12.5 L 22.5 7 L 30 8.5 L 37.5 5 L 45 6.5 L 52.5 3 L 60 4" fill="none" stroke="hsl(var(--success))" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          <span>vs. last fortnight</span>
+        </div>
+      </div>
+
+      <div class="stat-tile">
+        <div class="stat-label">RFIs open</div>
+        <div class="stat-value">17</div>
+        <div class="stat-meta">
+          <span class="delta-down">▼ 4</span>
+          <svg viewBox="0 0 60 18" width="60" height="18">
+            <path d="M 0 4 L 7.5 6 L 15 5 L 22.5 9 L 30 8 L 37.5 11 L 45 10 L 52.5 13 L 60 14" fill="none" stroke="hsl(var(--destructive))" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          <span>down from 21</span>
+        </div>
+      </div>
+
+      <div class="stat-tile">
+        <div class="stat-label">Materials on site</div>
+        <div class="stat-value">418 MT</div>
+        <div class="stat-meta">
+          <span class="delta-up">▲ 8%</span>
+          <span>steel · cement</span>
+        </div>
+      </div>
+
+      <div class="stat-tile">
+        <div class="stat-label">Cost vs BOQ</div>
+        <div class="stat-value">94.2%</div>
+        <div class="stat-meta">
+          <span class="delta-up">▲ 0.4pp</span>
+          <span>under budget</span>
+        </div>
+      </div>
+    </div>
+
+    <div style="height: 40px;"></div>
+
+    <div class="two-col">
+      <div>
+        <div class="row-label">Avatar stack</div>
+        <div class="demo-row">
+          <div class="avatar-stack">
+            <div class="av" style="background: var(--brand-blue-500);">RP</div>
+            <div class="av" style="background: var(--brand-amber-400);">SK</div>
+            <div class="av" style="background: var(--brand-navy-500);">AM</div>
+            <div class="av" style="background: var(--brand-blue-700);">DJ</div>
+            <div class="av overflow">+3</div>
+          </div>
+        </div>
+
+        <div class="row-label" style="margin-top: 24px;">Avatar stack · sm</div>
+        <div class="avatar-stack">
+          <div class="av" style="width:22px;height:22px;font-size:9px;background:var(--brand-blue-500);">SK</div>
+          <div class="av" style="width:22px;height:22px;font-size:9px;background:var(--brand-amber-400);">RP</div>
+          <div class="av overflow" style="width:22px;height:22px;font-size:9px;">+5</div>
+        </div>
+      </div>
+
+      <div>
+        <div class="row-label">Progress</div>
+        <div class="progress-row">
+          <div class="row">
+            <div class="progress-bar" style="flex:1;"><span class="fill" style="width: 78%; background: hsl(var(--primary));"></span></div>
+            <span class="pct">78%</span>
+          </div>
+          <div class="row">
+            <div class="progress-bar" style="flex:1;"><span class="fill" style="width: 42%; background: hsl(var(--success));"></span></div>
+            <span class="pct">42%</span>
+          </div>
+          <div class="row">
+            <div class="progress-bar lg" style="flex:1;"><span class="fill" style="width: 91%; background: hsl(var(--warning));"></span></div>
+            <span class="pct">91%</span>
+          </div>
+          <div class="row">
+            <div class="progress-bar lg" style="flex:1;"><span class="fill" style="width: 23%; background: hsl(var(--destructive));"></span></div>
+            <span class="pct">23%</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ════════════════════════════════════════════════════════
+       APP SHELL — sidebar + topbar slice
+       ════════════════════════════════════════════════════════ -->
+  <section>
+    <div class="section-head">
+      <span class="eyebrow">09 · application shell</span>
+      <h2>AppShell</h2>
+      <p>Dark navy sidebar in both themes (the lockup is part of the brand). 240 px width, blue 500 active row, navy-tinted shadow on the topbar. Workspace card and section labels use white at 4–55 % alpha.</p>
+    </div>
+
+    <div class="shell-preview">
+      <aside class="shell-sidebar">
+        <div class="lockup">enirman<span class="dot">.</span></div>
+        <div class="ws">
+          <div class="av">A</div>
+          <div>Ajira Group<br><span style="font-size:10px;font-weight:500;color:rgba(255,255,255,0.55);">3 firms · pro</span></div>
+        </div>
+        <div class="nav-section">
+          <div class="label">Workspace</div>
+          <div class="nav-item active"><div class="icon"></div>Dashboard<span class="badge">12</span></div>
+          <div class="nav-item"><div class="icon"></div>Projects<span class="badge">28</span></div>
+          <div class="nav-item"><div class="icon"></div>RFIs<span class="badge">17</span></div>
+          <div class="nav-item"><div class="icon"></div>RA bills<span class="badge">8</span></div>
+          <div class="nav-item"><div class="icon"></div>Materials</div>
+        </div>
+        <div class="nav-section">
+          <div class="label">Design</div>
+          <div class="nav-item"><div class="icon"></div>Drawings</div>
+          <div class="nav-item"><div class="icon"></div>Approvals<span class="badge">3</span></div>
+          <div class="nav-item"><div class="icon"></div>Site reports</div>
+        </div>
+        <div class="nav-section" style="margin-top: auto;">
+          <div class="nav-item"><div class="icon"></div>Settings</div>
+        </div>
+      </aside>
+
+      <div class="shell-main">
+        <header class="shell-topbar">
+          <div class="crumbs">Projects&nbsp;/&nbsp;Mumbai Metro&nbsp;/&nbsp;<strong>L4 Civil Works</strong></div>
+          <div class="search">⌘K&nbsp;&nbsp; Search projects, RFIs, drawings…</div>
+          <div class="icon-btn" aria-label="Notifications">!</div>
+          <div class="avatar-stack" style="margin-left: 0;">
+            <div class="av" style="background: var(--brand-amber-400); margin-left: 0;">AD</div>
+          </div>
+        </header>
+        <div class="shell-content">
+          <div class="eyebrow">Pro · Mumbai Metro</div>
+          <h3>L4 Civil Works · DPR-37411-26-0017</h3>
+          <p style="margin-top:8px;color:hsl(var(--muted-foreground));font-size:13px;line-height:1.5;max-width: 60ch;">Stage S3 · Concept Design. RA bill due in 9 days. Last sync: 27 Apr 2026, 14:32 IST.</p>
+
+          <div style="display:flex;gap:8px;margin-top:20px;">
+            <button class="demo-btn size-md eui-btn-soft-primary">Approve drawing set</button>
+            <button class="demo-btn size-md eui-btn-soft-neutral">Forward to client</button>
+            <button class="demo-btn size-md demo-btn-ghost">View timeline</button>
+          </div>
+
+          <div style="display:flex;gap:8px;margin-top:24px;flex-wrap:wrap;">
+            <span class="demo-badge badge-pending"><span class="dot"></span>Pending review</span>
+            <span class="demo-badge tag badge-info" style="font-family: var(--font-mono);">S3</span>
+            <span class="demo-badge tag" style="background: var(--brand-amber-50); color: var(--brand-amber-700); border: 1px solid var(--brand-amber-200);">Tower B</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ════════════════════════════════════════════════════════
+       LOGO LOCKUPS
+       ════════════════════════════════════════════════════════ -->
+  <section>
+    <div class="section-head">
+      <span class="eyebrow">10 · brand</span>
+      <h2>Wordmark</h2>
+      <p>Lowercase Manrope at 800, tight tracking, with a single blue period as the brand mark. Use the dark wordmark on light surfaces, the light wordmark on the navy sidebar.</p>
+    </div>
+
+    <div class="logo-banners">
+      <div class="logo-banner light">enirman<span class="dot">.</span></div>
+      <div class="logo-banner dark">enirman<span class="dot">.</span></div>
+    </div>
+  </section>
+
+  <footer style="font-family: var(--font-mono); font-size: 11px; color: hsl(var(--muted-foreground)); text-align: center; padding-top: 32px; border-top: 1px dashed hsl(var(--border-subtle));">
+    enirman v2 design system · this page reads tokens from
+    <code>../src/theme.css</code> · static, no server required
+  </footer>
+
+</body>
+</html>
