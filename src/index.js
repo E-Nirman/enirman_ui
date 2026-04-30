@@ -58,6 +58,9 @@ export { EuiActivityFeed }          from './components/app/EuiActivityFeed'
 export { EuiCdeStateBadge }         from './components/app/EuiCdeStateBadge'
 export { EuiSparkline }             from './components/app/EuiSparkline'
 export { EuiAvatarStack }           from './components/app/EuiAvatarStack'
+export { EuiFeatureGate }           from './components/app/EuiFeatureGate'
+export { DetailRow }                from './components/app/DetailRow'
+export { InlineSelect }             from './components/app/InlineSelect'
 
 // ─── Layouts ──────────────────────────────────────────────────────
 export { default as AppShell }        from './layouts/AppShell.vue'
