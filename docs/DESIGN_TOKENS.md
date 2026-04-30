@@ -1,6 +1,6 @@
 # Design Tokens
 
-Every visual decision in enirman-ui resolves to a CSS variable. The
+Every visual decision in @enirman/ui resolves to a CSS variable. The
 variables are defined in `src/theme.css` and re-exposed to Tailwind
 utility classes by `tailwind-preset.js`. Tokens live in two scopes:
 **brand tokens** (raw colors, change to rebrand) and **semantic tokens**

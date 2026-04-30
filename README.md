@@ -1,4 +1,4 @@
-# enirman-ui
+# @enirman/ui
 
 Shared design system and Vue component library for every eNirman app.
 
@@ -6,6 +6,16 @@ Shared design system and Vue component library for every eNirman app.
 - **Style:** Notion-minimal base + Stripe-dashboard density, with vibrant neutral accents
 - **Themes:** Light + dark, driven entirely by CSS variables
 - **Responsive:** Mobile-first, with hamburger drawer on phones
+
+## Install
+
+```bash
+yarn add @enirman/ui
+# or
+npm install @enirman/ui
+```
+
+See [`docs/USAGE.md`](docs/USAGE.md) for full integration steps.
 
 ## Docs
 
@@ -31,8 +41,10 @@ Every visual decision routes through `src/theme.css`. To change the
 primary color across every consumer app, edit the six `--brand-*` values
 in `:root` and `[data-theme="dark"]` — nothing else needs to change.
 
-## Status
+## Releasing
 
-v0.1 — initial scaffold, shipping with the enirman_connect UI redesign.
-New primitives are added as consumer apps need them; see `docs/COMPONENTS.md`
-for the decision rubric on when to extract into the library.
+See [`RELEASING.md`](RELEASING.md) for the publish ritual.
+
+## License
+
+MIT — see [`LICENSE`](LICENSE).

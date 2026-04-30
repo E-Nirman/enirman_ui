@@ -1,7 +1,17 @@
 {
-  "name": "enirman-ui",
-  "version": "0.2.0",
+  "name": "@enirman/ui",
+  "version": "1.0.0",
   "description": "Shared design system for eNirman apps — shadcn-vue primitives + app shell + design tokens",
+  "license": "MIT",
+  "author": "eNirman",
+  "homepage": "https://github.com/E-Nirman/enirman_ui#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/E-Nirman/enirman_ui.git"
+  },
+  "bugs": {
+    "url": "https://github.com/E-Nirman/enirman_ui/issues"
+  },
   "main": "src/index.js",
   "module": "src/index.js",
   "exports": {
@@ -13,8 +23,13 @@
   "files": [
     "src",
     "tailwind-preset.js",
-    "docs"
+    "docs",
+    "LICENSE",
+    "README.md"
   ],
+  "publishConfig": {
+    "access": "public"
+  },
   "dependencies": {
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
@@ -28,7 +43,10 @@
     "@vueuse/core": "^10.0.0 || ^11.0.0 || ^12.0.0 || ^13.0.0 || ^14.0.0",
     "tailwindcss": "^3.4.0",
     "vue": "^3.4.0",
-    "vue-router": "^4.0.0"
+    "vue-router": "^4.0.0",
+    "element-plus": "^2.0.0",
+    "@mlightcad/cad-viewer": "^1.4.0",
+    "@mlightcad/cad-simple-viewer": "^1.4.0"
   },
   "keywords": [
     "enirman",
@@ -36,6 +54,5 @@
     "vue",
     "shadcn",
     "reka-ui"
-  ],
-  "private": false
+  ]
 }

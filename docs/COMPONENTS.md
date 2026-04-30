@@ -1,6 +1,6 @@
 # Component Rules
 
-Every component in `enirman-ui` follows a small set of rules. These exist
+Every component in `@enirman/ui` follows a small set of rules. These exist
 so that (a) the design stays coherent even as many people contribute,
 and (b) you always know which component to reach for.
 
@@ -297,7 +297,7 @@ Loading placeholder.
 If you need a primitive that doesn't exist:
 
 1. **Check if an existing primitive covers it with different slot content.**
-2. **If you'd duplicate the same snippet 3+ times, add it to `enirman-ui`.**
+2. **If you'd duplicate the same snippet 3+ times, add it to `@enirman/ui`.**
 3. **If it's truly one-off, inline with Tailwind, but never hardcode
    colors** — use the CSS variables directly (`var(--color-primary)`)
    or color utilities from the preset (`bg-brand`, `text-success`).

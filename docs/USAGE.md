@@ -1,21 +1,27 @@
-# Using enirman-ui in a new app
+# Using @enirman/ui in a new app
 
-`enirman-ui` is the shared design system for all eNirman Vue apps. This doc
+`@enirman/ui` is the shared design system for all eNirman Vue apps. This doc
 walks through wiring it into a fresh frontend package.
 
 ---
 
 ## 1. Install
 
-The package is published on GitHub at
-[E-Nirman/enirman_ui](https://github.com/E-Nirman/enirman_ui). Install it
-via yarn's git-protocol support — no npm publishing required:
+The package is published on the public npm registry as
+[`@enirman/ui`](https://www.npmjs.com/package/@enirman/ui).
+
+```bash
+cd apps/<your-app>/frontend
+yarn add @enirman/ui
+```
+
+Or declare it in `package.json` and run `yarn install`:
 
 ```json
 // apps/<your-app>/frontend/package.json
 {
   "dependencies": {
-    "enirman-ui": "git+https://github.com/E-Nirman/enirman_ui.git#master",
+    "@enirman/ui": "^1.0.0",
     "frappe-ui": "latest",
     "vue": "^3.4.0",
     "vue-router": "^4.0.0",
@@ -24,34 +30,42 @@ via yarn's git-protocol support — no npm publishing required:
 }
 ```
 
-Pin to a tag (`#v0.1.0`) or commit SHA for reproducible deploys.
+If your app uses `EuiDwgViewer`, also declare:
 
-Then `yarn install`. Yarn clones the repo into `node_modules/enirman-ui`.
+```json
+"element-plus": "^2.0.0",
+"@mlightcad/cad-viewer": "^1.4.0",
+"@mlightcad/cad-simple-viewer": "^1.4.0"
+```
 
-### Local development against a branch of enirman_ui
+These are listed as `peerDependencies` of `@enirman/ui`; consumers that don't
+use the DWG viewer don't need them (Vue + Vite tree-shake the unused
+component).
 
-When you're actively editing `enirman_ui` and want instant updates in a
-consumer app without pushing, use `yarn link`:
+### Local development against an unpublished version
+
+When you're actively editing `@enirman/ui` and want instant updates in a
+consumer app without re-publishing, use `yarn link`:
 
 ```bash
 cd ~/frappe-bench/apps/enirman_ui
 yarn link
 
 cd ~/frappe-bench/apps/<your-app>/frontend
-yarn link enirman-ui
+yarn link @enirman/ui
 ```
 
-`yarn unlink enirman-ui` + `yarn install` reverts to the pinned version.
+`yarn unlink @enirman/ui` + `yarn install` reverts to the registry version.
 
 ## 2. Wire Tailwind
 
-`enirman-ui` ships a Tailwind preset that extends frappe-ui's preset with
+`@enirman/ui` ships a Tailwind preset that extends frappe-ui's preset with
 our color tokens, radii, shadows, and the `xs` breakpoint.
 
 ```js
 // apps/<your-app>/frontend/tailwind.config.js
 import frappeUIPreset from 'frappe-ui/tailwind'
-import enirmanPreset from 'enirman-ui/tailwind-preset'
+import enirmanPreset from '@enirman/ui/tailwind-preset'
 
 export default {
   presets: [frappeUIPreset, enirmanPreset],
@@ -59,7 +73,7 @@ export default {
     './index.html',
     './src/**/*.{vue,js,ts,jsx,tsx}',
     './node_modules/frappe-ui/src/**/*.{vue,js,ts,jsx,tsx}',
-    './node_modules/enirman-ui/src/**/*.{vue,js,ts,jsx,tsx}',
+    './node_modules/@enirman/ui/src/**/*.{vue,js,ts,jsx,tsx}',
   ],
   plugins: [],
 }
@@ -72,7 +86,7 @@ Import `theme.css` once in your app entry, after frappe-ui's style:
 ```js
 // apps/<your-app>/frontend/src/main.js
 import 'frappe-ui/style.css'
-import 'enirman-ui/theme.css'
+import '@enirman/ui/theme.css'
 import './index.css'
 // …rest of your app setup
 ```
@@ -87,7 +101,7 @@ Use `EuiAppShell` for the chrome and `EuiPageHeader` on every page.
 
 ```vue
 <script setup>
-import { EuiAppShell, EuiSidebarItem, EuiSidebarSection, useTheme } from 'enirman-ui'
+import { EuiAppShell, EuiSidebarItem, EuiSidebarSection, useTheme } from '@enirman/ui'
 import LucideHome from '~icons/lucide/home'
 import LucideSettings from '~icons/lucide/settings'
 
@@ -136,7 +150,7 @@ To let the user toggle:
 
 ```vue
 <script setup>
-import { useTheme, EuiIconButton } from 'enirman-ui'
+import { useTheme, EuiIconButton } from '@enirman/ui'
 import LucideMoon from '~icons/lucide/moon'
 import LucideSun from '~icons/lucide/sun'
 const { theme, toggle } = useTheme()
@@ -163,9 +177,10 @@ import LucideSearch from '~icons/lucide/search'
 
 To change the primary brand color across every consumer app:
 
-1. Edit `apps/enirman_ui/src/theme.css`
+1. Edit `apps/enirman_ui/src/theme.css` (in the source repo)
 2. Update `--brand-50 / 100 / 300 / 500 / 600 / 700` under `:root` and `[data-theme="dark"]`
-3. That's it — every component re-derives its color from these six values
+3. Bump version, publish (see [`RELEASING.md`](../RELEASING.md))
+4. In each consumer, `yarn upgrade @enirman/ui`
 
 No other file changes. No JS rebuild needed in the design system itself;
 consumers just need to restart their dev server.

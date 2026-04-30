@@ -1,10 +1,10 @@
 /*
- * enirman-ui v2 Tailwind preset (shadcn-vue compatible)
+ * @enirman/ui Tailwind preset (shadcn-vue compatible)
  *
  * Usage in a consumer app:
  *
  *   import frappeUIPreset from 'frappe-ui/tailwind'
- *   import enirmanPreset  from 'enirman-ui/tailwind-preset'
+ *   import enirmanPreset  from '@enirman/ui/tailwind-preset'
  *
  *   export default {
  *     presets: [frappeUIPreset, enirmanPreset],
@@ -12,7 +12,7 @@
  *       './index.html',
  *       './src/**\/*.{vue,js,ts,jsx,tsx}',
  *       './node_modules/frappe-ui/src/**\/*.{vue,js,ts,jsx,tsx}',
- *       './node_modules/enirman-ui/src/**\/*.{vue,js,ts,jsx,tsx}',
+ *       './node_modules/@enirman/ui/src/**\/*.{vue,js,ts,jsx,tsx}',
  *     ],
  *   }
  *
