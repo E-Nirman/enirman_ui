@@ -5,7 +5,7 @@ const props = defineProps({ class: { type: [String, Array, Object], default: '' 
 
 <template>
   <tr :class="cn(
-    'border-b border-border transition-colors hover:bg-muted/40 data-[state=selected]:bg-muted',
+    'border-b border-border transition-colors hover:bg-accent/60 data-[state=selected]:bg-muted',
     props.class,
   )">
     <slot />
