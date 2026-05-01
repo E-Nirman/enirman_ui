@@ -83,7 +83,7 @@
   --background:        210 33% 97%;     /* gray-50  #F6F8FA */
   --foreground:        222 27% 10%;     /* gray-900 #131722 */
 
-  --card:              0 0% 100%;
+  --card:              210 30% 99%;     /* faint blue, paler than --background so cards sit subtly above the canvas */
   --card-foreground:   222 27% 10%;
 
   --popover:           0 0% 100%;
