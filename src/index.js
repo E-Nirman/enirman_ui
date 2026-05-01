@@ -32,6 +32,7 @@ export * from './components/ui/table/index.js'
 export * from './components/ui/scroll-area/index.js'
 export * from './components/ui/sonner/index.js'
 export * from './components/ui/progress/index.js'
+export * from './components/ui/spinner/index.js'
 
 // ─── eNirman composed components ──────────────────────────────────
 export { default as PageHeader }    from './components/app/PageHeader.vue'
