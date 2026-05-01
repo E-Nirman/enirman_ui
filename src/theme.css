@@ -140,11 +140,7 @@
   --ring:              212 78% 48%;
 
   /* ─── Sidebar palette — DARK in both themes ──────────────────── */
-  --sidebar:                  217 48% 22%;     /* navy 700 — lifted in
-                                                  light mode so the chrome
-                                                  reads as a dark surface
-                                                  without going pitch-black
-                                                  next to the bright canvas */
+  --sidebar:                  217 58% 14%;     /* navy 800 */
   --sidebar-foreground:       0 0% 100%;
   --sidebar-muted:            0 0% 100%;       /* used with /60 alpha */
   --sidebar-border:           0 0% 100%;       /* used with /6  alpha */
