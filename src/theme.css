@@ -93,10 +93,11 @@
   --primary:           212 78% 48%;    /* blue 500 */
   --primary-foreground: 0 0% 100%;
 
-  --secondary:         220 19% 95%;    /* gray-100 */
+  --secondary:         220 19% 91%;    /* gray-150 — darker so chips read */
   --secondary-foreground: 222 27% 10%;
 
-  --muted:             220 19% 95%;
+  --muted:             220 19% 91%;    /* deeper than the gray-50 canvas
+                                          so default Badge has visible contrast */
   --muted-foreground:  219 11% 47%;    /* gray-500 */
 
   --accent:            210 91% 96%;    /* blue 50 */
