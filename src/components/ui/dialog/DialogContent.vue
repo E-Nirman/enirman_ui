@@ -81,9 +81,37 @@ const OPEN_PORTAL_SELECTORS = [
   '.el-popper:not([style*="display: none"])',
 ].join(',')
 
+// Reka unmounts a popper synchronously when its DismissableLayer
+// processes an outside pointerdown — by the time the Dialog's
+// pointer-down-outside fires, document.querySelector returns null and
+// the live DOM check above can't see "a popper was just open." Latch
+// the answer at capture-phase pointerdown (before any DismissableLayer
+// runs) and let the guard read the latch.
+let pointerDownHadOpenPortal = false
+let captureInstalled = false
+
+function installPointerDownCapture() {
+  if (captureInstalled || typeof document === 'undefined') return
+  captureInstalled = true
+  document.addEventListener('pointerdown', () => {
+    if (document.querySelector(OPEN_PORTAL_SELECTORS)) {
+      pointerDownHadOpenPortal = true
+      // queueMicrotask drains after all synchronous reka handlers fire
+      // (that's when pointer-down-outside is emitted) but before any
+      // subsequent user interaction.
+      queueMicrotask(() => { pointerDownHadOpenPortal = false })
+    }
+  }, true)
+}
+installPointerDownCapture()
+
 function guardOutside(event) {
   const target = event.target
   if (target && typeof target.closest === 'function' && target.closest(PORTAL_SELECTORS)) {
+    event.preventDefault()
+    return
+  }
+  if (pointerDownHadOpenPortal) {
     event.preventDefault()
     return
   }
