@@ -68,13 +68,26 @@ const PORTAL_SELECTORS = [
   '[data-sonner-toaster]',
 ].join(',')
 
+// "Is any popper currently OPEN?" — must exclude permanently-mounted
+// portals like the Sonner toast container, otherwise the dialog can
+// never be dismissed by an outside click.
+const OPEN_PORTAL_SELECTORS = [
+  '[data-reka-popper-content-wrapper]',
+  '[data-reka-menu-content][data-state="open"]',
+  '[data-reka-select-content][data-state="open"]',
+  '[data-reka-popover-content][data-state="open"]',
+  '[data-reka-combobox-content][data-state="open"]',
+  '[data-reka-dropdown-menu-content][data-state="open"]',
+  '.el-popper:not([style*="display: none"])',
+].join(',')
+
 function guardOutside(event) {
   const target = event.target
   if (target && typeof target.closest === 'function' && target.closest(PORTAL_SELECTORS)) {
     event.preventDefault()
     return
   }
-  if (typeof document !== 'undefined' && document.querySelector(PORTAL_SELECTORS)) {
+  if (typeof document !== 'undefined' && document.querySelector(OPEN_PORTAL_SELECTORS)) {
     event.preventDefault()
   }
 }
