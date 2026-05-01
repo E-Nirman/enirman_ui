@@ -46,7 +46,7 @@ const normalized = computed(() =>
         v-model="model"
         :disabled="disabled"
         :required="required"
-        class="w-full appearance-none rounded-md border border-input bg-card px-2.5 pr-8 h-8 text-sm text-foreground transition-colors duration-fast ease-out-expo cursor-pointer outline-none shadow-xs focus-visible:border-ring focus-visible:shadow-focus disabled:opacity-50 disabled:cursor-not-allowed disabled:bg-muted"
+        class="w-full appearance-none rounded-md border border-input bg-card px-2.5 pr-8 h-8 leading-8 text-sm text-foreground transition-colors duration-fast ease-out-expo cursor-pointer outline-none shadow-xs focus-visible:border-ring focus-visible:shadow-focus disabled:opacity-50 disabled:cursor-not-allowed disabled:bg-muted"
       >
         <option v-if="placeholder" value="" disabled>{{ placeholder }}</option>
         <option
