@@ -8,6 +8,10 @@ const props = defineProps({
   size:        { type: String, default: 'md' },
   showClose:   { type: Boolean, default: true },
   class:       { type: [String, Array, Object], default: '' },
+  // When false, suppress reka-ui's default focus-the-first-child behaviour
+  // on open. Focus stays on the dialog itself — Tab/Escape still work, but
+  // the first input doesn't show a focus ring before the user touches it.
+  autoFocus:   { type: Boolean, default: true },
 })
 
 const variants = cva(
@@ -132,6 +136,7 @@ function guardOutside(event) {
       :class="cn(variants({ size }), props.class)"
       @pointer-down-outside="guardOutside"
       @interact-outside="guardOutside"
+      @open-auto-focus="autoFocus ? undefined : $event.preventDefault()"
     >
       <slot />
       <DialogClose
