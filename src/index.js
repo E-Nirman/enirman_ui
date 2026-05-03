@@ -34,6 +34,7 @@ export * from './components/ui/scroll-area/index.js'
 export * from './components/ui/sonner/index.js'
 export * from './components/ui/progress/index.js'
 export * from './components/ui/spinner/index.js'
+export * from './components/ui/date-picker/index.js'
 
 // ─── eNirman composed components ──────────────────────────────────
 export { default as PageHeader }    from './components/app/PageHeader.vue'
@@ -73,6 +74,10 @@ export { default as SidebarSection }  from './layouts/SidebarSection.vue'
 export { useTheme }           from './composables/useTheme.js'
 export { useBreakpoint }      from './composables/useBreakpoint.js'
 export { useCommandPalette }  from './composables/useCommandPalette.js'
+export {
+  loadNepaliCalendarLib,
+  getNepaliCalendarLibSync,
+} from './composables/useNepaliCalendarLib.js'
 
 // ─── Utilities ───────────────────────────────────────────────────
 export { cn } from './lib/utils.js'
