@@ -81,6 +81,13 @@ export {
 
 // ─── Utilities ───────────────────────────────────────────────────
 export { cn } from './lib/utils.js'
+export {
+  formatDate,
+  formatDateTime,
+  formatTimeAgo,
+  useDateFormat,
+  nepaliCalendarReady,
+} from './lib/format-date.js'
 
 // ─── Brand assets (logo URLs, ready for <img :src>) ──────────────
 export { logo, logoLight, logoMark } from './assets/index.js'
