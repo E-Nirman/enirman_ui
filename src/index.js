@@ -88,6 +88,15 @@ export {
   useDateFormat,
   nepaliCalendarReady,
 } from './lib/format-date.js'
+export {
+  walkBsMonths,
+  walkBsQuarters,
+  fmtBsMonthDay,
+  fmtBsMonth,
+  BS_MONTH_NAMES_EN,
+  BS_MONTH_SHORT_EN,
+  BS_QUARTER_LABELS_EN,
+} from './lib/bs-calendar.js'
 
 // ─── Brand assets (logo URLs, ready for <img :src>) ──────────────
 export { logo, logoLight, logoMark } from './assets/index.js'
