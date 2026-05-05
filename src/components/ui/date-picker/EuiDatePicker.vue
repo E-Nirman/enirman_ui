@@ -62,7 +62,9 @@ function formatBsDisplay(adString) {
   if (!adString || typeof window === 'undefined' || !window.NepaliDateLib) return adString
   try {
     const [y, m, d] = adString.split('-').map(Number)
-    const date = new Date(y, m - 1, d)
+    // Construct as UTC midnight so the lib's fromAD (which uses getTime)
+    // doesn't drift to the previous day in zones west of UTC such as NPT.
+    const date = new Date(Date.UTC(y, m - 1, d))
     const nd = window.NepaliDateLib.NepaliDate.fromAD(date)
     return nd.format({ format: 'YYYY-MM-DD', calendar: 'BS', locale: 'en' })
   } catch {

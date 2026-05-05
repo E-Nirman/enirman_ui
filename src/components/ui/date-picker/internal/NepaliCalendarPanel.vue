@@ -34,11 +34,19 @@ onMounted(async () => {
   }
 })
 
+// All AD↔BS conversions are pinned to UTC midnight. The lib's internal
+// AD→BS path (NepaliDate.fromAD) uses Date.getTime() — i.e. UTC
+// milliseconds — and floors days since a UTC-midnight epoch. Constructing
+// dates with `new Date(y, m, d)` (local-midnight) silently shifts the
+// result back one day in zones west of UTC and forward one day in zones
+// far east of UTC. `Date.UTC(y, m, d)` produces exactly UTC midnight, and
+// the lib's toAD() returns UTC-midnight Dates the same way.
+
 function adToBs(adString) {
   if (!adString || !lib.value) return null
   try {
     const [y, m, d] = adString.split('-').map(Number)
-    const date = new Date(y, m - 1, d)
+    const date = new Date(Date.UTC(y, m - 1, d))
     return lib.value.NepaliDate.fromAD(date)
   } catch {
     return null
@@ -47,14 +55,9 @@ function adToBs(adString) {
 
 function bsToAd(nd) {
   const ad = nd.toAD()
-  // The lib returns a local-time Date (midnight in the user's timezone).
-  // Use local getters so the AD string matches the day the user clicked
-  // — UTC getters shift back one day in zones west of UTC such as
-  // Asia/Kathmandu (NPT = UTC+5:45), where local-midnight reads as the
-  // previous day's evening in UTC.
-  const y = ad.getFullYear()
-  const m = String(ad.getMonth() + 1).padStart(2, '0')
-  const d = String(ad.getDate()).padStart(2, '0')
+  const y = ad.getUTCFullYear()
+  const m = String(ad.getUTCMonth() + 1).padStart(2, '0')
+  const d = String(ad.getUTCDate()).padStart(2, '0')
   return `${y}-${m}-${d}`
 }
 
