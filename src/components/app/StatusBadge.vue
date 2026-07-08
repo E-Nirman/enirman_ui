@@ -9,6 +9,13 @@ import { Badge } from '../ui/badge/index.js'
  *
  * Default mappings handle the eNirman project / design / payment /
  * client-approval / municipal lifecycle statuses.
+ *
+ * v3 convention: one colored status element per row/entity. StatusBadge
+ * is that single element — a tinted pill with a leading dot. Revision
+ * types (Initial / Complete Redesign / …) are NOT statuses; they render
+ * as muted context text at the call site, so they were removed from the
+ * tone map. The overdue counter ("36 days in review") is likewise not
+ * part of the badge — render it as a separate `text-danger` caption.
  */
 
 const DEFAULT_MAP = {
@@ -37,18 +44,13 @@ const DEFAULT_MAP = {
   'Bank Transfer':                  'info',
   'eSewa':                          'plus',
   'Khalti':                         'plus',
-
-  // Revision types
-  'Initial':                        'default',
-  'Complete Redesign':              'destructive',
-  'Major Revision':                 'warning',
-  'Minor Correction':               'success',
 }
 
 const props = defineProps({
   status:  { type: String, required: true },
   toneMap: { type: Object, default: () => ({}) },
   solid:   { type: Boolean, default: false },
+  dot:     { type: Boolean, default: true },
   class:   { type: [String, Array, Object], default: '' },
 })
 
@@ -59,7 +61,7 @@ const variant = computed(() => {
 </script>
 
 <template>
-  <Badge :variant="variant" :solid="solid" :class="props.class">
+  <Badge :variant="variant" :solid="solid" :with-dot="dot" :class="props.class">
     {{ status }}
   </Badge>
 </template>
