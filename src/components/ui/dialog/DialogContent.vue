@@ -8,6 +8,10 @@ const props = defineProps({
   size:        { type: String, default: 'md' },
   showClose:   { type: Boolean, default: true },
   class:       { type: [String, Array, Object], default: '' },
+  // When false, suppress reka-ui's default focus-the-first-child behaviour
+  // on open. Focus stays on the dialog itself — Tab/Escape still work, but
+  // the first input doesn't show a focus ring before the user touches it.
+  autoFocus:   { type: Boolean, default: true },
 })
 
 const variants = cva(
@@ -68,13 +72,54 @@ const PORTAL_SELECTORS = [
   '[data-sonner-toaster]',
 ].join(',')
 
+// "Is any popper currently OPEN?" — must exclude permanently-mounted
+// portals like the Sonner toast container, otherwise the dialog can
+// never be dismissed by an outside click.
+const OPEN_PORTAL_SELECTORS = [
+  '[data-reka-popper-content-wrapper]',
+  '[data-reka-menu-content][data-state="open"]',
+  '[data-reka-select-content][data-state="open"]',
+  '[data-reka-popover-content][data-state="open"]',
+  '[data-reka-combobox-content][data-state="open"]',
+  '[data-reka-dropdown-menu-content][data-state="open"]',
+  '.el-popper:not([style*="display: none"])',
+].join(',')
+
+// Reka unmounts a popper synchronously when its DismissableLayer
+// processes an outside pointerdown — by the time the Dialog's
+// pointer-down-outside fires, document.querySelector returns null and
+// the live DOM check above can't see "a popper was just open." Latch
+// the answer at capture-phase pointerdown (before any DismissableLayer
+// runs) and let the guard read the latch.
+let pointerDownHadOpenPortal = false
+let captureInstalled = false
+
+function installPointerDownCapture() {
+  if (captureInstalled || typeof document === 'undefined') return
+  captureInstalled = true
+  document.addEventListener('pointerdown', () => {
+    if (document.querySelector(OPEN_PORTAL_SELECTORS)) {
+      pointerDownHadOpenPortal = true
+      // queueMicrotask drains after all synchronous reka handlers fire
+      // (that's when pointer-down-outside is emitted) but before any
+      // subsequent user interaction.
+      queueMicrotask(() => { pointerDownHadOpenPortal = false })
+    }
+  }, true)
+}
+installPointerDownCapture()
+
 function guardOutside(event) {
   const target = event.target
   if (target && typeof target.closest === 'function' && target.closest(PORTAL_SELECTORS)) {
     event.preventDefault()
     return
   }
-  if (typeof document !== 'undefined' && document.querySelector(PORTAL_SELECTORS)) {
+  if (pointerDownHadOpenPortal) {
+    event.preventDefault()
+    return
+  }
+  if (typeof document !== 'undefined' && document.querySelector(OPEN_PORTAL_SELECTORS)) {
     event.preventDefault()
   }
 }
@@ -91,6 +136,7 @@ function guardOutside(event) {
       :class="cn(variants({ size }), props.class)"
       @pointer-down-outside="guardOutside"
       @interact-outside="guardOutside"
+      @open-auto-focus="autoFocus ? undefined : $event.preventDefault()"
     >
       <slot />
       <DialogClose
