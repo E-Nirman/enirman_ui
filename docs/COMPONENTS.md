@@ -20,6 +20,10 @@ and (b) you always know which component to reach for.
    that dark mode overrides. Don't hardcode hex colors.
 5. **Mobile-first.** Components collapse gracefully below `md` breakpoint.
    Cards reduce padding, dialogs become bottom sheets, page headers stack.
+6. **One colored status element per row/entity.** Colour is the scarcest
+   signal on a dense screen — spend it on workflow status and nothing
+   else. Everything that competes gets demoted to text. See
+   [Status, revisions & versions](#status-revisions--versions).
 
 ---
 
@@ -99,6 +103,77 @@ badge. Use inside dense rows (sidebar, list) where a badge would
 overwhelm.
 
 **`pulse`** — animated ring. Reserve for real-time or "live" indicators.
+
+---
+
+## Status, revisions & versions
+
+**The rule: one colored status element per row/entity.** The workflow
+status is that element — a tinted pill with a leading dot (`StatusBadge`).
+Everything else on the row is demoted so the eye lands on status first.
+
+| Information | Render as |
+|---|---|
+| Workflow status | The ONLY badge — tinted pill, dot prefix (`StatusBadge`) |
+| Version (`v1.1.1`) | Plain `font-mono text-xs font-semibold` text, no chip |
+| Option (`OPT A`) | Mono text in a hairline border box, `text-[10px]`, gray |
+| Revision type (`Complete Redesign`) | Muted two-line text — `Complete redesign` over `✓ redesign done` in success ink |
+| Routing (`→ Structural · shyam`) | 20px avatar + muted name text |
+| Discipline (`ARCH`/`3D`/`STR`) | Tiny mono tag — ARCH `info-muted`, 3D `warning-muted`, STR `success-muted` |
+
+**Rules:**
+- **Revision types are never badges.** `Initial`, `Complete Redesign`,
+  `Major Revision`, `Minor Correction` are context, not state. They were
+  removed from `StatusBadge`'s tone map on purpose — passing one now falls
+  back to the `default` gray tone, which is the tell that it's misplaced.
+- **`StatusBadge` always shows its dot** (`dot` defaults to true). Pass
+  `dot={false}` only for label-only taxonomy chips.
+- **Overdue counters are not part of the badge.** "36 days in review" is a
+  separate `text-danger` caption under the modified date.
+- `'Sent to Client'` is toned `info`, but semantically means *waiting on
+  someone external* — dashboard and list age-alerts key off it.
+- Legend, where one is shown: blue = in progress · amber = waiting ·
+  green = approved · red = returned.
+
+---
+
+## Table conventions
+
+For dense list tables (Design Hub, Projects, Designs, Visits):
+
+- **Column clusters** separated by hairline `border-l` rules:
+  `identity | state (version + status + revision) | routing | meta`.
+- **Identity cell** is a title (13px semibold) over a mono code + a
+  discipline tag.
+- **Overdue rows** get an amber `inset 3px 0 0` left accent plus a red
+  caption under the date — never a second badge.
+- **Old versions never stack as rows.** The version cell carries an
+  "N older" link that expands an `EuiOlderVersionsRow` sub-row beneath.
+- Below `1250px`, wrap the table in `overflow-x-auto` and put a
+  `min-width` on the grid rather than letting columns collapse.
+
+---
+
+## Workflow components
+
+Composed pieces for the design/review lifecycle. All are driven by the
+rules above, so prefer them over bespoke markup.
+
+| Component | What it is |
+|---|---|
+| `EuiStatusFlow` | Vertical "Stage" stepper. `steps: [{ label, state, meta, quote, elapsed, tone }]`, state `done`/`current`/`upcoming`/`next`. Elapsed time renders in danger ink. |
+| `EuiVersionTimeline` | One card per version. Current version is `border-info` + `bg-info-muted` with a `current` chip. A version carrying `revisions: []` collapses to "v1 · N revisions". |
+| `EuiReviewCard` | A single client/reviewer decision as a left-border accent card. Internal notes are **not** rendered here — they live as a separate flat list so client feedback and internal chatter stay distinct. |
+| `EuiOlderVersionsRow` | The expandable sub-row behind a table's "N older" link. |
+| `EuiDesignItemPane` | Tabbed workflow panel (Workflow / Versions / Reviews / History). Resizable + collapsible; width and open state persist to localStorage. |
+| `EuiProjectTimeline` | Dashboard Gantt — estimated bar over actual phase bars, today line, legend. |
+
+**Rules:**
+- `EuiDesignItemPane`'s NEXT ACTION cluster gets **exactly one** primary
+  button. Decisions are bordered tone cards (title + one-line description).
+- **Destructive operations are never inline.** Retract approval, revoke
+  access and friends live behind the collapsed "Destructive actions"
+  disclosure at the bottom of the pane.
 
 ---
 
