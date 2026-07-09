@@ -15,7 +15,9 @@
   "files": [
     "src",
     "tailwind-preset.js",
-    "docs"
+    "docs",
+    "!docs/*-demo.html",
+    "CHANGELOG.md"
   ],
   "dependencies": {
     "class-variance-authority": "^0.7.1",
