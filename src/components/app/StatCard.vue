@@ -31,6 +31,7 @@ const props = defineProps({
   spark:       { type: Array, default: null },
   to:          { type: [String, Object], default: null },
   href:        { type: String, default: null },
+  showArrow:   { type: Boolean, default: false },
   class:       { type: [String, Array, Object], default: '' },
 })
 
@@ -104,7 +105,7 @@ const sparkTone = computed(() => {
 
     <!-- Link chevron (only when interactive) -->
     <ArrowUpRight
-      v-if="to || href"
+      v-if="showArrow && (to || href)"
       class="absolute right-3 top-3 size-3.5 text-muted-foreground/40 opacity-0 transition-opacity group-hover:opacity-100"
     />
   </component>
