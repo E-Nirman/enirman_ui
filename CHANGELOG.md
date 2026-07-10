@@ -7,6 +7,26 @@ change, minor = new components/variants/tokens, patch = fixes.
 
 ---
 
+## 3.0.1
+
+Fixes found by rendering the v3 components in a browser for the first
+time. No API changes.
+
+- **`EuiProjectTimeline` was broken in dark mode.** The estimated bars,
+  gridlines, today line and legend swatch used the raw `--gray-*` /
+  `--brand-*` scales. Those are absolute swatches — `theme.css` does not
+  flip them for dark mode — so the estimated bars painted as solid white
+  slabs on the dark canvas. They now use semantic tokens (`--border`,
+  `--border-strong`, `--muted`, `--primary`). The amber municipal bar is
+  unchanged: it's a deliberate brand accent, legible in both themes.
+- **`EuiStatusFlow` now shows ✓ on an approved current step.** It always
+  printed the step number; the mockup shows a check when the current step
+  is itself an approval. Keys off `tone === 'success'`, number otherwise.
+
+If you use `EuiProjectTimeline`, upgrade — 3.0.0 is unusable in dark mode.
+
+---
+
 ## 3.0.0
 
 The **v3 redesign** (`docs/ENIRMAN_UI_V3_HANDOFF.md`), built against the
