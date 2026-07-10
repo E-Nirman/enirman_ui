@@ -7,6 +7,24 @@ change, minor = new components/variants/tokens, patch = fixes.
 
 ---
 
+## 3.2.0
+
+- **`EuiProjectTimeline` actual bars take a `tone`.** `primary` / `info` /
+  `plus` / `warning` / `success` / `neutral` / `municipal`. The old
+  `phase: 'design' | 'municipal'` still works as an alias, so existing
+  calls are unchanged. Needed because consumers colour bars per workflow
+  stage, and two colours weren't enough.
+- Fixed: the `neutral` bar was `bg-muted` with muted ink — effectively
+  illegible. It is now a solid `bg-muted-foreground` bar with
+  background-coloured text.
+
+**Know before you colour-code:** `theme.css` gives `--primary` and
+`--info` the *same* blue, and `--plus` and `--warning` the *same* amber.
+Only three saturated hues are actually distinguishable. Don't rely on
+those pairs to separate two things the reader must tell apart.
+
+---
+
 ## 3.1.0
 
 `EuiProjectTimeline` gains the two things a real date window needs. Both

@@ -20,8 +20,10 @@ defineOptions({ name: 'EuiProjectTimeline' })
  * Project shape: {
  *   title, code, status,
  *   estimated?: { start, width },
- *   actual?: [{ label, phase, start, width }]   // phase: 'design'|'municipal'
+ *   actual?: [{ label, start, width, tone }]
  * }
+ * Bar `tone`: 'primary'|'info'|'plus'|'warning'|'success'|'neutral'|
+ * 'municipal'. `phase: 'design'|'municipal'` still works as an alias.
  *
  * `months` accepts either plain labels (equal-width columns):
  *     ['Bai', 'Jet', 'Asa', 'Shr']
@@ -51,14 +53,33 @@ const emit = defineEmits(['granularity-change'])
 
 const GRAINS = ['Week', 'Month', 'Quarter']
 
-// phase → actual-bar colour (full literal classes for Tailwind JIT).
-// municipal is a deliberate safety accent: saturated amber with navy ink
-// reads on both canvases, verified in light and dark.
-const PHASE_CLASS = {
-  design:    'bg-primary text-primary-foreground',
+/*
+ * Actual-bar colour. Prefer `tone` on the bar; `phase` is the original
+ * two-value alias kept for compatibility.
+ *
+ * `municipal` is a deliberate safety accent: saturated amber with navy
+ * ink, verified legible on both canvases. Everything else is a tone
+ * family, so it re-tints in dark mode.
+ * (Full literal classes — Tailwind JIT can't see runtime concatenation.)
+ *
+ * Caution: theme.css gives `--primary` and `--info` the same blue, and
+ * `--plus` and `--warning` the same amber. Only three saturated hues are
+ * actually distinguishable — don't rely on those pairs to separate two
+ * things the reader must tell apart.
+ */
+const TONE_CLASS = {
+  primary:   'bg-primary text-primary-foreground',
+  info:      'bg-info text-info-foreground',
+  plus:      'bg-plus text-plus-foreground',
+  warning:   'bg-warning text-warning-foreground',
+  success:   'bg-success text-success-foreground',
+  // solid, not a tint: a `bg-muted` bar with muted ink is illegible.
+  neutral:   'bg-muted-foreground text-background',
   municipal: 'bg-amber-400 text-navy-800', // theme-token-ok
 }
-const phaseClass = (phase) => PHASE_CLASS[phase] || PHASE_CLASS.design
+const PHASE_ALIAS = { design: 'primary', municipal: 'municipal' }
+const barClass = (b) =>
+  TONE_CLASS[b.tone] || TONE_CLASS[PHASE_ALIAS[b.phase]] || TONE_CLASS.primary
 
 // status → dot + ink for the label cell
 const STATUS_TONE = {
@@ -195,7 +216,7 @@ const actStyle = (b) => ({ left: `${b.start}%`, width: `${b.width}%`, top: '21px
                   v-for="(b, i) in (p.actual || [])"
                   :key="i"
                   class="absolute z-[1] flex items-center overflow-hidden rounded-full px-[7px]"
-                  :class="phaseClass(b.phase)"
+                  :class="barClass(b)"
                   :style="actStyle(b)"
                 >
                   <span v-if="b.label" class="truncate text-[9px] font-semibold tracking-wide">{{ b.label }}</span>
