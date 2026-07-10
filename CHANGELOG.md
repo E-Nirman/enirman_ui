@@ -7,6 +7,38 @@ change, minor = new components/variants/tokens, patch = fixes.
 
 ---
 
+## 3.1.0
+
+`EuiProjectTimeline` gains the two things a real date window needs. Both
+are additive — existing calls render exactly as before.
+
+- **Proportional period columns.** `months` now accepts
+  `{ label, days }` or `{ label, widthPct }` alongside plain strings.
+  Values are normalised to sum to 100, so gridlines land on the true
+  period boundaries. Real calendars are uneven — Gregorian months run
+  28–31 days, Bikram Sambat months 29–32 — and with equal columns the
+  bars drifted from the gridlines by up to ~5%. Plain strings still
+  divide the track evenly.
+
+  ```js
+  // before (still works): equal columns
+  :months="['Bai', 'Jet', 'Asa', 'Shr']"
+  // now: true widths — pairs with walkBsMonths()
+  :months="[{ label: 'Bai', days: 31 }, { label: 'Jet', days: 32 }, …]"
+  ```
+
+- **`minWidth` (px) enables horizontal scrolling.** Without it, a long
+  window compresses bars into unreadable slivers. With it the chart
+  scrolls and the label column stays pinned. Default `0` = fit, no
+  scroll, unchanged behaviour.
+
+- Gridlines are now drawn once across all rows at their real offsets,
+  rather than as a repeating `linear-gradient` that assumed equal months.
+- Fixed: when scrolled, period labels slid underneath the label column
+  (the header's spacer cell wasn't pinned).
+
+---
+
 ## 3.0.2
 
 - **`EuiBlockBadge` was broken in dark mode.** Its four accent chips used
