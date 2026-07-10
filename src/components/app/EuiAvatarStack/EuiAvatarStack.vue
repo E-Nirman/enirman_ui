@@ -19,12 +19,15 @@ import { cn } from '../../../lib/utils.js'
  *   size  (sm|md|lg)  — 22 / 26 / 32 px
  */
 
+// Identity colours: saturated brand swatches carrying white initials, so
+// they read on either canvas. Fixed across themes on purpose — a person
+// keeps the same colour in light and dark.
 const PALETTE = [
-  'var(--brand-blue-500)',
-  'var(--brand-amber-400)',
-  'var(--brand-navy-500)',
-  'var(--brand-blue-700)',
-  'var(--brand-amber-600)',
+  'var(--brand-blue-500)',  // theme-token-ok
+  'var(--brand-amber-400)', // theme-token-ok
+  'var(--brand-navy-500)',  // theme-token-ok
+  'var(--brand-blue-700)',  // theme-token-ok
+  'var(--brand-amber-600)', // theme-token-ok
 ]
 
 const props = defineProps({

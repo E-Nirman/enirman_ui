@@ -7,6 +7,29 @@ change, minor = new components/variants/tokens, patch = fixes.
 
 ---
 
+## 3.0.2
+
+- **`EuiBlockBadge` was broken in dark mode.** Its four accent chips used
+  `--brand-*-50` / `--gray-50` backgrounds, which are absolute swatches
+  and never flip, so the chips stayed pale on the dark canvas. (Its own
+  `null` branch already used `hsl(var(--muted))` correctly.) The accents
+  now use the `info` / `warning` / `success` / neutral tone families,
+  matching the discipline-tag convention. `plus` is intentionally skipped:
+  `theme.css` re-routes it to amber, so it collides with `warning`.
+
+### Tooling (not shipped in the package)
+
+- **`npm run check:tokens`** fails on any surface painted with a colour
+  that doesn't flip in dark mode. Mark a deliberate identity colour with a
+  `theme-token-ok` comment.
+- **`npm run check:drift`** refuses to publish when the registry holds
+  files this tree would drop — the failure mode that nearly deleted
+  `ConfirmDialog.vue` when 1.4.2/1.4.3 were published from an uncommitted
+  tree.
+- Both run automatically via `prepublishOnly`.
+
+---
+
 ## 3.0.1
 
 Fixes found by rendering the v3 components in a browser for the first

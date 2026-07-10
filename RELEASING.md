@@ -49,10 +49,37 @@ yarn install
 yarn build
 ```
 
+## Automated guards
+
+`npm publish` runs `prepublishOnly` → `npm run check`, which is two gates.
+Both must pass; neither is optional in normal use.
+
+- **`check:tokens`** — fails on a surface painted with a colour that does
+  not flip in dark mode (raw `--gray-*` / light-end `--brand-*`, or a
+  Tailwind `-gray-N` class). `@enirman/ui@3.0.0` shipped a Gantt whose
+  "estimated" bars were white slabs in dark mode; this catches that.
+  Escape hatch for a deliberate identity colour: a `theme-token-ok`
+  comment on the line.
+
+- **`check:drift`** — diffs this tree against the tarball npm currently
+  serves, and refuses to publish if the registry holds files you'd drop.
+  1.4.2/1.4.3 were published from an uncommitted tree, so npm carried a
+  `ConfirmDialog.vue` that existed in no branch — publishing from git
+  would have deleted it and broken `enirman_connect`. Escape hatch for a
+  deliberate removal: `SKIP_DRIFT_CHECK=1 npm publish --access public`.
+
+Run them any time with `npm run check`.
+
+**Never publish from an uncommitted tree.** That is what created the drift
+the second gate now exists to catch.
+
 ## Pre-publish checklist
 
 Before running `npm publish`:
 
+- [ ] `npm run check` passes (this also runs automatically on publish).
+- [ ] The component renders correctly in **both** light and dark mode.
+      Compiling is not verification; look at it.
 - [ ] `npm pack --dry-run` shows the tarball contains exactly what you
       expect — `src/`, `tailwind-preset.js`, `docs/`, `LICENSE`,
       `README.md`, `package.json`. No `node_modules/`, no `yarn.lock`,

@@ -35,10 +35,12 @@ const emit = defineEmits(['granularity-change'])
 
 const GRAINS = ['Week', 'Month', 'Quarter']
 
-// phase → actual-bar colour (full literal classes for Tailwind JIT)
+// phase → actual-bar colour (full literal classes for Tailwind JIT).
+// municipal is a deliberate safety accent: saturated amber with navy ink
+// reads on both canvases, verified in light and dark.
 const PHASE_CLASS = {
   design:    'bg-primary text-primary-foreground',
-  municipal: 'bg-amber-400 text-navy-800',
+  municipal: 'bg-amber-400 text-navy-800', // theme-token-ok
 }
 const phaseClass = (phase) => PHASE_CLASS[phase] || PHASE_CLASS.design
 

@@ -19,6 +19,12 @@
     "!docs/*-demo.html",
     "CHANGELOG.md"
   ],
+  "scripts": {
+    "check:tokens": "node scripts/check-theme-tokens.mjs",
+    "check:drift": "node scripts/check-publish-drift.mjs",
+    "check": "npm run check:tokens && npm run check:drift",
+    "prepublishOnly": "npm run check"
+  },
   "dependencies": {
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",

@@ -17,7 +17,9 @@ and (b) you always know which component to reach for.
 3. **Three sizes, max.** Every sized component is `sm / md (default) / lg`.
    Extra sizes fragment layouts.
 4. **Dark mode is not an afterthought.** Every component reads CSS vars
-   that dark mode overrides. Don't hardcode hex colors.
+   that dark mode overrides. Don't hardcode hex colors — and note that
+   the raw `--gray-*` / `--brand-*` scales are **not** overridden: they
+   are absolute swatches. See [Colour that flips](#colour-that-flips).
 5. **Mobile-first.** Components collapse gracefully below `md` breakpoint.
    Cards reduce padding, dialogs become bottom sheets, page headers stack.
 6. **One colored status element per row/entity.** Colour is the scarcest
@@ -103,6 +105,43 @@ badge. Use inside dense rows (sidebar, list) where a badge would
 overwhelm.
 
 **`pulse`** — animated ring. Reserve for real-time or "live" indicators.
+
+---
+
+## Colour that flips
+
+`theme.css` overrides the **semantic** tokens under `[data-theme="dark"]`.
+It deliberately does **not** override the raw `--gray-0…950` and
+`--brand-{navy,blue,amber}-*` scales — those are absolute swatches, for
+exact-colour work (SVG fills, slide artifacts).
+
+Paint a surface with a light-end raw swatch and it stays light: a white
+slab on the dark canvas. That is exactly how `@enirman/ui@3.0.0` shipped
+a broken `EuiProjectTimeline`.
+
+**Use these — they flip:**
+
+| For | Token |
+|---|---|
+| Surfaces | `hsl(var(--background))`, `--card`, `--muted` |
+| Borders | `hsl(var(--border))`, `--border-subtle`, `--border-strong` |
+| Text | `hsl(var(--foreground))`, `--muted-foreground` |
+| Accents | `hsl(var(--primary))`, or a tone family |
+| Tone families | `--{info,success,warning,destructive,plus}` each with `-muted` (tint), `-ink` (text on tint), `-foreground` (text on solid) |
+
+Note the semantic tokens hold **HSL triplets**, so inline styles need
+`hsl(var(--border-strong))`. The raw scales hold full hex values.
+Also: `--plus` is re-routed to amber, so it collides with `--warning` —
+don't rely on them being distinct hues.
+
+**Rules:**
+- `npm run check:tokens` fails the build on any light-end raw swatch used
+  as a surface, and on any Tailwind `-gray-N` class (the preset defines no
+  gray scale, so those silently resolve to stock Tailwind gray).
+- A saturated brand swatch is allowed when it's an *identity* colour that
+  reads on both canvases — avatar backgrounds, the amber municipal bar.
+  Mark the line with a `theme-token-ok` comment so the intent is explicit.
+- Render every new component in **both** themes before publishing.
 
 ---
 

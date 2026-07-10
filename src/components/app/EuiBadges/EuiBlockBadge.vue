@@ -6,9 +6,18 @@ defineOptions({ name: 'EuiBlockBadge' })
 /*
  * EuiBlockBadge — building / area / phase chip on the project canvas.
  *
- * Block name routes through a deterministic hash to one of four brand
- * accent palettes (blue, amber, navy-2, blue-7) — keeps blocks visually
- * separable on a busy table without escaping the brand system.
+ * Block name routes through a deterministic hash to one of four tone
+ * families — keeps blocks visually separable on a busy table without
+ * escaping the design system.
+ *
+ * Tones, not raw brand swatches: the -muted/-ink pairs are redefined under
+ * [data-theme="dark"], so the chips re-tint. The previous brand-*-50
+ * backgrounds did not flip and rendered as pale chips on the dark canvas.
+ *
+ * Four distinct hues — info / warning / success / neutral — matching the
+ * discipline-tag convention in COMPONENTS.md. (`plus` is deliberately not
+ * used: theme.css re-routes it to amber, so it would collide with
+ * `warning`.)
  *
  * `null` block renders the muted "Project-wide" chip.
  */
@@ -18,10 +27,10 @@ const props = defineProps({
 })
 
 const ACCENTS = [
-  { bg: 'var(--brand-blue-50)',  fg: 'var(--brand-blue-700)',  bd: 'var(--brand-blue-200)'  },
-  { bg: 'var(--brand-amber-50)', fg: 'var(--brand-amber-700)', bd: 'var(--brand-amber-200)' },
-  { bg: 'var(--brand-navy-50)',  fg: 'var(--brand-navy-700)',  bd: 'var(--brand-navy-200)'  },
-  { bg: 'var(--gray-50)',        fg: 'var(--gray-700)',        bd: 'var(--gray-200)'        },
+  { bg: 'hsl(var(--info-muted))',    fg: 'hsl(var(--info-ink))',         bd: 'hsl(var(--info) / 0.3)' },
+  { bg: 'hsl(var(--warning-muted))', fg: 'hsl(var(--warning-ink))',      bd: 'hsl(var(--warning) / 0.3)' },
+  { bg: 'hsl(var(--success-muted))', fg: 'hsl(var(--success-ink))',      bd: 'hsl(var(--success) / 0.3)' },
+  { bg: 'hsl(var(--muted))',         fg: 'hsl(var(--muted-foreground))', bd: 'hsl(var(--border))' },
 ]
 
 const palette = computed(() => {
