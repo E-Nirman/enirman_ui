@@ -10,9 +10,10 @@ defineOptions({ name: 'EuiStatusFlow' })
  *
  *   done      16px success-filled circle + ✓, success-muted connector,
  *             muted 12px label with inline meta (e.g. "12 Jan · ram")
- *   current   tone-filled circle + step number + 3px tone-muted halo,
- *             bold 13px label + caption; `elapsed` renders in danger ink
- *             (e.g. "with Anup since 18 Feb · 36 days")
+ *   current   tone-filled circle + 3px tone-muted halo, bold 13px label +
+ *             caption; `elapsed` renders in danger ink (e.g. "with Anup
+ *             since 18 Feb · 36 days"). The circle shows ✓ when tone is
+ *             'success' (the step itself is an approval), else its number.
  *   upcoming  2px outline circle, muted label
  *   next      dashed outline circle, muted label + " — up next"
  *
@@ -59,7 +60,7 @@ const view = computed(() =>
           v-else-if="step.state === 'current'"
           class="flex-none grid place-items-center h-4 w-4 rounded-full text-[9px] font-bold leading-none ring-[3px]"
           :class="step.toneClass"
-        >{{ step.number }}</span>
+        >{{ step.tone === 'success' ? '✓' : step.number }}</span>
         <span
           v-else
           class="flex-none h-4 w-4 rounded-full border-2 border-border-strong"

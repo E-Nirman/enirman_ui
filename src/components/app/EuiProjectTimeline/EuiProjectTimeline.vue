@@ -55,19 +55,29 @@ const TONE = {
 }
 const tone = (status) => TONE[STATUS_TONE[status] || 'neutral'] || TONE.neutral
 
+/*
+ * Semantic tokens only. The raw gray and brand scales are absolute
+ * swatches — they do NOT flip in dark mode — so using them for surfaces
+ * paints light bars onto a dark canvas.
+ */
+const ESTIMATED_BAR = {
+  border: '1.5px dashed hsl(var(--border-strong))',
+  background: 'hsl(var(--muted))',
+}
+
 const cols = computed(() => `${props.labelWidth}px 1fr`)
 const trackStyle = computed(() => ({
-  backgroundImage: 'linear-gradient(90deg, var(--gray-100) 1px, transparent 1px)',
+  backgroundImage: 'linear-gradient(90deg, hsl(var(--border)) 1px, transparent 1px)',
   backgroundSize: `${props.months.length ? 100 / props.months.length : 25}% 100%`,
 }))
 const todayStyle = computed(() => ({
   left: `calc(${props.labelWidth}px + (100% - ${props.labelWidth}px) * ${(props.todayPct || 0) / 100})`,
-  background: 'var(--brand-blue-400)',
+  background: 'hsl(var(--primary))',
   opacity: 0.55,
 }))
 const estStyle = (b) => ({
   left: `${b.start}%`, width: `${b.width}%`, top: '9px', height: '9px',
-  border: '1.5px dashed var(--gray-300)', background: 'var(--gray-50)',
+  ...ESTIMATED_BAR,
 })
 const actStyle = (b) => ({ left: `${b.start}%`, width: `${b.width}%`, top: '21px', height: '11px' })
 </script>
@@ -151,13 +161,13 @@ const actStyle = (b) => ({ left: `${b.start}%`, width: `${b.width}%`, top: '21px
       <!-- legend -->
       <div class="mt-0.5 flex items-center gap-4 border-t border-border-subtle pt-2.5 text-[11px] font-medium text-muted-foreground">
         <span class="inline-flex items-center gap-1.5">
-          <span class="h-[7px] w-[18px] rounded-full" style="border:1.5px dashed var(--gray-300);background:var(--gray-50)" />Estimated
+          <span class="h-[7px] w-[18px] rounded-full border-[1.5px] border-dashed border-border-strong bg-muted" />Estimated
         </span>
         <span class="inline-flex items-center gap-1.5">
           <span class="h-[7px] w-[18px] rounded-full bg-primary" />Actual
         </span>
         <span class="inline-flex items-center gap-1.5">
-          <span class="h-3 w-0.5" style="background:var(--brand-blue-400)" />Today
+          <span class="h-3 w-0.5 bg-primary opacity-[0.55]" />Today
         </span>
       </div>
     </div>
