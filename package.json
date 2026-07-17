@@ -1,7 +1,7 @@
 {
   "name": "@enirman/ui",
   "version": "3.2.0",
-  "description": "Shared design system for eNirman apps — shadcn-vue primitives + app shell + design tokens",
+  "description": "Shared design system for eNirman apps \u2014 shadcn-vue primitives + app shell + design tokens",
   "main": "src/index.js",
   "module": "src/index.js",
   "exports": {
@@ -23,7 +23,8 @@
     "check:tokens": "node scripts/check-theme-tokens.mjs",
     "check:drift": "node scripts/check-publish-drift.mjs",
     "check": "npm run check:tokens && npm run check:drift",
-    "prepublishOnly": "npm run check"
+    "prepublishOnly": "npm run check",
+    "play": "vite"
   },
   "dependencies": {
     "class-variance-authority": "^0.7.1",
@@ -49,6 +50,13 @@
   ],
   "private": false,
   "devDependencies": {
-    "tailwindcss": "^3.4.0"
+    "@vitejs/plugin-vue": "^5.0.4",
+    "@vueuse/core": "^14.2.1",
+    "autoprefixer": "^10.4.19",
+    "postcss": "^8.4.38",
+    "tailwindcss": "^3.4.0",
+    "vite": "^5.2.8",
+    "vue": "^3.4.21",
+    "vue-router": "^4.3.0"
   }
 }
