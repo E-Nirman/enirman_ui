@@ -3,7 +3,6 @@ import { computed } from 'vue'
 import { cva } from 'class-variance-authority'
 import { cn } from '../../lib/utils.js'
 import { ArrowUpRight, TrendingUp, TrendingDown } from 'lucide-vue-next'
-import { EuiSparkline } from './EuiSparkline/index.js'
 
 /*
  * StatCard — KPI tile for dashboards.
@@ -11,11 +10,11 @@ import { EuiSparkline } from './EuiSparkline/index.js'
  * Layout per the Enirman web-app Shell:
  *   [eyebrow label]  ........  [icon, optional]
  *   [big display value]
- *   [Δdelta chip] [optional sparkline] [description]
+ *   [Δdelta chip] [description]
  *
  * Display values use the sans display face (Manrope 700 / 28px),
  * NOT the mono — mono is reserved for IDs, dates, and dense table
- * numerics. The sparkline tone follows the delta sign by default.
+ * numerics.
  *
  * Click-through is opt-in via `to` / `href`.
  */
@@ -28,7 +27,6 @@ const props = defineProps({
   tone:        { type: String, default: 'default' },
   delta:       { type: Number, default: null },
   deltaSuffix: { type: String, default: '%' },
-  spark:       { type: Array, default: null },
   to:          { type: [String, Object], default: null },
   href:        { type: String, default: null },
   showArrow:   { type: Boolean, default: false },
@@ -56,10 +54,6 @@ const iconWrap = cva(
 )
 
 const deltaPositive = computed(() => (props.delta ?? 0) >= 0)
-const sparkTone = computed(() => {
-  if (props.delta === null || props.delta === undefined) return 'positive'
-  return deltaPositive.value ? 'positive' : 'negative'
-})
 </script>
 
 <template>
@@ -86,8 +80,8 @@ const sparkTone = computed(() => {
       {{ value }}
     </p>
 
-    <!-- Footer: delta + sparkline + description -->
-    <div v-if="description || delta !== null || spark" class="flex items-center gap-2 text-xs text-muted-foreground">
+    <!-- Footer: delta + description -->
+    <div v-if="description || delta !== null" class="flex items-center gap-2 text-xs text-muted-foreground">
       <span
         v-if="delta !== null && delta !== undefined"
         :class="cn(
@@ -99,7 +93,6 @@ const sparkTone = computed(() => {
         <TrendingDown v-else class="size-3" />
         {{ Math.abs(delta) }}{{ deltaSuffix }}
       </span>
-      <EuiSparkline v-if="spark && spark.length" :points="spark" :tone="sparkTone" />
       <span v-if="description" class="truncate">{{ description }}</span>
     </div>
 
