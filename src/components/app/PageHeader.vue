@@ -50,12 +50,12 @@ const props = defineProps({
         <div class="min-w-0">
           <div class="flex items-center gap-2">
             <h1 :class="cn(
-              'text-foreground font-semibold tracking-tight truncate',
-              compact ? 'text-lg' : 'text-xl sm:text-[22px]',
+              'text-foreground font-bold tracking-[-0.015em] truncate',
+              compact ? 'text-lg' : 'text-xl sm:text-[24px] sm:leading-[1.2]',
             )">{{ title }}</h1>
             <slot name="badge" />
           </div>
-          <p v-if="subtitle || $slots.subtitle" class="mt-0.5 text-xs text-muted-foreground truncate">
+          <p v-if="subtitle || $slots.subtitle" class="mt-1 text-[13px] text-muted-foreground truncate">
             <slot name="subtitle">{{ subtitle }}</slot>
           </p>
         </div>

@@ -83,7 +83,7 @@
   --background:        210 33% 97%;     /* gray-50  #F6F8FA */
   --foreground:        222 27% 10%;     /* gray-900 #131722 */
 
-  --card:              210 30% 99%;     /* faint blue, paler than --background so cards sit subtly above the canvas */
+  --card:              0 0% 100%;       /* pure white — mockup cards sit crisp on the cool canvas */
   --card-foreground:   222 27% 10%;
 
   --popover:           0 0% 100%;
@@ -140,7 +140,7 @@
   --ring:              212 78% 48%;
 
   /* ─── Sidebar palette — DARK in both themes ──────────────────── */
-  --sidebar:                  217 58% 14%;     /* navy 800 */
+  --sidebar:                  212 58% 14%;     /* navy 800 #0F2238 — exact mockup hue */
   --sidebar-foreground:       0 0% 100%;
   --sidebar-muted:            0 0% 100%;       /* used with /60 alpha */
   --sidebar-border:           0 0% 100%;       /* used with /6  alpha */
@@ -329,11 +329,24 @@
 html,
 body {
   font-family: var(--font-sans) !important;
-  font-size: var(--font-size-base);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-rendering: optimizeLegibility;
   font-feature-settings: 'cv02', 'cv03', 'cv04', 'cv11';
+}
+
+/*
+ * v4 scale fix: the rem ROOT is 16px so every rem-based utility
+ * (h-8 = 32px, px-2.5 = 10px, rounded-md = 6px…) renders at the size
+ * the mockup was authored at. Density comes from the 14px BODY text —
+ * exactly how the mockup's .ds-base works — not from shrinking the
+ * whole coordinate system (the old 14px root rendered the UI at 87.5%).
+ */
+html {
+  font-size: 16px;
+}
+body {
+  font-size: var(--font-size-base);
 }
 
 body {

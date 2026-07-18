@@ -7,6 +7,21 @@ change, minor = new components/variants/tokens, patch = fixes.
 
 ---
 
+## 4.0.1
+
+The "liveliness" patch — fixes the scale regression that made the whole
+app render at 87.5% of the mockup's size.
+
+- **16px rem root restored.** theme.css set `html { font-size: 14px }`
+  (v2 "ERP density"), silently shrinking every rem-based utility —
+  h-8 buttons to 28px, w-80 search to 280px, radii, paddings. Density
+  now comes from the 14px *body* text (exactly how the mockup's
+  `.ds-base` works); the coordinate system is full-size.
+- `--card` → pure white (mockup cards sit crisp on the cool canvas).
+- `--sidebar` hue corrected to the exact navy-800 `#0F2238`.
+- PageHeader h1 → 24px/700/−0.015em (mockup page header); subtitle 13px.
+- SidebarItem rest state → font-medium, white/75 (mockup `.sb-item`).
+
 ## 4.0.0
 
 The "eNirman Connect Redesign" release — the library now matches the v4

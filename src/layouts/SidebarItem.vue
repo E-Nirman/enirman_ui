@@ -59,7 +59,7 @@ const isActive = computed(() => {
           collapsed ? 'mx-auto w-8 justify-center px-0' : child ? 'mx-2 pl-7 pr-2.5' : 'mx-2 px-2.5',
           isActive
             ? 'bg-sidebar-primary text-sidebar-primary-foreground font-semibold shadow-xs'
-            : 'text-sidebar-foreground/70 hover:bg-sidebar-accent/[0.06] hover:text-sidebar-foreground',
+            : 'font-medium text-sidebar-foreground/75 hover:bg-sidebar-accent/[0.06] hover:text-sidebar-foreground',
         )"
         @click="$emit('click', $event)"
       >
