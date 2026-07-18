@@ -1,7 +1,7 @@
 {
   "name": "@enirman/ui",
-  "version": "3.2.0",
-  "description": "Shared design system for eNirman apps \u2014 shadcn-vue primitives + app shell + design tokens",
+  "version": "4.0.0",
+  "description": "Shared design system for eNirman apps — shadcn-vue primitives + app shell + design tokens",
   "main": "src/index.js",
   "module": "src/index.js",
   "exports": {
