@@ -72,14 +72,15 @@ const descriptionClass = computed(() => DESCRIPTION_TONE[props.descriptionTone] 
     :to="to"
     :href="href"
     :class="cn(
-      'group relative flex flex-col gap-3 rounded-lg border border-border-subtle bg-card p-4 shadow-sm transition-all duration-fast ease-out-expo',
+      'group relative flex flex-col gap-1 rounded-[10px] border border-border-subtle bg-card px-4 py-3.5 shadow-sm transition-all duration-fast ease-out-expo',
       (to || href) && 'cursor-pointer hover:border-ring/40 hover:shadow-md',
       props.class,
     )"
   >
     <!-- Top row: label + icon -->
     <div class="flex items-start justify-between gap-2">
-      <p class="text-xs font-medium uppercase tracking-caps text-muted-foreground">{{ label }}</p>
+      <!-- mockup .stat-tile .label: sentence case, 12px/500 muted -->
+      <p class="text-xs font-medium text-muted-foreground">{{ label }}</p>
       <span v-if="icon" :class="iconWrap({ tone })">
         <component :is="icon" class="size-4" />
       </span>
@@ -91,7 +92,7 @@ const descriptionClass = computed(() => DESCRIPTION_TONE[props.descriptionTone] 
     </p>
 
     <!-- Footer: delta + description -->
-    <div v-if="description || delta !== null" class="flex items-center gap-2 text-xs text-muted-foreground">
+    <div v-if="description || delta !== null" class="mt-0.5 flex items-center gap-2 text-[11px] font-medium text-muted-foreground">
       <span
         v-if="delta !== null && delta !== undefined"
         :class="cn(

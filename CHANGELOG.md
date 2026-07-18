@@ -7,6 +7,14 @@ change, minor = new components/variants/tokens, patch = fixes.
 
 ---
 
+## 4.0.2
+
+Density pass — card anatomy now measures identical to the mockup.
+
+- `Card` radius 10px (was 8); `CardHeader` 16/12px padding (was 16/16).
+- `StatCard`: label is sentence-case 12px/500 (was uppercase tracked),
+  4px label→value gap (was 12px), 16/14px tile padding, 11px footer.
+
 ## 4.0.1
 
 The "liveliness" patch — fixes the scale regression that made the whole
