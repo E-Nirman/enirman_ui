@@ -99,12 +99,12 @@ const ganttProjects = [
     actual: [{ label: '', start: 21, width: 2, tone: 'primary' }] },
 ]
 
-/* Recent activity (mockup dashboard-2.jpeg) */
+/* Recent activity (mockup dashboard-2.jpeg) — avatar rows, newest first */
 const activity = [
-  { kind: 'event', id: 'a1', text: 'ram uploaded v2 PDF to ARCH-36425-26-0008', timestamp: '18 Feb · 16:10' },
-  { kind: 'event', id: 'a2', text: 'Client requested a minor correction on v1.1.1', timestamp: '18 Feb · 15:27' },
-  { kind: 'event', id: 'a3', text: 'shyam was granted structural access on Proj tect cust 2', timestamp: '18 Feb · 14:02' },
-  { kind: 'event', id: 'a4', text: 'Quotation QTN-0043 shared with client via WhatsApp', timestamp: '17 Feb · 11:48' },
+  { kind: 'activity', id: 'a1', actor: 'ram', html: '<strong>ram</strong> uploaded v2 PDF to <code>ARCH-36425-26-0008</code>', timestamp: '18 Feb · 16:10' },
+  { kind: 'activity', id: 'a2', actor: 'Client', html: 'Client requested a <a class="text-info-ink">minor correction</a> on v1.1.1', timestamp: '18 Feb · 15:27' },
+  { kind: 'activity', id: 'a3', actor: 'shyam', html: '<strong>shyam</strong> was granted structural access on Proj tect cust 2', timestamp: '18 Feb · 14:02' },
+  { kind: 'activity', id: 'a4', actor: 'WA', html: 'Quotation <code>QTN-0043</code> shared with client via WhatsApp', timestamp: '17 Feb · 11:48' },
 ]
 </script>
 
@@ -130,8 +130,8 @@ const activity = [
       <section id="stat-cards">
         <h2 class="mb-3 text-sm font-bold uppercase tracking-wider text-muted-foreground">StatCard (dashboard tiles)</h2>
         <div class="grid grid-cols-4 gap-3">
-          <StatCard label="Active DPRs" :value="12" description="+2 this month" />
-          <StatCard label="Drawings in review" :value="4" description="2 overdue" tone="destructive" />
+          <StatCard label="Active DPRs" :value="12" description="+2 this month" description-tone="success" />
+          <StatCard label="Drawings in review" :value="4" description="2 overdue" description-tone="destructive" />
           <StatCard label="Awaiting client" :value="3" description="avg 4 days out" />
           <StatCard label="Municipal in progress" :value="2" description="1 checklist pending" />
         </div>
@@ -196,7 +196,15 @@ const activity = [
       <section id="activity">
         <h2 class="mb-3 text-sm font-bold uppercase tracking-wider text-muted-foreground">EuiActivityFeed</h2>
         <div class="rounded-xl border border-border-subtle bg-card p-4">
-          <EuiActivityFeed :entries="activity" />
+          <EuiActivityFeed :entries="activity" order="desc" />
+        </div>
+      </section>
+
+      <!-- File viewer (header parity) -->
+      <section id="file-viewer">
+        <h2 class="mb-3 text-sm font-bold uppercase tracking-wider text-muted-foreground">EuiFileViewer (PDF header)</h2>
+        <div class="h-[220px] overflow-hidden rounded-xl border border-border-subtle">
+          <EuiFileViewer pdf-url="/v1-3D-36425-26-0002.pdf" />
         </div>
       </section>
     </div>

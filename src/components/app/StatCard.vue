@@ -27,6 +27,7 @@ const props = defineProps({
   tone:        { type: String, default: 'default' },
   delta:       { type: Number, default: null },
   deltaSuffix: { type: String, default: '%' },
+  descriptionTone: { type: String, default: 'neutral' }, // 'success'|'destructive'|'neutral'
   to:          { type: [String, Object], default: null },
   href:        { type: String, default: null },
   showArrow:   { type: Boolean, default: false },
@@ -54,6 +55,15 @@ const iconWrap = cva(
 )
 
 const deltaPositive = computed(() => (props.delta ?? 0) >= 0)
+
+// mockup stat tiles: caption carries the tone ("+2 this month" success,
+// "2 overdue" danger); neutral stays muted.
+const DESCRIPTION_TONE = {
+  success:     'text-success-ink font-semibold',
+  destructive: 'text-destructive-ink font-semibold',
+  neutral:     '',
+}
+const descriptionClass = computed(() => DESCRIPTION_TONE[props.descriptionTone] || '')
 </script>
 
 <template>
@@ -75,8 +85,8 @@ const deltaPositive = computed(() => (props.delta ?? 0) >= 0)
       </span>
     </div>
 
-    <!-- Value (display sans, not mono) -->
-    <p class="font-display text-[28px] font-bold leading-none tracking-tight text-foreground">
+    <!-- Value (display sans, not mono; 26px per the v4 mockup tiles) -->
+    <p class="font-display text-[26px] font-bold leading-none tracking-tight text-foreground tabular-nums">
       {{ value }}
     </p>
 
@@ -93,7 +103,7 @@ const deltaPositive = computed(() => (props.delta ?? 0) >= 0)
         <TrendingDown v-else class="size-3" />
         {{ Math.abs(delta) }}{{ deltaSuffix }}
       </span>
-      <span v-if="description" class="truncate">{{ description }}</span>
+      <span v-if="description" class="truncate" :class="descriptionClass">{{ description }}</span>
     </div>
 
     <!-- Link chevron (only when interactive) -->

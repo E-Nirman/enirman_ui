@@ -21,8 +21,9 @@ import { Badge } from '../ui/badge/index.js'
 const DEFAULT_MAP = {
   // Project / DPR
   'Draft':                          'default',
-  'Planning':                       'info',
+  'Planning':                       'default',   // mockup: gray — colored stages start at design
   'Design':                         'primary',
+  'Structural Design':              'info',
   'Municipal':                      'warning',
   'Municipally Approved':           'success',
   'Cancelled':                      'default',
@@ -44,6 +45,10 @@ const DEFAULT_MAP = {
   'Bank Transfer':                  'info',
   'eSewa':                          'plus',
   'Khalti':                         'plus',
+
+  // WhatsApp / subscription (v4 mockup screens)
+  'Live':                           'success',
+  'Not Subscribed':                 'warning',
 }
 
 const props = defineProps({
