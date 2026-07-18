@@ -372,6 +372,9 @@ EuiAppShell
 ```
 
 **Rules:**
+- Brand lockup (v4): `enirman` + amber `Connect` (weight-800, tracking
+  −0.02em) + amber PRO pill when the firm is on a paid tier. Use the
+  shipped `logo-light.svg` on the navy sidebar; never write "Hub".
 - Top-level items have icons. Children (indented) do not (to save width).
 - Active state is auto-derived from route. Pass `exact` for dashboard-like
   paths that shouldn't match children.

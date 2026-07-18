@@ -7,6 +7,45 @@ change, minor = new components/variants/tokens, patch = fixes.
 
 ---
 
+## 4.0.0
+
+The "eNirman Connect Redesign" release — the library now matches the v4
+design mockup screen-for-screen and drops every pre-v3 legacy pattern.
+
+### Breaking
+
+- **Removed 11 legacy components** (zero usage in any consumer; no v4
+  mockup pattern): `EuiCategoryRail`, `EuiCdeStateBadge`,
+  `EuiDesignItemCard`, `EuiDesignItemList`, `EuiHandoffCard`,
+  `EuiPhaseKanban`, `EuiPhaseRail`, `EuiPhaseTable`, `EuiSparkline`,
+  `EuiStageBadge`, `EuiBlockBadge`.
+- **`StatCard`**: `spark` prop removed (mockup tiles carry a toned caption,
+  not a sparkline); display value is 26px tabular.
+- **`StatusBadge`**: `Planning` is now neutral gray (colored stages start
+  at design); added `Structural Design` (info), `Live` (success),
+  `Not Subscribed` (warning).
+- **Brand assets**: `logo.svg` / `logo-light.svg` now read
+  **enirmanConnect** (amber `Connect`); same filenames and exports.
+
+### Added
+
+- **`StatCard.descriptionTone`** — `success` / `destructive` / `neutral`
+  caption ink ("+2 this month" green, "2 overdue" red).
+- **`EuiActivityFeed`**: new `activity` entry kind (avatar + rich text +
+  timestamp — the dashboard "Recent activity" anatomy) and an `order`
+  prop (`desc` for recent-first cards).
+- **Playground** (`yarn play`): local Vite harness that mounts every
+  component with mockup-mirroring data for release verification.
+
+### Fixed
+
+- **Dark-mode token debt cleared** — `EuiFileViewer` and `EuiActivityFeed`
+  no longer use raw brand / frappe-ui classes; `check:tokens` passes with
+  zero warnings. `EuiFileViewer` gets the mockup's navy mono file header;
+  its E2K card uses the structural success tone.
+
+---
+
 ## 3.2.0
 
 - **`EuiProjectTimeline` actual bars take a `tone`.** `primary` / `info` /
