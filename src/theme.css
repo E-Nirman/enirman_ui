@@ -146,7 +146,7 @@
   --sidebar-border:           0 0% 100%;       /* used with /6  alpha */
   --sidebar-accent:           0 0% 100%;       /* hover — used with /6 alpha */
   --sidebar-accent-foreground: 0 0% 100%;
-  --sidebar-primary:          212 78% 48%;     /* blue 500 — active row bg */
+  --sidebar-primary:          212 78% 47.6%;   /* blue 500 #1B73D8 — exact mockup active row */
   --sidebar-primary-foreground: 0 0% 100%;
 
   /* ─── Layout ─────────────────────────────────────────────────── */

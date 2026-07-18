@@ -54,7 +54,7 @@ const isActive = computed(() => {
         :type="tag === 'button' ? 'button' : undefined"
         :aria-current="isActive ? 'page' : undefined"
         :class="cn(
-          'group flex h-[30px] items-center gap-2.5 rounded-md text-sm transition-colors duration-fast outline-none',
+          'group flex h-8 items-center gap-2.5 rounded-md text-sm transition-colors duration-fast outline-none',
           'focus-visible:ring-2 focus-visible:ring-sidebar-primary focus-visible:ring-offset-1 focus-visible:ring-offset-sidebar',
           collapsed ? 'mx-auto w-8 justify-center px-0' : child ? 'mx-2 pl-7 pr-2.5' : 'mx-2 px-2.5',
           isActive

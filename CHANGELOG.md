@@ -7,6 +7,15 @@ change, minor = new components/variants/tokens, patch = fixes.
 
 ---
 
+## 4.0.5
+
+Sidebar fidelity — measured against the mockup's computed styles.
+
+- `SidebarItem` 32px tall (mockup `.sb-item` 7px 10px padding).
+- `SidebarSection` airier: 10/4px section padding, heading gap, 1px
+  item rhythm (mockup `.sb-section`).
+- `--sidebar-primary` pinned to the exact `#1B73D8` active-row blue.
+
 ## 4.0.4
 
 - **`EuiActivityFeed` activity avatars use identity swatches** —

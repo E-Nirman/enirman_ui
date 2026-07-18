@@ -16,13 +16,13 @@ function toggle() { if (props.collapsible) expanded.value = !expanded.value }
 </script>
 
 <template>
-  <div :class="cn('flex flex-col gap-0.5 py-2', props.class)">
+  <div :class="cn('flex flex-col pt-2.5 pb-1', props.class)">
     <button
       v-if="!collapsed && label"
       type="button"
       :disabled="!collapsible"
       :class="cn(
-        'mx-3 flex h-6 items-center justify-between px-1 text-[10px] font-semibold uppercase tracking-caps text-sidebar-foreground/55',
+        'mx-3 mb-1.5 flex h-5 items-center justify-between px-1 text-[10px] font-semibold uppercase tracking-caps text-sidebar-foreground/55',
         collapsible ? 'cursor-pointer hover:text-sidebar-foreground' : 'cursor-default',
       )"
       @click="toggle"
@@ -34,7 +34,7 @@ function toggle() { if (props.collapsible) expanded.value = !expanded.value }
       />
     </button>
 
-    <div v-if="collapsed || expanded" class="flex flex-col gap-0.5">
+    <div v-if="collapsed || expanded" class="flex flex-col gap-px">
       <slot />
     </div>
   </div>
