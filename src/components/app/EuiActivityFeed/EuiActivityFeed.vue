@@ -16,9 +16,30 @@ const sorted = computed(() => {
 })
 
 // 'activity' rows: dashboard "Recent activity" anatomy — avatar + rich
-// text + timestamp. Initials derive from `actor` when not given.
-const initials = (e) =>
-  e.initials || (e.actor || '?').split(/\s+/).map(w => w[0]).join('').slice(0, 2).toUpperCase()
+// text + timestamp. Initials derive from `actor` when not given; a
+// single-word name still yields two letters (ram → RM-style).
+const initials = (e) => {
+  if (e.initials) return e.initials
+  const words = (e.actor || '?').trim().split(/\s+/)
+  const raw = words.length > 1 ? words.map(w => w[0]).join('') : words[0].slice(0, 2)
+  return raw.slice(0, 2).toUpperCase()
+}
+
+/* Identity swatches (mockup: saturated avatar colors, white ink).
+ * Deterministic per actor so a person keeps their color. These are
+ * deliberate brand accents, legible on both canvases. theme-token-ok */
+const AVATAR_TONES = [
+  'bg-primary text-primary-foreground',
+  'bg-plus text-plus-foreground',
+  'bg-success text-success-foreground',
+  'bg-navy-500 text-white', // theme-token-ok — identity swatch, legible on both canvases
+]
+const avatarTone = (e) => {
+  const k = e.actor || e.initials || '?'
+  let h = 0
+  for (const c of k) h = ((h * 31) + c.charCodeAt(0)) >>> 0
+  return AVATAR_TONES[h % AVATAR_TONES.length]
+}
 </script>
 
 <template>
@@ -45,7 +66,7 @@ const initials = (e) =>
         <span>{{ entry.text }}<span v-if="entry.timestamp"> · {{ entry.timestamp }}</span></span>
       </div>
       <div v-else-if="entry.kind === 'activity'" class="flex gap-2.5 border-b border-border-subtle pb-3 last:border-b-0 last:pb-0">
-        <span class="grid h-6 w-6 flex-none place-items-center rounded-full bg-info-muted text-[9px] font-bold text-info-ink">{{ initials(entry) }}</span>
+        <span :class="['grid h-6 w-6 flex-none place-items-center rounded-full text-[9px] font-bold', avatarTone(entry)]">{{ initials(entry) }}</span>
         <div class="min-w-0 flex-1">
           <div class="text-[13px] leading-snug text-foreground/90">
             <slot name="activity-text" :entry="entry"><span v-html="entry.html || entry.text" /></slot>

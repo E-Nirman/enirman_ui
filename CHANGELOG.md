@@ -7,6 +7,13 @@ change, minor = new components/variants/tokens, patch = fixes.
 
 ---
 
+## 4.0.4
+
+- **`EuiActivityFeed` activity avatars use identity swatches** —
+  deterministic saturated tone per actor (mockup Recent-activity look)
+  instead of one pale info chip for everyone; single-word names get
+  two-letter initials (ram → RA).
+
 ## 4.0.3
 
 - **`PageContainer` is full-bleed** — the mockup's `.page` runs
