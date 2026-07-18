@@ -7,6 +7,13 @@ change, minor = new components/variants/tokens, patch = fixes.
 
 ---
 
+## 4.0.3
+
+- **`PageContainer` is full-bleed** — the mockup's `.page` runs
+  edge-to-edge from the sidebar with 24/20px padding; the old centered
+  `max-w-[1440px]` created dead gutters on wide monitors.
+  `size="narrow"` still centers at 960px for forms.
+
 ## 4.0.2
 
 Density pass — card anatomy now measures identical to the mockup.
