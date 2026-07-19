@@ -7,6 +7,11 @@ change, minor = new components/variants/tokens, patch = fixes.
 
 ---
 
+## 4.0.6
+
+- `PageHeader`: new `titleClass` prop — extra classes merged onto the h1
+  (e.g. `font-mono` for ID-titled detail pages per the v4 mockups).
+
 ## 4.0.5
 
 Sidebar fidelity — measured against the mockup's computed styles.

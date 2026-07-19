@@ -21,6 +21,9 @@ const props = defineProps({
   breadcrumbs: { type: Array, default: () => [] },
   class:       { type: [String, Array, Object], default: '' },
   compact:     { type: Boolean, default: false },
+  // Extra classes for the h1 — e.g. 'font-mono' for ID-titled detail
+  // pages (Land-26-016, SV-…), per the v4 mockups.
+  titleClass:  { type: [String, Array, Object], default: '' },
 })
 </script>
 
@@ -52,6 +55,7 @@ const props = defineProps({
             <h1 :class="cn(
               'text-foreground font-bold tracking-[-0.015em] truncate',
               compact ? 'text-lg' : 'text-xl sm:text-[24px] sm:leading-[1.2]',
+              titleClass,
             )">{{ title }}</h1>
             <slot name="badge" />
           </div>
