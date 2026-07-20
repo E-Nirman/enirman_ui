@@ -7,6 +7,12 @@ change, minor = new components/variants/tokens, patch = fixes.
 
 ---
 
+## 4.0.7
+
+- `SidebarItem`: 13px/500 in both states per the Connect mockup
+  (`.sb-item` is `font: 500 13px` — active only changes bg/color; the
+  extra `font-semibold shadow-xs` on active is gone).
+
 ## 4.0.6
 
 - `PageHeader`: new `titleClass` prop — extra classes merged onto the h1

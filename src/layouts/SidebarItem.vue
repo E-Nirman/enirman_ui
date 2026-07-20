@@ -9,8 +9,9 @@ import { Tooltip, TooltipContent, TooltipTrigger } from '../components/ui/toolti
  *
  * Inactive: white at 70% on the navy 800 surface; hover lifts to
  *           white@6% bg with full white text.
- * Active:   blue 500 fill, white text, weight 600 — reads as the
- *           current page across the dark canvas.
+ * Active:   blue 500 fill, white text — reads as the current page
+ *           across the dark canvas. Both states 13px/500 per the
+ *           Connect mockup (.sb-item); only bg/color change.
  *
  * Active state auto-derives from route. Set `exact` for dashboard-
  * like roots that shouldn't match descendants.
@@ -54,11 +55,11 @@ const isActive = computed(() => {
         :type="tag === 'button' ? 'button' : undefined"
         :aria-current="isActive ? 'page' : undefined"
         :class="cn(
-          'group flex h-8 items-center gap-2.5 rounded-md text-sm transition-colors duration-fast outline-none',
+          'group flex h-8 items-center gap-2.5 rounded-md text-[13px] transition-colors duration-fast outline-none',
           'focus-visible:ring-2 focus-visible:ring-sidebar-primary focus-visible:ring-offset-1 focus-visible:ring-offset-sidebar',
           collapsed ? 'mx-auto w-8 justify-center px-0' : child ? 'mx-2 pl-7 pr-2.5' : 'mx-2 px-2.5',
           isActive
-            ? 'bg-sidebar-primary text-sidebar-primary-foreground font-semibold shadow-xs'
+            ? 'bg-sidebar-primary text-sidebar-primary-foreground font-medium'
             : 'font-medium text-sidebar-foreground/75 hover:bg-sidebar-accent/[0.06] hover:text-sidebar-foreground',
         )"
         @click="$emit('click', $event)"
