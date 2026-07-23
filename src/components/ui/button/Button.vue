@@ -77,10 +77,14 @@ const variants = cva(
 </script>
 
 <template>
+  <!-- disabled `|| undefined`: with as-child on an <a>, Primitive
+       stringifies false to disabled="false", which the
+       .eui-btn[disabled] presence selector matches — link renders
+       dimmed + pointer-events:none. undefined omits the attribute. -->
   <Primitive
     :as="as"
     :as-child="asChild"
-    :disabled="disabled"
+    :disabled="disabled || undefined"
     :class="cn(variants({ variant, size }), props.class)"
   >
     <slot />

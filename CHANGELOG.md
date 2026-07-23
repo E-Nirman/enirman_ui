@@ -7,6 +7,13 @@ change, minor = new components/variants/tokens, patch = fixes.
 
 ---
 
+## 4.0.8
+
+- `Button`: as-child links no longer render dimmed and unclickable.
+  reka-ui's Primitive stringifies `:disabled="false"` onto the child
+  `<a>` as `disabled="false"`, which the `.eui-btn[disabled]` presence
+  selector matched. Fixed by omitting the attribute when not disabled.
+
 ## 4.0.7
 
 - `SidebarItem`: 13px/500 in both states per the Connect mockup
