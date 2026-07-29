@@ -94,7 +94,7 @@
      modifiers on the aliased old name; plain hex refs otherwise. */
   --bg-canvas:  210 33% 97%;             /* was inlined under --background */
   --bg-surface: 0 0% 100%;               /* was inlined under --card/--popover */
-  --bg-sunken:  var(--gray-100);         /* NEW — spec value; distinct from --muted (gray-150) */
+  --bg-sunken:  214 23% 94%;             /* NEW — spec value; distinct from --muted (gray-150) */
   --bg-inverse: var(--brand-navy-800);   /* NEW — generic dark/hero surface */
   --bg-brand:   var(--brand-navy-700);   /* NEW */
   --bg-accent-subtle: var(--brand-blue-50); /* NEW */
@@ -112,7 +112,7 @@
   --fg-on-inverse-muted: 0 0% 100%;      /* NEW — same reasoning; paired with /NN opacity at call sites */
 
   /* Borders */
-  --border-default: var(--gray-200);     /* NEW — spec value; --border (below) keeps its own gray-150 value, unchanged */
+  --border-default: 216 19% 84%;         /* NEW — spec value; --border (below) keeps its own gray-150 value, unchanged */
   --border-focus: 212 78% 48%;           /* was inlined under --ring */
   --border-brand: var(--brand-navy-700); /* NEW */
   --border-on-inverse: 0 0% 100%;        /* NEW — bare HSL triple, same reasoning as --fg-on-inverse above; paired with /NN opacity at call sites */
@@ -121,8 +121,8 @@
   --action-primary: 212 78% 48%;                 /* was inlined under --primary */
   --action-primary-hover:  var(--brand-blue-600); /* NEW */
   --action-primary-active: var(--brand-blue-700); /* NEW */
-  --action-secondary:       var(--gray-100);      /* NEW — spec value; --secondary (below) keeps its own gray-150 value, unchanged */
-  --action-secondary-hover: var(--gray-150);       /* NEW */
+  --action-secondary:       214 23% 94%;          /* NEW — spec value; --secondary (below) keeps its own gray-150 value, unchanged */
+  --action-secondary-hover: 218 19% 89%;          /* NEW */
   --action-danger: 0 64% 47%;                     /* was inlined under --destructive */
 
   /* ─── Surfaces (HSL components for composition) ──────────────── */

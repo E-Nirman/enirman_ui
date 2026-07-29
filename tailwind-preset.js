@@ -56,7 +56,7 @@ export default {
 
         canvas:  'hsl(var(--bg-canvas))',
         surface: 'hsl(var(--bg-surface))',
-        sunken:  'var(--bg-sunken)',
+        sunken:  'hsl(var(--bg-sunken))',
         inverse: 'var(--bg-inverse)',
         brand:   'var(--bg-brand)',
         'accent-subtle': 'var(--bg-accent-subtle)',
@@ -75,8 +75,8 @@ export default {
         'action-primary':          'hsl(var(--action-primary))',
         'action-primary-hover':    'var(--action-primary-hover)',
         'action-primary-active':   'var(--action-primary-active)',
-        'action-secondary':        'var(--action-secondary)',
-        'action-secondary-hover':  'var(--action-secondary-hover)',
+        'action-secondary':        'hsl(var(--action-secondary))',
+        'action-secondary-hover':  'hsl(var(--action-secondary-hover))',
         'action-danger':           'hsl(var(--action-danger))',
 
         primary: {
