@@ -4,7 +4,7 @@ import {
   StatusBadge, StatCard, EuiStatusFlow, EuiDesignItemPane,
   EuiVersionTimeline, EuiReviewCard, EuiOlderVersionsRow,
   EuiProjectTimeline, EuiActivityFeed, EuiFileViewer,
-  AppShell, SidebarItem, SidebarSection,
+  AppShell, SidebarItem, SidebarSection, TooltipProvider,
 } from '@enirman/ui'
 
 /* ── mockup data (mirrors eNirman Connect Redesign.dc.html) ─────────── */
@@ -110,6 +110,7 @@ const activity = [
 </script>
 
 <template>
+  <TooltipProvider>
   <div class="min-h-screen bg-background p-8 text-foreground">
     <div class="mx-auto flex max-w-[1200px] flex-col gap-10">
       <header class="flex items-center gap-4">
@@ -231,4 +232,5 @@ const activity = [
       </section>
     </div>
   </div>
+  </TooltipProvider>
 </template>
