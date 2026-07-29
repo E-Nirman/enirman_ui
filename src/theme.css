@@ -343,7 +343,7 @@
      border-on-inverse, fg-link, and fg-link-hover are theme-invariant
      (brand or identity colors) and intentionally have no override here. */
   --bg-sunken: var(--muted);      /* reuse dark --muted (220 25% 18%) — already "one step above canvas" in this file's ladder */
-  --bg-accent-subtle: var(--accent);   /* reuse dark --accent (214 78% 22%) — already the "subtle blue panel on dark canvas" role */
+  --bg-accent-subtle: hsl(var(--accent));   /* reuse dark --accent (214 78% 22%) — already the "subtle blue panel on dark canvas" role. Wrapped in hsl() because --bg-accent-subtle is consumed unwrapped by the Tailwind preset (correct for its light-mode hex-ref shape); wrapping here makes the dark value a valid, equivalently-shaped color string. */
   --fg2: var(--gray-300);         /* light-toned raw swatch for body text on a dark canvas */
   --fg4: var(--gray-500);         /* dimmer than fg2, still legible — tertiary/disabled register */
   --border-default: var(--border-strong); /* reuse dark --border-strong (217 30% 36%) */
