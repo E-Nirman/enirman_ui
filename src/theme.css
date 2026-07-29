@@ -180,7 +180,7 @@
   /* ─── Chrome ─────────────────────────────────────────────────── */
   --border:            218 19% 89%;    /* PRAGMATIC EXCEPTION — spec's --border-default is gray-200; this stays gray-150 (Hub's existing shade). Do not alias. */
   --border-subtle:     218 19% 89%;    /* already spec-compliant — same name, same value as colors_and_type.css */
-  --border-strong:     218 17% 80%;    /* already spec-compliant — same name, same value as colors_and_type.css */
+  --border-strong:     218 17% 80%;    /* pre-existing shade, NOT spec-compliant — spec's gray-300 is #B5BDC9, this is #C3CAD5. Third known divergence, discovered in final review; not changed here (would be a value change under an existing name — major, not this release). Tracked in enirman_ui#1 (comment added). */
   --input:             218 19% 89%;
   --ring:              var(--border-focus);
 
@@ -273,28 +273,34 @@
  * 400 for AA contrast on dark surfaces.
  */
 [data-theme="dark"] {
-  --background:        217 50% 13%;    /* canvas — lifted from sidebar */
-  --foreground:        210 16% 96%;
+  --bg-canvas:  217 50% 13%;    /* canvas — lifted from sidebar */
+  --fg1:        210 16% 96%;
+  --background:        var(--bg-canvas);
+  --foreground:        var(--fg1);
 
-  --card:              217 42% 17%;    /* surface — clearly above canvas */
-  --card-foreground:   210 16% 96%;
+  --bg-surface: 217 42% 17%;    /* surface — clearly above canvas */
+  --card:              var(--bg-surface);
+  --card-foreground:   var(--fg1);
 
-  --popover:           217 42% 17%;
-  --popover-foreground: 210 16% 96%;
+  --popover:           var(--bg-surface);
+  --popover-foreground: var(--fg1);
 
-  --primary:           211 87% 56%;    /* blue 400 */
+  --action-primary:    211 87% 56%;    /* blue 400 */
+  --primary:           var(--action-primary);
   --primary-foreground: 0 0% 100%;
 
   --secondary:         220 25% 18%;
   --secondary-foreground: 210 16% 96%;
 
   --muted:             220 25% 18%;
-  --muted-foreground:  219 12% 70%;
+  --fg3:               219 12% 70%;
+  --muted-foreground:  var(--fg3);
 
   --accent:            214 78% 22%;    /* blue 800 */
   --accent-foreground: 210 91% 90%;
 
-  --destructive:       0 65% 60%;
+  --action-danger:     0 65% 60%;
+  --destructive:       var(--action-danger);
   --destructive-foreground: 0 0% 100%;
 
   --success:           149 53% 45%;
@@ -320,7 +326,8 @@
   --border-subtle:     217 35% 22%;
   --border-strong:     217 30% 36%;
   --input:             217 35% 26%;
-  --ring:              211 87% 56%;
+  --border-focus:      211 87% 56%;
+  --ring:              var(--border-focus);
 
   --sidebar:                  217 65% 9%;     /* navy 900 — anchor */
   --sidebar-foreground:       var(--fg-on-inverse);
@@ -332,12 +339,16 @@
   --sidebar-primary-foreground: 0 0% 100%;
 
   /* §4.2 new tokens — dark mode. bg-inverse, bg-brand, border-brand,
-     fg-on-inverse, border-on-inverse, and fg-link are theme-invariant
+     fg-on-inverse, fg-on-inverse-muted, fg-on-brand, fg-on-accent,
+     border-on-inverse, fg-link, and fg-link-hover are theme-invariant
      (brand or identity colors) and intentionally have no override here. */
   --bg-sunken: var(--muted);      /* reuse dark --muted (220 25% 18%) — already "one step above canvas" in this file's ladder */
+  --bg-accent-subtle: var(--accent);   /* reuse dark --accent (214 78% 22%) — already the "subtle blue panel on dark canvas" role */
   --fg2: var(--gray-300);         /* light-toned raw swatch for body text on a dark canvas */
   --fg4: var(--gray-500);         /* dimmer than fg2, still legible — tertiary/disabled register */
   --border-default: var(--border-strong); /* reuse dark --border-strong (217 30% 36%) */
+  --action-primary-hover:  var(--brand-blue-300);  /* lighter than dark --action-primary (blue 400) — dark surfaces lighten for interaction feedback, the opposite direction from light mode's darken-on-hover */
+  --action-primary-active: var(--brand-blue-200);  /* lighter still than hover, same reasoning */
   --action-secondary: var(--secondary);        /* reuse dark --secondary (220 25% 18%) */
   --action-secondary-hover: var(--border-strong); /* one step up from --action-secondary */
 }

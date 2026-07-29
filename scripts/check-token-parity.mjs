@@ -97,6 +97,88 @@ function resolve(name, seen = new Set()) {
   throw new Error(`unrecognized value shape for ${name}: "${raw}"`)
 }
 
+// ── Alias-consistency check: every deprecated old name must resolve to
+// the same value as its new canonical name, in BOTH light and dark mode.
+// Catches exactly the class of bug where a light-mode alias exists but
+// the corresponding dark-mode declaration was never added for the new
+// name, so the "canonical" token silently keeps its light-mode value
+// under [data-theme="dark"].
+const ALIAS_PAIRS = {
+  '--background': '--bg-canvas',
+  '--card': '--bg-surface',
+  '--popover': '--bg-surface',
+  '--foreground': '--fg1',
+  '--card-foreground': '--fg1',
+  '--popover-foreground': '--fg1',
+  '--muted-foreground': '--fg3',
+  '--primary': '--action-primary',
+  '--destructive': '--action-danger',
+  '--ring': '--border-focus',
+}
+
+function extractBlock(selectorPattern) {
+  const re = new RegExp(`${selectorPattern}\\s*\\{([^}]*)\\}`, 's')
+  const m = css.match(re)
+  if (!m) throw new Error(`block not found: ${selectorPattern}`)
+  return m[1]
+}
+
+const ROOT_BLOCK = extractBlock(':root')
+const DARK_BLOCK = extractBlock('\\[data-theme="dark"\\]')
+
+function resolveIn(name, blockText, seen = new Set()) {
+  if (seen.has(name)) throw new Error(`circular var reference: ${name}`)
+  seen.add(name)
+  const re = new RegExp(`--${name.replace(/^--/, '')}:\\s*([^;]+);`)
+  let match = blockText.match(re)
+  let raw
+  if (match) {
+    raw = match[1].trim()
+  } else {
+    // Not overridden in this theme block — deliberately theme-invariant
+    // (brand/identity colors); fall back to the :root declaration.
+    match = ROOT_BLOCK.match(re)
+    if (!match) throw new Error(`token not found in :root or the given block: ${name}`)
+    raw = match[1].trim()
+  }
+  const varRef = raw.match(/^var\((--[\w-]+)\)$/)
+  if (varRef) return resolveIn(varRef[1], blockText, seen)
+  const hex = raw.match(/^#([0-9a-fA-F]{6})$/)
+  if (hex) return `#${hex[1].toUpperCase()}`
+  const hsl = raw.match(/^([\d.]+)\s+([\d.]+)%\s+([\d.]+)%$/)
+  if (hsl) return hslTripleToHex(Number(hsl[1]), Number(hsl[2]), Number(hsl[3]))
+  throw new Error(`unrecognized value shape for ${name}: "${raw}"`)
+}
+
+const aliasMismatches = []
+for (const [oldName, newName] of Object.entries(ALIAS_PAIRS)) {
+  for (const [themeName, block] of [['light', ROOT_BLOCK], ['dark', DARK_BLOCK]]) {
+    let oldHex, newHex
+    try {
+      oldHex = resolveIn(oldName, block)
+      newHex = resolveIn(newName, block)
+    } catch (err) {
+      aliasMismatches.push({ oldName, newName, theme: themeName, error: err.message })
+      continue
+    }
+    if (!colorsMatch(oldHex, newHex)) {
+      aliasMismatches.push({ oldName, newName, theme: themeName, oldHex, newHex })
+    }
+  }
+}
+
+if (aliasMismatches.length) {
+  console.error(`\n✗ ${aliasMismatches.length} alias pair(s) diverge between their legacy and canonical name:\n`)
+  for (const m of aliasMismatches) {
+    if (m.error) console.error(`   ${m.oldName} <-> ${m.newName} (${m.theme}): ${m.error}`)
+    else console.error(`   ${m.oldName} (${m.oldHex}) != ${m.newName} (${m.newHex}) in ${m.theme} mode`)
+  }
+  console.error('\n  A deprecated alias must resolve identically to its canonical name in EVERY theme.')
+  process.exit(1)
+}
+
+console.log(`✓ alias consistency: ${Object.keys(ALIAS_PAIRS).length} pairs match in both light and dark`)
+
 const mismatches = []
 for (const [name, expectedHex] of Object.entries(SPEC_HEX)) {
   let actualHex

@@ -159,7 +159,7 @@ metric card stripes, primary badges, and links.
 
 ---
 
-## Known shade divergence — `--border`/`--secondary` (tracked, not yet resolved)
+## Known shade divergence — `--border`/`--secondary`/`--border-strong` (tracked, not yet resolved)
 
 `--border` (gray-150, `#DFE3EA`) and `--secondary` (gray-150, `#DFE3EA`) predate the §4.2 design-spec
 reconciliation (v4.1.0) and are **intentionally not aliased** to their spec-named counterparts:
@@ -168,6 +168,11 @@ reconciliation (v4.1.0) and are **intentionally not aliased** to their spec-name
 |---|---|---|---|
 | `--border`    | gray-150 `#DFE3EA` | `--border-default`     | gray-200 `#CFD5DE`   |
 | `--secondary` | gray-150 `#DFE3EA` | `--action-secondary`   | gray-100 `#ECEFF3`   |
+| `--border-strong` | `#C3CAD5` (not a named gray step) | (no spec-named equivalent defined — spec's `--border-strong` is gray-300 `#B5BDC9`) | gray-300 `#B5BDC9` |
+
+Unlike `--border`/`--secondary`, the `--border-strong` divergence was not a deliberate deferral: it is a
+pre-existing mismatch that went undetected until this release's final whole-branch review (a 4.1.0 comment
+had asserted it was spec-compliant), and it is disclosed here rather than left silently mislabeled.
 
 Repointing either legacy name to its spec equivalent would silently reflow every default input
 border and every secondary button/chip in every consumer of this package — a visual change under

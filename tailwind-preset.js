@@ -55,7 +55,7 @@ export default {
         foreground:       'hsl(var(--foreground))',
 
         canvas:  'hsl(var(--bg-canvas))',
-        surface: 'hsl(var(--bg-surface))',
+        panel:   'hsl(var(--bg-surface))',
         sunken:  'hsl(var(--bg-sunken))',
         inverse: 'var(--bg-inverse)',
         brand:   'var(--bg-brand)',
