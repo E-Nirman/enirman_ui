@@ -79,31 +79,76 @@
   --gray-900: #131722;
   --gray-950: #0A0D14;
 
+  /* ─── §4.2 tier-2 canonical tokens (spec: colors_and_type.css) ───
+   * These are the names colors_and_type.css defines as canonical.
+   * Every pre-4.1 shadcn-style name below becomes an alias of one of
+   * these, UNCHANGED in resolved value — except --border and
+   * --secondary, which keep their original value under their
+   * original name (see the "PRAGMATIC EXCEPTIONS" note below) because
+   * the spec's value for that concept differs from what Hub already
+   * ships; changing it under the old name would be a visual break,
+   * which is a major bump, not this minor release.
+   */
+
+  /* Backgrounds — bare HSL triples where Tailwind needs opacity
+     modifiers on the aliased old name; plain hex refs otherwise. */
+  --bg-canvas:  210 33% 97%;             /* was inlined under --background */
+  --bg-surface: 0 0% 100%;               /* was inlined under --card/--popover */
+  --bg-sunken:  var(--gray-100);         /* NEW — spec value; distinct from --muted (gray-150) */
+  --bg-inverse: var(--brand-navy-800);   /* NEW — generic dark/hero surface */
+  --bg-brand:   var(--brand-navy-700);   /* NEW */
+  --bg-accent-subtle: var(--brand-blue-50); /* NEW */
+
+  /* Foregrounds */
+  --fg1: 222 27% 10%;                    /* was inlined under --foreground/--card-foreground/--popover-foreground */
+  --fg2: var(--gray-700);                /* NEW — no existing equivalent */
+  --fg3: 219 11% 47%;                    /* was inlined under --muted-foreground */
+  --fg4: var(--gray-400);                /* NEW — no existing equivalent */
+  --fg-on-brand:  var(--gray-0);         /* NEW */
+  --fg-on-accent: var(--gray-0);         /* NEW */
+  --fg-link:       var(--brand-blue-500); /* NEW */
+  --fg-link-hover: var(--brand-blue-600); /* NEW */
+  --fg-on-inverse:       0 0% 100%;      /* NEW — bare HSL triple (not a hex var-ref): existing call sites consume --sidebar-foreground via hsl(var(--sidebar-foreground) / <alpha>) once Task 4 repoints it here, so this must resolve to three HSL numbers, not a hex string */
+  --fg-on-inverse-muted: 0 0% 100%;      /* NEW — same reasoning; paired with /NN opacity at call sites */
+
+  /* Borders */
+  --border-default: var(--gray-200);     /* NEW — spec value; --border (below) keeps its own gray-150 value, unchanged */
+  --border-focus: 212 78% 48%;           /* was inlined under --ring */
+  --border-brand: var(--brand-navy-700); /* NEW */
+  --border-on-inverse: 0 0% 100%;        /* NEW — bare HSL triple, same reasoning as --fg-on-inverse above; paired with /NN opacity at call sites */
+
+  /* Actions */
+  --action-primary: 212 78% 48%;                 /* was inlined under --primary */
+  --action-primary-hover:  var(--brand-blue-600); /* NEW */
+  --action-primary-active: var(--brand-blue-700); /* NEW */
+  --action-secondary:       var(--gray-100);      /* NEW — spec value; --secondary (below) keeps its own gray-150 value, unchanged */
+  --action-secondary-hover: var(--gray-150);       /* NEW */
+  --action-danger: 0 64% 47%;                     /* was inlined under --destructive */
+
   /* ─── Surfaces (HSL components for composition) ──────────────── */
-  --background:        210 33% 97%;     /* gray-50  #F6F8FA */
-  --foreground:        222 27% 10%;     /* gray-900 #131722 */
+  --background:        var(--bg-canvas);
+  --foreground:        var(--fg1);
 
-  --card:              0 0% 100%;       /* pure white — mockup cards sit crisp on the cool canvas */
-  --card-foreground:   222 27% 10%;
+  --card:              var(--bg-surface);
+  --card-foreground:   var(--fg1);
 
-  --popover:           0 0% 100%;
-  --popover-foreground: 222 27% 10%;
+  --popover:           var(--bg-surface);
+  --popover-foreground: var(--fg1);
 
   /* ─── Semantic roles ─────────────────────────────────────────── */
-  --primary:           212 78% 48%;    /* blue 500 */
+  --primary:           var(--action-primary);
   --primary-foreground: 0 0% 100%;
 
-  --secondary:         220 19% 91%;    /* gray-150 — darker so chips read */
+  --secondary:         220 19% 91%;    /* PRAGMATIC EXCEPTION — spec's --action-secondary is gray-100; this stays gray-150 (Hub's existing shade). Do not alias. */
   --secondary-foreground: 222 27% 10%;
 
-  --muted:             220 19% 91%;    /* deeper than the gray-50 canvas
-                                          so default Badge has visible contrast */
-  --muted-foreground:  219 11% 47%;    /* gray-500 */
+  --muted:             220 19% 91%;    /* unchanged — distinct concept from --bg-sunken, see comment above */
+  --muted-foreground:  var(--fg3);
 
   --accent:            210 91% 96%;    /* blue 50 */
   --accent-foreground: 213 78% 28%;    /* blue 700 */
 
-  --destructive:       0 64% 47%;      /* danger #C32A2A */
+  --destructive:       var(--action-danger);
   --destructive-foreground: 0 0% 100%;
 
   /* ─── Status tones ────────────────────────────────────────────
@@ -133,11 +178,11 @@
   --plus-ink:          33 88% 22%;
 
   /* ─── Chrome ─────────────────────────────────────────────────── */
-  --border:            218 19% 89%;    /* gray-150 */
-  --border-subtle:     218 19% 89%;
-  --border-strong:     218 17% 80%;    /* gray-300 */
+  --border:            218 19% 89%;    /* PRAGMATIC EXCEPTION — spec's --border-default is gray-200; this stays gray-150 (Hub's existing shade). Do not alias. */
+  --border-subtle:     218 19% 89%;    /* already spec-compliant — same name, same value as colors_and_type.css */
+  --border-strong:     218 17% 80%;    /* already spec-compliant — same name, same value as colors_and_type.css */
   --input:             218 19% 89%;
-  --ring:              212 78% 48%;
+  --ring:              var(--border-focus);
 
   /* ─── Sidebar palette — DARK in both themes ──────────────────── */
   --sidebar:                  212 58% 14%;     /* navy 800 #0F2238 — exact mockup hue */
