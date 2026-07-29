@@ -330,6 +330,16 @@
   --sidebar-accent-foreground: 0 0% 100%;
   --sidebar-primary:          211 87% 56%;
   --sidebar-primary-foreground: 0 0% 100%;
+
+  /* §4.2 new tokens — dark mode. bg-inverse/bg-brand/border-brand/
+     fg-on-*/border-on-inverse/fg-link* are theme-invariant (brand or
+     identity colors) and intentionally have no override here. */
+  --bg-sunken: var(--muted);      /* reuse dark --muted (220 25% 18%) — already "one step above canvas" in this file's ladder */
+  --fg2: var(--gray-300);         /* light-toned raw swatch for body text on a dark canvas */
+  --fg4: var(--gray-500);         /* dimmer than fg2, still legible — tertiary/disabled register */
+  --border-default: var(--border-strong); /* reuse dark --border-strong (217 30% 36%) */
+  --action-secondary: var(--secondary);        /* reuse dark --secondary (220 25% 18%) */
+  --action-secondary-hover: var(--border-strong); /* one step up from --action-secondary */
 }
 
 /* ─── Frappe-ui variable bridge ──────────────────────────────────
