@@ -4,7 +4,6 @@
   "description": "Shared design system for eNirman apps — shadcn-vue primitives + app shell + design tokens",
   "main": "src/index.js",
   "module": "src/index.js",
-  "types": "src/index.d.ts",
   "exports": {
     ".": "./src/index.js",
     "./theme.css": "./src/theme.css",
