@@ -7,13 +7,15 @@ change, minor = new components/variants/tokens, patch = fixes.
 
 ---
 
-## 4.1.1
+## 5.0.0
 
-Two fixes surfaced by a fresh consumer (Enirman Studio) that 4.0.x/4.1.0's only other consumer (Hub) happened not to trigger.
+Two fixes surfaced by a fresh consumer (Enirman Studio) that 4.0.x/4.1.0's only other consumer (Hub) happened not to trigger. One of them removes a public export, hence the major bump — see **Breaking** below.
 
 **Fixed**
 - `AppShell` now wraps its content in `TooltipProvider`. Previously, any consumer composing `AppShell` + `SidebarItem` exactly as documented crashed at mount (`Injection Symbol(TooltipProviderContext) not found`), because `SidebarItem`'s internal `Tooltip` requires that ambient context and `AppShell` never provided it. Consumers that were already wrapping their own root in `TooltipProvider` as a workaround can safely remove that wrapper (nesting providers is harmless).
-- `EuiDwgViewer` is no longer exported from the main barrel (`src/index.js`). It hard-imports `element-plus` and `@mlightcad/cad-viewer`/`cad-simple-viewer`, none of which were declared as dependencies — so importing *anything* from `@enirman/ui` (not just `EuiDwgViewer`) forced every consumer's bundler to resolve those packages, crashing the build for any consumer that didn't separately happen to have them installed. `EuiDwgViewer` is now reachable only via a dedicated subpath, `import { EuiDwgViewer } from '@enirman/ui/EuiDwgViewer'`, and `element-plus`/`@mlightcad/*` are now declared as optional peer dependencies — install them yourself only if you actually use `EuiDwgViewer`. No existing consumer imported `EuiDwgViewer` from the main barrel, so this has no real-world breaking impact.
+
+**Breaking**
+- `EuiDwgViewer` is removed. It hard-imported `element-plus` and `@mlightcad/cad-viewer`/`cad-simple-viewer`, none of which were declared as dependencies — so importing *anything* from `@enirman/ui` (not just `EuiDwgViewer`) forced every consumer's bundler to resolve those packages, crashing the build for any consumer that didn't separately happen to have them installed. It was added in a single commit and never adopted by any consumer or documented anywhere — Hub's own DWG viewing is a separate, iframe-isolated implementation that never went through `@enirman/ui`. Given zero real usage (confirmed: no consumer imports it), removing it outright is simpler and safer than carving out a subpath export to keep it around. If you need a DWG/CAD viewer, install `element-plus` + `@mlightcad/cad-viewer` + `@mlightcad/cad-simple-viewer` directly and build your own, the way Hub's iframe-isolated viewer does.
 
 ---
 
