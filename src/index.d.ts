@@ -1,0 +1,96 @@
+// Type declarations for @enirman/ui
+import type { DefineComponent, AllowedComponentProps, ComponentCustomProps } from 'vue'
+
+// Primitive components (shadcn-vue style)
+export * from './components/ui/button/index.js'
+export * from './components/ui/card/index.js'
+export * from './components/ui/badge/index.js'
+export * from './components/ui/input/index.js'
+export * from './components/ui/label/index.js'
+export * from './components/ui/textarea/index.js'
+export * from './components/ui/avatar/index.js'
+export * from './components/ui/dialog/index.js'
+export * from './components/ui/tabs/index.js'
+export * from './components/ui/dropdown-menu/index.js'
+export * from './components/ui/tooltip/index.js'
+export * from './components/ui/separator/index.js'
+export * from './components/ui/skeleton/index.js'
+export * from './components/ui/popover/index.js'
+export * from './components/ui/sheet/index.js'
+export * from './components/ui/command/index.js'
+export * from './components/ui/switch/index.js'
+export * from './components/ui/table/index.js'
+export * from './components/ui/scroll-area/index.js'
+export * from './components/ui/sonner/index.js'
+export * from './components/ui/progress/index.js'
+export * from './components/ui/spinner/index.js'
+export * from './components/ui/date-picker/index.js'
+
+// eNirman composed components
+export { default as PageHeader } from './components/app/PageHeader.vue'
+export { default as PageContainer } from './components/app/PageContainer.vue'
+export { default as StatCard } from './components/app/StatCard.vue'
+export { default as StatusBadge } from './components/app/StatusBadge.vue'
+export { default as EmptyState } from './components/app/EmptyState.vue'
+export { default as CommandPalette } from './components/app/CommandPalette.vue'
+export { EuiFileViewer } from './components/app/EuiFileViewer'
+export { EuiKanbanCard } from './components/app/EuiKanbanCard'
+export { EuiKanbanColumn } from './components/app/EuiKanbanColumn'
+export { EuiVersionTimeline } from './components/app/EuiVersionTimeline'
+export { EuiStatusFlow } from './components/app/EuiStatusFlow'
+export { EuiDesignItemPane } from './components/app/EuiDesignItemPane'
+export { EuiReviewCard } from './components/app/EuiReviewCard'
+export { EuiOlderVersionsRow } from './components/app/EuiOlderVersionsRow'
+export { EuiProjectTimeline } from './components/app/EuiProjectTimeline'
+export { EuiActivityFeed } from './components/app/EuiActivityFeed'
+export { EuiAvatarStack } from './components/app/EuiAvatarStack'
+export { EuiFeatureGate } from './components/app/EuiFeatureGate'
+export { DetailRow } from './components/app/DetailRow'
+export { InlineSelect } from './components/app/InlineSelect'
+
+// Layouts
+export { default as AppShell } from './layouts/AppShell.vue'
+export { default as SidebarItem } from './layouts/SidebarItem.vue'
+export { default as SidebarSection } from './layouts/SidebarSection.vue'
+
+// Composables
+export { useTheme } from './composables/useTheme.js'
+export { useBreakpoint } from './composables/useBreakpoint.js'
+export { useCommandPalette } from './composables/useCommandPalette.js'
+export {
+  loadNepaliCalendarLib,
+  getNepaliCalendarLibSync,
+} from './composables/useNepaliCalendarLib.js'
+
+// Utilities
+export { cn } from './lib/utils.js'
+export {
+  formatDate,
+  formatDateTime,
+  formatTimeAgo,
+  useDateFormat,
+  nepaliCalendarReady,
+} from './lib/format-date.js'
+export {
+  walkBsMonths,
+  walkBsQuarters,
+  fmtBsMonthDay,
+  fmtBsMonth,
+  BS_MONTH_NAMES_EN,
+  BS_MONTH_SHORT_EN,
+  BS_QUARTER_LABELS_EN,
+} from './lib/bs-calendar.js'
+
+// Brand assets
+export { logo, logoLight, logoMark } from './assets/index.js'
+
+declare module '@enirman/ui' {
+  export const EuiKanbanCard: DefineComponent<{
+    dragId: string
+  }, {}, any>
+  export const EuiKanbanColumn: DefineComponent<{
+    label: string
+    count?: number
+    tone?: 'neutral' | 'info' | 'success' | 'warning'
+  }, {}, any>
+}
