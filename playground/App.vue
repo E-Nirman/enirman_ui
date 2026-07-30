@@ -4,6 +4,7 @@ import {
   StatusBadge, StatCard, EuiStatusFlow, EuiDesignItemPane,
   EuiVersionTimeline, EuiReviewCard, EuiOlderVersionsRow,
   EuiProjectTimeline, EuiActivityFeed, EuiFileViewer,
+  EuiKanbanColumn, EuiKanbanCard,
   AppShell, SidebarItem, SidebarSection, TooltipProvider,
 } from '@enirman/ui'
 
@@ -228,6 +229,36 @@ const activity = [
         <h2 class="mb-3 text-sm font-bold uppercase tracking-wider text-muted-foreground">EuiFileViewer (PDF header)</h2>
         <div class="h-[220px] overflow-hidden rounded-xl border border-border-subtle">
           <EuiFileViewer pdf-url="/v1-3D-36425-26-0002.pdf" />
+        </div>
+      </section>
+
+      <!-- Kanban -->
+      <section id="kanban" class="mb-10">
+        <h2 class="text-lg font-semibold mb-3">Kanban</h2>
+        <div class="flex gap-3 overflow-x-auto pb-2">
+          <EuiKanbanColumn label="WIP" :count="2" tone="neutral">
+            <EuiKanbanCard drag-id="a">
+              <div class="font-mono text-muted-foreground text-[11.5px]">PCC-VDS-ZZ-01-DR-A-1101</div>
+              <div class="font-medium text-[13px]">Level 1 floor plan</div>
+            </EuiKanbanCard>
+            <EuiKanbanCard drag-id="b">
+              <div class="font-mono text-muted-foreground text-[11.5px]">PCC-HSC-ZZ-02-DR-S-3104</div>
+              <div class="font-medium text-[13px]">Core wall reinforcement</div>
+            </EuiKanbanCard>
+          </EuiKanbanColumn>
+          <EuiKanbanColumn label="Shared" :count="1" tone="info">
+            <EuiKanbanCard drag-id="c">
+              <div class="font-mono text-muted-foreground text-[11.5px]">PCC-VDS-ZZ-02-DR-A-2201</div>
+              <div class="font-medium text-[13px]">Level 2 GA</div>
+            </EuiKanbanCard>
+          </EuiKanbanColumn>
+          <EuiKanbanColumn label="Published" :count="1" tone="success">
+            <EuiKanbanCard drag-id="d">
+              <div class="font-mono text-muted-foreground text-[11.5px]">PCC-EME-ZZ-02-DR-M-4102</div>
+              <div class="font-medium text-[13px]">Ductwork layout</div>
+            </EuiKanbanCard>
+          </EuiKanbanColumn>
+          <EuiKanbanColumn label="Archived" :count="0" tone="warning" />
         </div>
       </section>
     </div>

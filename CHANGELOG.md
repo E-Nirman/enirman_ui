@@ -7,6 +7,13 @@ change, minor = new components/variants/tokens, patch = fixes.
 
 ---
 
+## 5.1.0
+
+**Added**
+- `EuiKanbanColumn` + `EuiKanbanCard` — a draggable kanban column/card pair, ported from the abandoned `riba-ui` branch and fixed for token compliance (the original hardcoded raw Tailwind palette classes for priority/tone coloring) and genericized (the original `EuiKanbanCard` assumed RFI-like fields — `priority`, `due_date`, `assigned_to` — that don't apply generally; the port is a slot-driven card shell instead, consumer supplies its own content). First consumer: Enirman Studio's Design Hub kanban.
+
+---
+
 ## 5.0.0
 
 Two fixes surfaced by a fresh consumer (Enirman Studio) that 4.0.x/4.1.0's only other consumer (Hub) happened not to trigger. One of them removes a public export, hence the major bump — see **Breaking** below.
