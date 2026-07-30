@@ -7,6 +7,31 @@ change, minor = new components/variants/tokens, patch = fixes.
 
 ---
 
+## 4.1.0
+
+**§4.2 token reconciliation** — the live token system now uses the design-spec's (`colors_and_type.css`) tier-2 names as canonical. Every 4.0.x name still works, unchanged in value, as a deprecated alias — except two cases below where the spec's value differs from what was already shipped; those got an *additional* new-named token instead of a repoint, to avoid a silent visual change under an old name.
+
+**Added**
+- Tier-2 tokens: `--bg-canvas`, `--bg-surface`, `--bg-sunken`, `--bg-inverse`, `--bg-brand`, `--bg-accent-subtle`, `--fg1`–`--fg4`, `--fg-on-brand`, `--fg-on-accent`, `--fg-on-inverse`, `--fg-on-inverse-muted`, `--fg-link`, `--fg-link-hover`, `--border-default`, `--border-focus`, `--border-brand`, `--border-on-inverse`, `--action-primary(-hover|-active)`, `--action-secondary(-hover)`, `--action-danger` — plus matching Tailwind utility keys (`bg-canvas`, `text-fg1`, `border-border-default`, `bg-action-primary`, …). One naming exception: `--bg-surface`'s Tailwind key is `panel` (i.e. `bg-panel`), not `surface` — frappe-ui's preset already defines a nested `backgroundColor.surface` with no `DEFAULT`, which silently shadows `bg-surface` to nothing in the merged config.
+- `scripts/check-token-parity.mjs`, wired into `npm run check` — regression-guards token values against the design spec.
+
+**Changed**
+- Sidebar tokens (`--sidebar-foreground`, `--sidebar-muted`, `--sidebar-border`, `--sidebar-accent`, `--sidebar-accent-foreground`) now source from the new generic on-inverse tokens instead of hardcoding white — same resolved color, now reusable by any dark/inverse surface.
+- Docs: confirmed no stale font references exist in this package (Manrope throughout) — the design-export's separate README claim about Inter is a different repo's issue, out of scope here.
+
+**Deprecated** (unchanged value, will be removed in a future major)
+- `--background` → alias of `--bg-canvas`
+- `--card`, `--popover` → alias of `--bg-surface`
+- `--foreground`, `--card-foreground`, `--popover-foreground` → alias of `--fg1`
+- `--muted-foreground` → alias of `--fg3`
+- `--primary` → alias of `--action-primary`
+- `--destructive` → alias of `--action-danger`
+- `--ring` → alias of `--border-focus`
+
+**Known exceptions — not aliased, kept at their existing value:**
+- `--border` (stays gray-150) — the spec's equivalent concept, `--border-default`, is gray-200. Repointing `--border` would silently change every default input/table border in Hub; that's a major-version change, not this release. Use `border-default` for new spec-value borders. Divergence documented in `docs/DESIGN_TOKENS.md`; migration tracked in [enirman_ui#1](https://github.com/E-Nirman/enirman_ui/issues/1).
+- `--secondary` (stays gray-150) — the spec's equivalent concept, `--action-secondary`, is gray-100. Same reasoning as `--border`.
+
 ## 4.0.8
 
 - `Button`: as-child links no longer render dimmed and unclickable.

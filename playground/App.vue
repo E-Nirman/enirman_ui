@@ -4,6 +4,7 @@ import {
   StatusBadge, StatCard, EuiStatusFlow, EuiDesignItemPane,
   EuiVersionTimeline, EuiReviewCard, EuiOlderVersionsRow,
   EuiProjectTimeline, EuiActivityFeed, EuiFileViewer,
+  AppShell, SidebarItem, SidebarSection, TooltipProvider,
 } from '@enirman/ui'
 
 /* ── mockup data (mirrors eNirman Connect Redesign.dc.html) ─────────── */
@@ -109,6 +110,7 @@ const activity = [
 </script>
 
 <template>
+  <TooltipProvider>
   <div class="min-h-screen bg-background p-8 text-foreground">
     <div class="mx-auto flex max-w-[1200px] flex-col gap-10">
       <header class="flex items-center gap-4">
@@ -117,6 +119,27 @@ const activity = [
           {{ dark ? 'Light' : 'Dark' }} mode
         </button>
       </header>
+
+      <!-- AppShell + Sidebar -->
+      <section id="app-shell-sidebar">
+        <h2 class="mb-3 text-sm font-bold uppercase tracking-wider text-muted-foreground">AppShell + Sidebar</h2>
+        <AppShell>
+          <template #sidebar="{ collapsed }">
+            <SidebarSection label="Overview">
+              <SidebarItem label="Dashboard" :collapsed="collapsed" active />
+              <SidebarItem label="Projects" :collapsed="collapsed" :badge="3" />
+            </SidebarSection>
+            <SidebarSection label="Design management">
+              <SidebarItem label="Design Hub" :collapsed="collapsed" :badge="12" />
+              <SidebarItem label="Drawing Hub" :collapsed="collapsed" />
+            </SidebarSection>
+          </template>
+          <template #topbar>
+            <span class="text-sm font-medium">Playground content area</span>
+          </template>
+          <div class="p-6 text-sm text-muted-foreground">Sidebar demo content.</div>
+        </AppShell>
+      </section>
 
       <!-- StatusBadge -->
       <section id="status-badge">
@@ -209,4 +232,5 @@ const activity = [
       </section>
     </div>
   </div>
+  </TooltipProvider>
 </template>

@@ -156,3 +156,30 @@ All buttons, inputs, and selects follow these heights for visual rhythm.
 Every semantic `--color-primary*` reference in every component will
 re-resolve, including hover states, focus rings, active sidebar items,
 metric card stripes, primary badges, and links.
+
+---
+
+## Known shade divergence — `--border`/`--secondary`/`--border-strong` (tracked, not yet resolved)
+
+`--border` (gray-150, `#DFE3EA`) and `--secondary` (gray-150, `#DFE3EA`) predate the §4.2 design-spec
+reconciliation (v4.1.0) and are **intentionally not aliased** to their spec-named counterparts:
+
+| Legacy name  | Legacy value        | Spec-named equivalent | Spec value           |
+|---|---|---|---|
+| `--border`    | gray-150 `#DFE3EA` | `--border-default`     | gray-200 `#CFD5DE`   |
+| `--secondary` | gray-150 `#DFE3EA` | `--action-secondary`   | gray-100 `#ECEFF3`   |
+| `--border-strong` | `#C3CAD5` (not a named gray step) | (no spec-named equivalent defined — spec's `--border-strong` is gray-300 `#B5BDC9`) | gray-300 `#B5BDC9` |
+
+Unlike `--border`/`--secondary`, the `--border-strong` divergence was not a deliberate deferral: it is a
+pre-existing mismatch that went undetected until this release's final whole-branch review (a 4.1.0 comment
+had asserted it was spec-compliant), and it is disclosed here rather than left silently mislabeled.
+
+Repointing either legacy name to its spec equivalent would silently reflow every default input
+border and every secondary button/chip in every consumer of this package — a visual change under
+a name nobody bumped a major version for. **Do not do this in a patch or minor release.**
+
+The long-term canonical shade for each pair is an explicit design decision, made deliberately and
+visually reviewed against the live consumer(s) — never auto-inherited from the v0.1 design export.
+Until that decision lands (tracked in a follow-up issue — see CHANGELOG 4.1.0), **new code should
+prefer the spec-named tokens** (`--border-default`, `--action-secondary`) for anything new, and
+leave `--border`/`--secondary` alone where they're already in use.
