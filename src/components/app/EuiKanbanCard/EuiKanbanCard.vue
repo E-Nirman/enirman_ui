@@ -12,7 +12,7 @@ function onDragStart(e) {
 
 <template>
   <article
-    class="bg-card border border-border rounded-md cursor-grab text-[14px] hover:border-foreground/30 transition-colors overflow-hidden p-2"
+    class="bg-card border border-border-default rounded-md cursor-grab text-base hover:border-foreground/30 transition-colors overflow-hidden p-2"
     draggable="true"
     @dragstart="onDragStart"
   >
