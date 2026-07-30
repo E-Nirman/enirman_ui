@@ -43,7 +43,13 @@ export { default as StatCard }      from './components/app/StatCard.vue'
 export { default as StatusBadge }   from './components/app/StatusBadge.vue'
 export { default as EmptyState }    from './components/app/EmptyState.vue'
 export { default as CommandPalette }from './components/app/CommandPalette.vue'
-export { EuiDwgViewer }             from './components/app/EuiDwgViewer'
+// EuiDwgViewer is NOT re-exported from this barrel — it hard-requires
+// element-plus + @mlightcad/* (optional peer deps, not bundled with
+// @enirman/ui), and any static export here would force every consumer's
+// bundler to resolve those packages just to import anything else from
+// this package. Import it from the dedicated subpath instead:
+//   import { EuiDwgViewer } from '@enirman/ui/EuiDwgViewer'
+// after installing element-plus + @mlightcad/cad-viewer + @mlightcad/cad-simple-viewer yourself.
 export { EuiFileViewer }            from './components/app/EuiFileViewer'
 export { EuiVersionTimeline }       from './components/app/EuiVersionTimeline'
 export { EuiStatusFlow }            from './components/app/EuiStatusFlow'

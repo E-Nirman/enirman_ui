@@ -1,6 +1,6 @@
 {
   "name": "@enirman/ui",
-  "version": "4.1.0",
+  "version": "4.1.1",
   "description": "Shared design system for eNirman apps — shadcn-vue primitives + app shell + design tokens",
   "main": "src/index.js",
   "module": "src/index.js",
@@ -10,7 +10,8 @@
     "./tailwind-preset": "./tailwind-preset.js",
     "./lib/utils": "./src/lib/utils.js",
     "./assets": "./src/assets/index.js",
-    "./assets/*": "./src/assets/*"
+    "./assets/*": "./src/assets/*",
+    "./EuiDwgViewer": "./src/components/app/EuiDwgViewer/index.js"
   },
   "files": [
     "src",
@@ -40,7 +41,15 @@
     "@vueuse/core": "^10.0.0 || ^11.0.0 || ^12.0.0 || ^13.0.0 || ^14.0.0",
     "tailwindcss": "^3.4.0",
     "vue": "^3.4.0",
-    "vue-router": "^4.0.0"
+    "vue-router": "^4.0.0",
+    "@mlightcad/cad-simple-viewer": "^1.4.12",
+    "@mlightcad/cad-viewer": "^1.4.12",
+    "element-plus": "^2.13.7"
+  },
+  "peerDependenciesMeta": {
+    "@mlightcad/cad-simple-viewer": { "optional": true },
+    "@mlightcad/cad-viewer": { "optional": true },
+    "element-plus": { "optional": true }
   },
   "keywords": [
     "enirman",

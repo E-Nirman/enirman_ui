@@ -5,6 +5,7 @@ import { useBreakpoint } from '../composables/useBreakpoint.js'
 import { Menu } from 'lucide-vue-next'
 import { Sheet, SheetContent } from '../components/ui/sheet/index.js'
 import { Button } from '../components/ui/button/index.js'
+import { TooltipProvider } from '../components/ui/tooltip/index.js'
 
 /*
  * AppShell — canonical application chrome for every consumer app.
@@ -69,64 +70,66 @@ const sidebarWidth = computed(() =>
 </script>
 
 <template>
-  <div :class="['relative flex h-dvh w-screen bg-background text-foreground', props.class]">
-    <!-- Desktop sidebar (dark navy in both themes) -->
-    <aside
-      v-if="isDesktop"
-      :class="[
-        'group relative flex shrink-0 flex-col bg-sidebar text-sidebar-foreground',
-        'transition-[width] duration-base ease-out-expo',
-        sidebarWidth,
-      ]"
-      :data-collapsed="collapsed"
-    >
-      <slot name="sidebar" :collapsed="collapsed" :toggle="toggleCollapse" :mobile="false" />
-    </aside>
-
-    <!-- Mobile sidebar sheet -->
-    <Sheet v-if="!isDesktop" :open="mobileOpen" @update:open="mobileOpen = $event">
-      <SheetContent
-        side="left"
-        class="p-0 w-[260px] bg-sidebar text-sidebar-foreground border-r-0"
-        :show-close="false"
+  <TooltipProvider>
+    <div :class="['relative flex h-dvh w-screen bg-background text-foreground', props.class]">
+      <!-- Desktop sidebar (dark navy in both themes) -->
+      <aside
+        v-if="isDesktop"
+        :class="[
+          'group relative flex shrink-0 flex-col bg-sidebar text-sidebar-foreground',
+          'transition-[width] duration-base ease-out-expo',
+          sidebarWidth,
+        ]"
+        :data-collapsed="collapsed"
       >
-        <div class="flex h-full flex-col">
-          <slot name="sidebar" :collapsed="false" :toggle="() => {}" :mobile="true" />
-        </div>
-      </SheetContent>
-    </Sheet>
+        <slot name="sidebar" :collapsed="collapsed" :toggle="toggleCollapse" :mobile="false" />
+      </aside>
 
-    <!-- Main column -->
-    <div class="flex min-w-0 flex-1 flex-col">
-      <!-- Topbar -->
-      <header class="flex h-[52px] shrink-0 items-center gap-3 border-b border-border-subtle bg-card px-4 sm:px-5">
-        <Button
-          v-if="!isDesktop"
-          variant="ghost"
-          size="icon-sm"
-          class="-ml-1"
-          aria-label="Open menu"
-          @click="openMobile"
+      <!-- Mobile sidebar sheet -->
+      <Sheet v-if="!isDesktop" :open="mobileOpen" @update:open="mobileOpen = $event">
+        <SheetContent
+          side="left"
+          class="p-0 w-[260px] bg-sidebar text-sidebar-foreground border-r-0"
+          :show-close="false"
         >
-          <Menu />
-        </Button>
-        <slot name="topbar" :collapsed="collapsed" :toggleSidebar="toggleCollapse" />
-      </header>
+          <div class="flex h-full flex-col">
+            <slot name="sidebar" :collapsed="false" :toggle="() => {}" :mobile="true" />
+          </div>
+        </SheetContent>
+      </Sheet>
 
-      <!-- Banner zone -->
-      <div v-if="$slots.banner" class="shrink-0">
-        <slot name="banner" />
+      <!-- Main column -->
+      <div class="flex min-w-0 flex-1 flex-col">
+        <!-- Topbar -->
+        <header class="flex h-[52px] shrink-0 items-center gap-3 border-b border-border-subtle bg-card px-4 sm:px-5">
+          <Button
+            v-if="!isDesktop"
+            variant="ghost"
+            size="icon-sm"
+            class="-ml-1"
+            aria-label="Open menu"
+            @click="openMobile"
+          >
+            <Menu />
+          </Button>
+          <slot name="topbar" :collapsed="collapsed" :toggleSidebar="toggleCollapse" />
+        </header>
+
+        <!-- Banner zone -->
+        <div v-if="$slots.banner" class="shrink-0">
+          <slot name="banner" />
+        </div>
+
+        <!-- Scroll area -->
+        <main class="flex-1 overflow-auto">
+          <slot />
+        </main>
       </div>
 
-      <!-- Scroll area -->
-      <main class="flex-1 overflow-auto">
-        <slot />
-      </main>
+      <!-- Overlay slot -->
+      <slot name="overlay" />
     </div>
-
-    <!-- Overlay slot -->
-    <slot name="overlay" />
-  </div>
+  </TooltipProvider>
 </template>
 
 <style scoped>
