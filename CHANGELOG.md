@@ -7,6 +7,13 @@ change, minor = new components/variants/tokens, patch = fixes.
 
 ---
 
+## 5.1.1
+
+**Fixed**
+- `EuiKanbanColumn`/`EuiKanbanCard` (added in 5.1.0) still used `border-border` — a legacy class Studio's own adherence lint denylists — and a raw `text-[14px]` where an exact token (`text-base`) exists. Caught by Studio's final whole-branch review for the first screen that consumed these components. Fixed to `border-border-default`/`text-base`; `npm run check` clean.
+
+---
+
 ## 5.1.0
 
 **Added**
