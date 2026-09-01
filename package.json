@@ -20,10 +20,11 @@
     "CHANGELOG.md"
   ],
   "scripts": {
+    "check:css": "node scripts/check-css-syntax.mjs",
     "check:tokens": "node scripts/check-theme-tokens.mjs",
     "check:parity": "node scripts/check-token-parity.mjs",
     "check:drift": "node scripts/check-publish-drift.mjs",
-    "check": "npm run check:tokens && npm run check:parity && npm run check:drift",
+    "check": "npm run check:css && npm run check:tokens && npm run check:parity && npm run check:drift",
     "prepublishOnly": "npm run check",
     "play": "vite"
   },

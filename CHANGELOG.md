@@ -11,11 +11,13 @@ change, minor = new components/variants/tokens, patch = fixes.
 
 Studio's v3-fidelity audit found that `theme.css` shipped exactly one
 `.t-*` rule (`.t-num`) while the design spec (`colors_and_type.css`)
-defines fourteen — `t-body`, `t-mono`, and `t-caps` alone accounted for
-~300 dead call sites across Studio, since CLAUDE.md §4.0 names `.t-*` as
-the sanctioned way to set type and every one of those classes resolved
-to no CSS rule. This release completes the family. Fixes finding `S-21`
-in the same audit (`StatCard.descriptionTone` had no amber option).
+defines nineteen — three of them `.t-display-*` (out of scope: nothing
+in the shipped app calls those). This release adds the fifteen that are
+in scope: `t-body`, `t-mono`, and `t-caps` alone accounted for ~300 dead
+call sites across Studio, since CLAUDE.md §4.0 names `.t-*` as the
+sanctioned way to set type and every one of those classes resolved to
+no CSS rule. Also fixes finding `S-21` in the same audit
+(`StatCard.descriptionTone` had no amber option).
 
 **Added**
 - **`.t-*` semantic typography classes** — `.t-h1`…`.t-h6`, `.t-body-lg`,
@@ -32,6 +34,26 @@ in the same audit (`StatCard.descriptionTone` had no amber option).
 - **`StatCard.descriptionTone`** gains a `warning` value (`text-warning-ink
   font-semibold`, joining `success`/`destructive`/`neutral`) — the "N
   overdue" sub-line now has an amber option instead of only red/green/muted.
+- **`npm run check:css`** — parses `theme.css` with `postcss.parse()` and
+  asserts every `.t-*` rule and type-scale token above actually made it
+  into the parsed stylesheet, wired into `npm run check`. Added after
+  review caught this release's own first draft shipping a `theme.css`
+  that wasn't valid CSS (see **Fixed** below) — none of the three
+  existing check scripts parse CSS, so that regression was invisible to
+  a green `npm run check`.
+
+**Fixed**
+- Two of the doc-comments added for the `.t-*` work above separated
+  adjacent token names with a bare slash (e.g. "--fs-*" next to "--fw-*"
+  with only a `/` between them), which put a star immediately before a
+  slash in the middle of the comment's prose. CSS closes a comment on
+  that sequence regardless of where it falls, so both comments closed
+  early and dumped the rest of their sentence into `theme.css` as
+  invalid CSS — `--fs-2xs` never got declared and `.t-h1` never reached
+  `document.styleSheets` in a real browser, even though `npm run check`
+  was green (see `check:css` above for why). Caught in review before
+  publish. Reworded both comments to use commas; no rule's selector or
+  value changed.
 
 ---
 

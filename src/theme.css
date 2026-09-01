@@ -227,7 +227,7 @@
 
   /* ─── Type scale — 1.2 ratio, 14px UI base (spec: colors_and_type.css)
    * §4.2 (task 1): primitives the .t-* semantic classes below compose
-   * from. theme.css had no --fs-*/--fw-*/--lh-* scale before this
+   * from. theme.css had no --fs-*, --fw-*, --lh-* scale before this
    * release — the .t-* rules are the first consumers, so the steps are
    * added on demand rather than the full spec range (no --fs-5xl.. or
    * --fw-black: nothing below needs them; add more steps if a future
@@ -462,7 +462,7 @@ body {
  * tracking and (where the spec calls for it) color as one unit; compose
  * these instead of hand-rolling font utilities. Values expressed
  * entirely through the type-scale primitives above and the existing
- * --tracking-*/--fg2/--fg3 tier-2 tokens — never a literal px/hex — so a
+ * --tracking-*, --fg2, --fg3 tier-2 tokens — never a literal px/hex — so a
  * brand or density swap re-points every .t-* rule at once.
  */
 .t-h1 { font-family: var(--font-sans); font-size: var(--fs-4xl); font-weight: var(--fw-bold);     line-height: var(--lh-tight); letter-spacing: var(--tracking-tight); }
