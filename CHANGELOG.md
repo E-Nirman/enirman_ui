@@ -7,6 +7,34 @@ change, minor = new components/variants/tokens, patch = fixes.
 
 ---
 
+## 5.2.0
+
+Studio's v3-fidelity audit found that `theme.css` shipped exactly one
+`.t-*` rule (`.t-num`) while the design spec (`colors_and_type.css`)
+defines fourteen — `t-body`, `t-mono`, and `t-caps` alone accounted for
+~300 dead call sites across Studio, since CLAUDE.md §4.0 names `.t-*` as
+the sanctioned way to set type and every one of those classes resolved
+to no CSS rule. This release completes the family. Fixes finding `S-21`
+in the same audit (`StatCard.descriptionTone` had no amber option).
+
+**Added**
+- **`.t-*` semantic typography classes** — `.t-h1`…`.t-h6`, `.t-body-lg`,
+  `.t-body`, `.t-body-sm`, `.t-label`, `.t-label-sm`, `.t-caps`,
+  `.t-caps-sm`, `.t-mono`, `.t-mono-md`, matching `colors_and_type.css`
+  lines 246–265 exactly. `.t-num` is unchanged. Every rule composes from
+  tokens, not literals: a new type-scale primitive layer
+  (`--fs-2xs`…`--fs-4xl`, `--fw-regular`…`--fw-bold`,
+  `--lh-tight`/`--lh-snug`/`--lh-normal`/`--lh-relaxed`) that theme.css
+  had no equivalent for before this release, plus the existing
+  `--tracking-tight`/`--tracking-caps` and `--fg2`/`--fg3` tier-2 tokens.
+  Purely additive — no existing rule's selector or resolved value
+  changed, so this cannot affect Hub.
+- **`StatCard.descriptionTone`** gains a `warning` value (`text-warning-ink
+  font-semibold`, joining `success`/`destructive`/`neutral`) — the "N
+  overdue" sub-line now has an amber option instead of only red/green/muted.
+
+---
+
 ## 5.1.1
 
 **Fixed**

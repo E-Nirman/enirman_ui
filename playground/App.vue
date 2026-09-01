@@ -155,9 +155,10 @@ const activity = [
         <h2 class="mb-3 text-sm font-bold uppercase tracking-wider text-muted-foreground">StatCard (dashboard tiles)</h2>
         <div class="grid grid-cols-4 gap-3">
           <StatCard label="Active DPRs" :value="12" description="+2 this month" description-tone="success" />
-          <StatCard label="Drawings in review" :value="4" description="2 overdue" description-tone="destructive" />
+          <StatCard label="Drawings in review" :value="4" description="2 overdue" description-tone="warning" />
           <StatCard label="Awaiting client" :value="3" description="avg 4 days out" />
           <StatCard label="Municipal in progress" :value="2" description="1 checklist pending" />
+          <StatCard label="Failed syncs" :value="1" description="1 error" description-tone="destructive" />
         </div>
       </section>
 

@@ -27,7 +27,7 @@ const props = defineProps({
   tone:        { type: String, default: 'default' },
   delta:       { type: Number, default: null },
   deltaSuffix: { type: String, default: '%' },
-  descriptionTone: { type: String, default: 'neutral' }, // 'success'|'destructive'|'neutral'
+  descriptionTone: { type: String, default: 'neutral' }, // 'success'|'warning'|'destructive'|'neutral'
   to:          { type: [String, Object], default: null },
   href:        { type: String, default: null },
   showArrow:   { type: Boolean, default: false },
@@ -57,9 +57,13 @@ const iconWrap = cva(
 const deltaPositive = computed(() => (props.delta ?? 0) >= 0)
 
 // mockup stat tiles: caption carries the tone ("+2 this month" success,
-// "2 overdue" danger); neutral stays muted.
+// "3 overdue" warning/amber, hard failure states destructive); neutral
+// stays muted. warning added for S-21 ("N overdue" sub-line — amber, not
+// red: overdue-but-recoverable reads as a warning tone in this system,
+// destructive is reserved for hard failure states).
 const DESCRIPTION_TONE = {
   success:     'text-success-ink font-semibold',
+  warning:     'text-warning-ink font-semibold',
   destructive: 'text-destructive-ink font-semibold',
   neutral:     '',
 }
