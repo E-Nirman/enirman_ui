@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 /*
  * check-token-parity — verify that every §4.2-reconciled tier-2 token in
- * theme.css resolves to the exact hex value the design spec
+ * each brand stylesheet resolves to the exact hex value the design spec
  * (colors_and_type.css, in the enirman_studio repo's docs/design/ export)
  * defines for that concept.
  *
@@ -16,7 +16,15 @@
 import { readFileSync } from 'node:fs'
 
 const ROOT = new URL('..', import.meta.url).pathname
-const css = readFileSync(new URL('../src/theme.css', import.meta.url), 'utf8')
+/*
+ * Brand tokens moved out of theme.css into src/brands/<brand>.css when the
+ * base/brands split landed. Read the brand file directly: theme.css is now
+ * only @import lines, and the first `:root` in the flattened result belongs
+ * to base.css's frappe-ui bridge, not to the brand palette this check is
+ * about. Add further brands to this list as they are populated.
+ */
+const BRAND_FILE = 'src/brands/aec.css'
+const css = readFileSync(new URL(`../${BRAND_FILE}`, import.meta.url), 'utf8')
 
 // Snapshot taken 2026-07-29 from
 // docs/design/_ds/enirman-design-system-*/colors_and_type.css in enirman_studio.
@@ -82,7 +90,7 @@ function resolve(name, seen = new Set()) {
 
   const re = new RegExp(`--${name.replace(/^--/, '')}:\\s*([^;]+);`)
   const match = css.match(re)
-  if (!match) throw new Error(`token not found in theme.css: ${name}`)
+  if (!match) throw new Error(`token not found in ${BRAND_FILE}: ${name}`)
   const raw = match[1].trim()
 
   const varRef = raw.match(/^var\((--[\w-]+)\)$/)
@@ -198,7 +206,7 @@ if (mismatches.length) {
   for (const m of mismatches) {
     console.error(`   ${m.name}: expected ${m.expectedHex}, got ${m.actualHex}`)
   }
-  console.error('\n  Fix theme.css (or update SPEC_HEX if the spec itself changed).')
+  console.error(`\n  Fix ${BRAND_FILE} (or update SPEC_HEX if the spec itself changed).`)
   process.exit(1)
 }
 

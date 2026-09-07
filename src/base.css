@@ -1,0 +1,274 @@
+/* ─── Base layer ─────────────────────────────────────────────────
+ * Brand-agnostic foundations: web-font loading, the frappe-ui
+ * variable bridge, base type rendering, the semantic .t-* typography
+ * classes, scrollbar polish, the focus-ring helper, third-party paint
+ * fixes and the .eui-btn-* materiality classes.
+ *
+ * Contains no brand tokens — those live in brands/*.css.
+ */
+
+@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap');
+
+/* ─── Frappe-ui variable bridge ──────────────────────────────────
+ * frappe-ui components read their own CSS variables. Map them to
+ * our semantic tokens so frappe-ui elements blend with shadcn-vue.
+ */
+:root {
+  --surface-white:    hsl(var(--background));
+  --surface-gray-1:   hsl(var(--muted));
+  --surface-gray-2:   hsl(var(--border));
+  --surface-gray-3:   hsl(var(--border));
+  --surface-menu-bar: hsl(var(--sidebar));
+  --surface-modal:    hsl(var(--card));
+  --surface-cards:    hsl(var(--card));
+  --surface-selected: hsl(var(--accent));
+
+  --ink-gray-9: hsl(var(--foreground));
+  --ink-gray-8: hsl(var(--foreground) / 0.85);
+  --ink-gray-7: hsl(var(--foreground) / 0.70);
+  --ink-gray-6: hsl(var(--muted-foreground));
+  --ink-gray-5: hsl(var(--muted-foreground));
+  --ink-gray-4: hsl(var(--muted-foreground) / 0.70);
+  --ink-gray-3: hsl(var(--muted-foreground) / 0.45);
+
+  --outline-gray-3: hsl(var(--border));
+  --outline-gray-4: hsl(var(--border));
+}
+
+/* ─── Base type rendering ────────────────────────────────────────
+ * Manrope must beat:
+ *   1. frappe-ui's themePlugin which emits
+ *      `:root { font-family: InterVar, var(--font-sans) }`,
+ *      prepending InterVar to whatever fontFamily.sans resolves to.
+ *   2. @mlightcad/cad-viewer's leaky body rule that hardcodes
+ *      `body { font-family: Inter, system-ui, Avenir, … }` and is
+ *      injected via JS at runtime, so it wins source order.
+ *
+ * Both are 3rd-party leaks we don't own. Using !important here is
+ * the pragmatic shield — font-family is inherited, so descendants
+ * (mono, display) still pick up their explicit overrides.
+ */
+html,
+body {
+  font-family: var(--font-sans) !important;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  font-feature-settings: 'cv02', 'cv03', 'cv04', 'cv11';
+}
+
+/*
+ * v4 scale fix: the rem ROOT is 16px so every rem-based utility
+ * (h-8 = 32px, px-2.5 = 10px, rounded-md = 6px…) renders at the size
+ * the mockup was authored at. Density comes from the 14px BODY text —
+ * exactly how the mockup's .ds-base works — not from shrinking the
+ * whole coordinate system (the old 14px root rendered the UI at 87.5%).
+ */
+html {
+  font-size: 16px;
+}
+body {
+  font-size: var(--font-size-base);
+}
+
+body {
+  background: hsl(var(--background));
+  color: hsl(var(--foreground));
+  /*
+   * Reka UI sets `body { pointer-events: none }` while overlays are
+   * open; race conditions can leave that lock in place after the
+   * overlay unmounts. Our overlays each render their own backdrop,
+   * so the body-level lock is redundant — forcing pointer-events:auto
+   * eliminates the frozen-page bug.
+   */
+  pointer-events: auto !important;
+}
+
+/* ─── Semantic typography classes (spec: colors_and_type.css, the
+ * "SEMANTIC TYPOGRAPHY CLASSES" block) — the sanctioned way to set type
+ * per CLAUDE.md §4.0. Each class encodes size, weight, line-height,
+ * tracking and (where the spec calls for it) color as one unit; compose
+ * these instead of hand-rolling font utilities. Values expressed
+ * entirely through the type-scale primitives above and the existing
+ * --tracking-*, --fg2, --fg3 tier-2 tokens — never a literal px/hex — so a
+ * brand or density swap re-points every .t-* rule at once.
+ */
+.t-h1 { font-family: var(--font-sans); font-size: var(--fs-4xl); font-weight: var(--fw-bold);     line-height: var(--lh-tight); letter-spacing: var(--tracking-tight); }
+.t-h2 { font-family: var(--font-sans); font-size: var(--fs-3xl); font-weight: var(--fw-bold);     line-height: var(--lh-snug);  letter-spacing: var(--tracking-tight); }
+.t-h3 { font-family: var(--font-sans); font-size: var(--fs-2xl); font-weight: var(--fw-semibold); line-height: var(--lh-snug);  letter-spacing: var(--tracking-tight); }
+.t-h4 { font-family: var(--font-sans); font-size: var(--fs-xl);  font-weight: var(--fw-semibold); line-height: var(--lh-snug); }
+.t-h5 { font-family: var(--font-sans); font-size: var(--fs-lg);  font-weight: var(--fw-semibold); line-height: var(--lh-snug); }
+.t-h6 { font-family: var(--font-sans); font-size: var(--fs-md);  font-weight: var(--fw-semibold); line-height: var(--lh-snug); }
+
+.t-body-lg { font-family: var(--font-sans); font-size: var(--fs-lg); font-weight: var(--fw-regular); line-height: var(--lh-relaxed); color: var(--fg2); }
+.t-body    { font-family: var(--font-sans); font-size: var(--fs-md); font-weight: var(--fw-regular); line-height: var(--lh-normal);  color: var(--fg2); }
+.t-body-sm { font-family: var(--font-sans); font-size: var(--fs-sm); font-weight: var(--fw-regular); line-height: var(--lh-normal);  color: var(--fg2); }
+
+.t-label    { font-family: var(--font-sans); font-size: var(--fs-sm); font-weight: var(--fw-medium); line-height: var(--lh-snug); color: var(--fg2); }
+.t-label-sm { font-family: var(--font-sans); font-size: var(--fs-xs); font-weight: var(--fw-medium); line-height: var(--lh-snug); color: hsl(var(--fg3)); }
+
+.t-caps    { font-family: var(--font-sans); font-size: var(--fs-xs);  font-weight: var(--fw-semibold); line-height: var(--lh-snug); letter-spacing: var(--tracking-caps); text-transform: uppercase; color: hsl(var(--fg3)); }
+.t-caps-sm { font-family: var(--font-sans); font-size: var(--fs-2xs); font-weight: var(--fw-semibold); line-height: var(--lh-snug); letter-spacing: var(--tracking-caps); text-transform: uppercase; color: hsl(var(--fg3)); }
+
+.t-mono    { font-family: var(--font-mono); font-size: var(--fs-sm); font-weight: var(--fw-regular); line-height: var(--lh-normal); }
+.t-mono-md { font-family: var(--font-mono); font-size: var(--fs-md); font-weight: var(--fw-medium);  line-height: var(--lh-normal); }
+
+/* Tabular numerics on demand */
+.t-num,
+[data-tabular] {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+}
+
+/* ─── Scrollbar polish (unobtrusive) ─────────────────────────── */
+*::-webkit-scrollbar { width: 10px; height: 10px; }
+*::-webkit-scrollbar-track { background: transparent; }
+*::-webkit-scrollbar-thumb {
+  background: hsl(var(--border));
+  border-radius: 999px;
+  border: 2px solid transparent;
+  background-clip: padding-box;
+}
+*::-webkit-scrollbar-thumb:hover {
+  background: hsl(var(--muted-foreground) / 0.35);
+  background-clip: padding-box;
+  border: 2px solid transparent;
+}
+
+/* ─── Focus ring helper ─────────────────────────────────────── */
+.eui-focus-ring {
+  outline: 2px solid hsl(var(--ring));
+  outline-offset: 2px;
+}
+
+/* ─── Firefox tab-bar paint fix ─────────────────────────────── */
+[role="tablist"] { overflow: clip; }
+[data-reka-tabs-indicator] { will-change: transform, width; }
+
+/* ─── Marketing-density opt-in ──────────────────────────────── */
+.ds-marketing { font-size: 16px; }
+
+/* =============================================================
+   BUTTON MATERIALITY — Enirman Design System "Soft" preset
+   Tailwind's JIT can't safely parse arbitrary `bg-[linear-gradient(…)]`
+   classes when the value contains nested hsl()/var() with parens, so
+   the gradient + layered shadow + inset highlight live here as named
+   classes that Button.vue toggles via CVA.
+   ============================================================= */
+
+.eui-btn {
+  /* Heights: 28 / 32 / 34 / 42 px. Real values, not arbitrary. */
+  --eui-btn-h-xs: 24px;
+  --eui-btn-h-sm: 28px;
+  --eui-btn-h-md: 34px;
+  --eui-btn-h-lg: 42px;
+}
+
+.eui-btn-h-xs { height: var(--eui-btn-h-xs); }
+.eui-btn-h-sm { height: var(--eui-btn-h-sm); }
+.eui-btn-h-md { height: var(--eui-btn-h-md); }
+.eui-btn-h-lg { height: var(--eui-btn-h-lg); }
+
+/* ── Soft primary: navy-tinted gradient + inset highlight ────── */
+.eui-btn-soft-primary {
+  background-image: linear-gradient(
+    180deg,
+    hsl(var(--primary) / 0.92) 0%,
+    hsl(var(--primary)) 100%
+  );
+  color: hsl(var(--primary-foreground));
+  box-shadow: var(--button-shadow-soft);
+  border: 0;
+}
+.eui-btn-soft-primary:hover {
+  background-image: linear-gradient(
+    180deg,
+    hsl(var(--primary)) 0%,
+    hsl(var(--primary) / 0.86) 100%
+  );
+  box-shadow: var(--button-shadow-soft-hover);
+}
+.eui-btn-soft-primary:active {
+  box-shadow: var(--shadow-sm);
+}
+
+/* ── Soft neutral: white-to-gray gradient with crisp inset ───── */
+.eui-btn-soft-neutral {
+  background-image: linear-gradient(
+    180deg,
+    hsl(var(--card)) 0%,
+    hsl(var(--muted)) 100%
+  );
+  color: hsl(var(--foreground));
+  border: 1px solid hsl(var(--border-subtle));
+  box-shadow: var(--button-shadow-soft-neutral);
+}
+.eui-btn-soft-neutral:hover {
+  background-image: linear-gradient(
+    180deg,
+    hsl(var(--card)) 0%,
+    hsl(var(--secondary)) 100%
+  );
+  box-shadow: var(--button-shadow-soft-neutral-hover);
+}
+.eui-btn-soft-neutral:active {
+  box-shadow: var(--shadow-sm);
+}
+
+/* ── Soft destructive ───────────────────────────────────────── */
+.eui-btn-soft-destructive {
+  background-image: linear-gradient(
+    180deg,
+    hsl(var(--destructive) / 0.92) 0%,
+    hsl(var(--destructive)) 100%
+  );
+  color: hsl(var(--destructive-foreground));
+  box-shadow: var(--button-shadow-soft);
+  border: 0;
+}
+.eui-btn-soft-destructive:hover {
+  background-image: linear-gradient(
+    180deg,
+    hsl(var(--destructive)) 0%,
+    hsl(var(--destructive) / 0.86) 100%
+  );
+  box-shadow: var(--button-shadow-soft-hover);
+}
+.eui-btn-soft-destructive:active {
+  box-shadow: var(--shadow-sm);
+}
+
+/* ── Soft success ───────────────────────────────────────────── */
+.eui-btn-soft-success {
+  background-image: linear-gradient(
+    180deg,
+    hsl(var(--success) / 0.92) 0%,
+    hsl(var(--success)) 100%
+  );
+  color: hsl(var(--success-foreground));
+  box-shadow: var(--button-shadow-soft);
+  border: 0;
+}
+.eui-btn-soft-success:hover {
+  background-image: linear-gradient(
+    180deg,
+    hsl(var(--success)) 0%,
+    hsl(var(--success) / 0.86) 100%
+  );
+  box-shadow: var(--button-shadow-soft-hover);
+}
+.eui-btn-soft-success:active {
+  box-shadow: var(--shadow-sm);
+}
+
+/* Disabled override — kill the active translate so disabled
+   buttons don't bounce when tapped through. */
+.eui-btn:disabled,
+.eui-btn[disabled] {
+  opacity: 0.45;
+  pointer-events: none;
+}
+.eui-btn:disabled:active,
+.eui-btn[disabled]:active {
+  transform: none;
+}

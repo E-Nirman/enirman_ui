@@ -27,41 +27,68 @@
  *   npm run check:css
  */
 import { readFileSync } from 'node:fs'
+import { dirname, relative, resolve } from 'node:path'
 import postcss from 'postcss'
 
+const PKG_ROOT = new URL('..', import.meta.url).pathname
 const THEME_PATH = new URL('../src/theme.css', import.meta.url).pathname
-const css = readFileSync(THEME_PATH, 'utf8')
 
-let root
-try {
-  root = postcss.parse(css, { from: THEME_PATH })
-} catch (err) {
-  console.error(`\n✗ src/theme.css is not valid CSS:\n`)
-  console.error(`   ${err.name}: ${err.message}`)
-  if (typeof err.showSourceCode === 'function') {
-    console.error(`\n${err.showSourceCode()}\n`)
-  }
-  console.error(`
+/*
+ * Since the base/brands split, src/theme.css is a manifest of @import lines
+ * and the rules themselves live in src/base.css and src/brands/*.css. Parse
+ * theme.css and every local file it pulls in — each on its own rather than
+ * as one concatenation, so a syntax error still names the real file and the
+ * real line number.
+ */
+function collectRoots(file, roots = [], seen = new Set()) {
+  if (seen.has(file)) return roots
+  seen.add(file)
+
+  let root
+  try {
+    root = postcss.parse(readFileSync(file, 'utf8'), { from: file })
+  } catch (err) {
+    console.error(`\n✗ ${relative(PKG_ROOT, file)} is not valid CSS:\n`)
+    console.error(`   ${err.name}: ${err.message}`)
+    if (typeof err.showSourceCode === 'function') {
+      console.error(`\n${err.showSourceCode()}\n`)
+    }
+    console.error(`
   A CSS syntax error here is invisible to check:tokens/check:parity/
   check:drift — none of them parse the file. Common cause: a doc-comment
   whose prose contains a literal "*/" (e.g. "--fs-*/--fw-*"), which closes
   the comment early and dumps the rest into CSS as bare tokens. Use a
   comma or "and" instead of "/" between token names in comments.
 `)
-  process.exit(1)
+    process.exit(1)
+  }
+
+  roots.push(root)
+  root.walkAtRules('import', (rule) => {
+    // Local imports only; the remote webfont url() import has no file to read.
+    const local = rule.params.match(/^['"](\.[^'"]+)['"]$/)
+    if (local) collectRoots(resolve(dirname(file), local[1]), roots, seen)
+  })
+  return roots
 }
+
+const roots = collectRoots(THEME_PATH)
 
 // ── every rule selector actually present after parsing ──────────────
 const selectors = new Set()
-root.walkRules((rule) => {
-  for (const sel of rule.selectors) selectors.add(sel.trim())
-})
+for (const root of roots) {
+  root.walkRules((rule) => {
+    for (const sel of rule.selectors) selectors.add(sel.trim())
+  })
+}
 
 // ── every custom property actually declared after parsing ───────────
 const declaredProps = new Set()
-root.walkDecls((decl) => {
-  if (decl.prop.startsWith('--')) declaredProps.add(decl.prop)
-})
+for (const root of roots) {
+  root.walkDecls((decl) => {
+    if (decl.prop.startsWith('--')) declaredProps.add(decl.prop)
+  })
+}
 
 const EXPECTED_T_CLASSES = [
   '.t-h1', '.t-h2', '.t-h3', '.t-h4', '.t-h5', '.t-h6',
@@ -82,7 +109,7 @@ const missingClasses = EXPECTED_T_CLASSES.filter((c) => !selectors.has(c))
 const missingTokens = EXPECTED_SCALE_TOKENS.filter((t) => !declaredProps.has(t))
 
 if (missingClasses.length || missingTokens.length) {
-  console.error(`\n✗ src/theme.css parsed, but expected rules/tokens are missing from the parse tree:\n`)
+  console.error(`\n✗ the theme stylesheets parsed, but expected rules/tokens are missing from the parse tree:\n`)
   if (missingClasses.length) {
     console.error(`   missing .t-* rule(s): ${missingClasses.join(', ')}`)
   }
@@ -99,4 +126,5 @@ if (missingClasses.length || missingTokens.length) {
   process.exit(1)
 }
 
-console.log(`✓ css syntax: src/theme.css parses (${root.nodes.length} top-level nodes); ${EXPECTED_T_CLASSES.length} .t-* rules and ${EXPECTED_SCALE_TOKENS.length} type-scale tokens present`)
+const totalNodes = roots.reduce((n, r) => n + r.nodes.length, 0)
+console.log(`✓ css syntax: ${roots.length} file(s) parse (${totalNodes} top-level nodes); ${EXPECTED_T_CLASSES.length} .t-* rules and ${EXPECTED_SCALE_TOKENS.length} type-scale tokens present`)

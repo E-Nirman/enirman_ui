@@ -1,0 +1,380 @@
+/*
+ * @enirman/ui v2 — Enirman Design System tokens
+ *
+ * Brand: Engineering Blueprint.
+ *   navy 700 (#16304D)  → primary brand surface, deep ink
+ *   blue 500 (#1B73D8)  → interactive (links, primary buttons, focus)
+ *   amber 400 (#E5A41C) → safety accent, sparingly
+ *
+ * Type:
+ *   Manrope (sans + display via weight)
+ *   JetBrains Mono (IDs, currency, tabular numerics, code)
+ *
+ * Density:
+ *   App base = 14px (ERP density, dense tables)
+ *   Marketing layouts opt up via .ds-marketing { font-size: 16px }
+ *
+ * Sidebar is DARK by default in both light and dark themes — the navy
+ * lockup is the brand. Apps that want a light sidebar override the
+ * --sidebar-* variables themselves.
+ *
+ * Shadows are navy-tinted (rgba(15, 34, 56, ...)) — subtle, layered,
+ * never grey. They tie back to the brand even at low opacity.
+ *
+ * Conventions:
+ *   - HSL components for shadcn-vue / tailwind composition
+ *   - Raw hex variables for the brand scales (so SVGs / inline styles
+ *     can pick exact swatches without HSL conversion)
+ *   - Dark mode keys off [data-theme="dark"] on <html>
+ */
+
+:root {
+  /* ─── Brand scales (raw hex, source of truth) ────────────────── */
+  --brand-navy-50:  #EEF2F7;
+  --brand-navy-100: #D5DEEA;
+  --brand-navy-200: #A9BCD3;
+  --brand-navy-300: #7995B6;
+  --brand-navy-400: #4E6F95;
+  --brand-navy-500: #2E4F77;
+  --brand-navy-600: #1F3D60;
+  --brand-navy-700: #16304D;   /* primary brand */
+  --brand-navy-800: #0F2238;   /* sidebar / dark surfaces */
+  --brand-navy-900: #07142A;
+
+  --brand-blue-50:  #EAF4FE;
+  --brand-blue-100: #C7E1FC;
+  --brand-blue-200: #8FC2F8;
+  --brand-blue-300: #56A3F4;
+  --brand-blue-400: #2A8AF0;
+  --brand-blue-500: #1B73D8;   /* primary action */
+  --brand-blue-600: #155CAE;
+  --brand-blue-700: #104785;
+  --brand-blue-800: #0B335E;
+  --brand-blue-900: #061F3A;
+
+  --brand-amber-50:  #FEF6E7;
+  --brand-amber-100: #FDE7B6;
+  --brand-amber-200: #FAD278;
+  --brand-amber-300: #F6BC3A;
+  --brand-amber-400: #E5A41C;   /* safety accent */
+  --brand-amber-500: #BF8410;
+  --brand-amber-600: #95650A;
+  --brand-amber-700: #6B4806;
+
+  /* Concrete grays — slight cool tint, matched to navy */
+  --gray-0:   #FFFFFF;
+  --gray-25:  #FBFCFD;
+  --gray-50:  #F6F8FA;
+  --gray-100: #ECEFF3;
+  --gray-150: #DFE3EA;
+  --gray-200: #CFD5DE;
+  --gray-300: #B5BDC9;
+  --gray-400: #8B95A4;
+  --gray-500: #6B7585;
+  --gray-600: #4F5868;
+  --gray-700: #3A4250;
+  --gray-800: #252B36;
+  --gray-900: #131722;
+  --gray-950: #0A0D14;
+
+  /* ─── §4.2 tier-2 canonical tokens (spec: colors_and_type.css) ───
+   * These are the names colors_and_type.css defines as canonical.
+   * Every pre-4.1 shadcn-style name below becomes an alias of one of
+   * these, UNCHANGED in resolved value — except --border and
+   * --secondary, which keep their original value under their
+   * original name (see the "PRAGMATIC EXCEPTIONS" note below) because
+   * the spec's value for that concept differs from what Hub already
+   * ships; changing it under the old name would be a visual break,
+   * which is a major bump, not this minor release.
+   */
+
+  /* Backgrounds — bare HSL triples where Tailwind needs opacity
+     modifiers on the aliased old name; plain hex refs otherwise. */
+  --bg-canvas:  210 33% 97%;             /* was inlined under --background */
+  --bg-surface: 0 0% 100%;               /* was inlined under --card/--popover */
+  --bg-sunken:  214 23% 94%;             /* NEW — spec value; distinct from --muted (gray-150) */
+  --bg-inverse: var(--brand-navy-800);   /* NEW — generic dark/hero surface */
+  --bg-brand:   var(--brand-navy-700);   /* NEW */
+  --bg-accent-subtle: var(--brand-blue-50); /* NEW */
+
+  /* Foregrounds */
+  --fg1: 222 27% 10%;                    /* was inlined under --foreground/--card-foreground/--popover-foreground */
+  --fg2: var(--gray-700);                /* NEW — no existing equivalent */
+  --fg3: 219 11% 47%;                    /* was inlined under --muted-foreground */
+  --fg4: var(--gray-400);                /* NEW — no existing equivalent */
+  --fg-on-brand:  var(--gray-0);         /* NEW */
+  --fg-on-accent: var(--gray-0);         /* NEW */
+  --fg-link:       var(--brand-blue-500); /* NEW */
+  --fg-link-hover: var(--brand-blue-600); /* NEW */
+  --fg-on-inverse:       0 0% 100%;      /* NEW — bare HSL triple (not a hex var-ref): existing call sites consume --sidebar-foreground via hsl(var(--sidebar-foreground) / <alpha>) once Task 4 repoints it here, so this must resolve to three HSL numbers, not a hex string */
+  --fg-on-inverse-muted: 0 0% 100%;      /* NEW — same reasoning; paired with /NN opacity at call sites */
+
+  /* Borders */
+  --border-default: 216 19% 84%;         /* NEW — spec value; --border (below) keeps its own gray-150 value, unchanged */
+  --border-focus: 212 78% 48%;           /* was inlined under --ring */
+  --border-brand: var(--brand-navy-700); /* NEW */
+  --border-on-inverse: 0 0% 100%;        /* NEW — bare HSL triple, same reasoning as --fg-on-inverse above; paired with /NN opacity at call sites */
+
+  /* Actions */
+  --action-primary: 212 78% 48%;                 /* was inlined under --primary */
+  --action-primary-hover:  var(--brand-blue-600); /* NEW */
+  --action-primary-active: var(--brand-blue-700); /* NEW */
+  --action-secondary:       214 23% 94%;          /* NEW — spec value; --secondary (below) keeps its own gray-150 value, unchanged */
+  --action-secondary-hover: 218 19% 89%;          /* NEW */
+  --action-danger: 0 64% 47%;                     /* was inlined under --destructive */
+
+  /* ─── Surfaces (HSL components for composition) ──────────────── */
+  --background:        var(--bg-canvas);
+  --foreground:        var(--fg1);
+
+  --card:              var(--bg-surface);
+  --card-foreground:   var(--fg1);
+
+  --popover:           var(--bg-surface);
+  --popover-foreground: var(--fg1);
+
+  /* ─── Semantic roles ─────────────────────────────────────────── */
+  --primary:           var(--action-primary);
+  --primary-foreground: 0 0% 100%;
+
+  --secondary:         220 19% 91%;    /* PRAGMATIC EXCEPTION — spec's --action-secondary is gray-100; this stays gray-150 (Hub's existing shade). Do not alias. */
+  --secondary-foreground: 222 27% 10%;
+
+  --muted:             220 19% 91%;    /* unchanged — distinct concept from --bg-sunken, see comment above */
+  --muted-foreground:  var(--fg3);
+
+  --accent:            210 91% 96%;    /* blue 50 */
+  --accent-foreground: 213 78% 28%;    /* blue 700 */
+
+  --destructive:       var(--action-danger);
+  --destructive-foreground: 0 0% 100%;
+
+  /* ─── Status tones ────────────────────────────────────────────
+   * `*-muted` = subtle bg fill;  `*-ink` = strong fg over muted.
+   */
+  --success:           149 63% 33%;    /* #1F8B53 */
+  --success-foreground: 0 0% 100%;
+  --success-muted:     145 47% 94%;    /* #E8F6EE */
+  --success-ink:       147 65% 25%;    /* #176D40 */
+
+  --warning:           39 78% 50%;     /* amber 400 */
+  --warning-foreground: 0 0% 100%;
+  --warning-muted:     42 95% 95%;     /* amber 50 */
+  --warning-ink:       33 88% 22%;     /* amber 700 */
+
+  --danger-muted:      0 86% 95%;      /* #FDECEC */
+  --danger-ink:        0 67% 36%;      /* #9C1F1F */
+
+  --info:              212 78% 48%;
+  --info-foreground:   0 0% 100%;
+  --info-muted:        212 95% 95%;    /* blue 50 */
+  --info-ink:          213 79% 29%;    /* blue 700 */
+
+  --plus:              39 78% 50%;     /* re-routed to amber for premium tier */
+  --plus-foreground:   0 0% 100%;
+  --plus-muted:        42 95% 95%;
+  --plus-ink:          33 88% 22%;
+
+  /* ─── Chrome ─────────────────────────────────────────────────── */
+  --border:            218 19% 89%;    /* PRAGMATIC EXCEPTION — spec's --border-default is gray-200; this stays gray-150 (Hub's existing shade). Do not alias. */
+  --border-subtle:     218 19% 89%;    /* already spec-compliant — same name, same value as colors_and_type.css */
+  --border-strong:     218 17% 80%;    /* pre-existing shade, NOT spec-compliant — spec's gray-300 is #B5BDC9, this is #C3CAD5. Third known divergence, discovered in final review; not changed here (would be a value change under an existing name — major, not this release). Tracked in enirman_ui#1 (comment added). */
+  --input:             218 19% 89%;
+  --ring:              var(--border-focus);
+
+  /* ─── Sidebar palette — DARK in both themes ──────────────────── */
+  --sidebar:                  212 58% 14%;     /* navy 800 #0F2238 — exact mockup hue */
+  --sidebar-foreground:       var(--fg-on-inverse);
+  --sidebar-muted:            var(--fg-on-inverse-muted);      /* used with /60 alpha at call sites */
+  --sidebar-border:           var(--border-on-inverse);        /* used with /6  alpha at call sites */
+  --sidebar-accent:           var(--border-on-inverse);        /* hover — used with /6 alpha at call sites */
+  --sidebar-accent-foreground: var(--fg-on-inverse);
+  --sidebar-primary:          212 78% 47.6%;   /* blue 500 #1B73D8 — exact mockup active row */
+  --sidebar-primary-foreground: 0 0% 100%;
+
+  /* ─── Layout ─────────────────────────────────────────────────── */
+  --radius:    0.5rem;     /* 8px  — cards (default) */
+  --radius-sm: 0.375rem;   /* 6px  — buttons, inputs */
+  --radius-xs: 0.25rem;    /* 4px  — tag badges */
+  --radius-lg: 0.75rem;    /* 12px — large containers */
+  --radius-xl: 1rem;       /* 16px — dialogs */
+  --radius-pill: 999px;
+
+  --sidebar-width:        240px;
+  --sidebar-width-icon:   56px;
+  --topbar-height:        52px;
+
+  /* ─── Density ────────────────────────────────────────────────── */
+  --font-size-base: 14px;
+
+  /* ─── Type stack ─────────────────────────────────────────────── */
+  --font-sans: 'Manrope', ui-sans-serif, system-ui, -apple-system, 'Segoe UI',
+    Roboto, 'Helvetica Neue', Arial, sans-serif, 'Apple Color Emoji',
+    'Segoe UI Emoji';
+  --font-display: 'Manrope', ui-sans-serif, system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, 'SF Mono', Menlo,
+    Consolas, 'Liberation Mono', monospace;
+
+  /* Tracking presets */
+  --tracking-tighter: -0.03em;
+  --tracking-tight:   -0.015em;
+  --tracking-normal:  0;
+  --tracking-wide:    0.02em;
+  --tracking-wider:   0.06em;
+  --tracking-caps:    0.08em;
+
+  /* ─── Type scale — 1.2 ratio, 14px UI base (spec: colors_and_type.css)
+   * §4.2 (task 1): primitives the .t-* semantic classes below compose
+   * from. theme.css had no --fs-*, --fw-*, --lh-* scale before this
+   * release — the .t-* rules are the first consumers, so the steps are
+   * added on demand rather than the full spec range (no --fs-5xl.. or
+   * --fw-black: nothing below needs them; add more steps if a future
+   * .t-display-* class does).
+   */
+  --fs-2xs: 11px;
+  --fs-xs:  12px;
+  --fs-sm:  13px;
+  --fs-md:  14px;
+  --fs-lg:  16px;
+  --fs-xl:  18px;
+  --fs-2xl: 22px;
+  --fs-3xl: 28px;
+  --fs-4xl: 36px;
+
+  --fw-regular:  400;
+  --fw-medium:   500;
+  --fw-semibold: 600;
+  --fw-bold:     700;
+
+  --lh-tight:   1.15;
+  --lh-snug:    1.3;
+  --lh-normal:  1.5;
+  --lh-relaxed: 1.65;
+
+  /* ─── Shadows — navy-tinted, layered ─────────────────────────── */
+  --shadow-xs: 0 1px 1px rgba(15, 34, 56, 0.04);
+  --shadow-sm: 0 1px 2px rgba(15, 34, 56, 0.06), 0 1px 1px rgba(15, 34, 56, 0.04);
+  --shadow-md: 0 4px 8px -2px rgba(15, 34, 56, 0.08), 0 2px 4px -2px rgba(15, 34, 56, 0.05);
+  --shadow-lg: 0 12px 24px -8px rgba(15, 34, 56, 0.12), 0 4px 8px -4px rgba(15, 34, 56, 0.06);
+  --shadow-xl: 0 24px 48px -12px rgba(15, 34, 56, 0.18), 0 8px 16px -8px rgba(15, 34, 56, 0.08);
+  --shadow-inner: inset 0 1px 2px rgba(15, 34, 56, 0.06);
+  --shadow-focus: 0 0 0 3px rgba(27, 115, 216, 0.25);
+
+  /* Soft-materiality button shadows. Kept separate from card shadows
+     so tweaking button feel doesn't bleed into elevation. */
+  --button-shadow-soft:
+    inset 0 1px 0 rgba(255, 255, 255, 0.20),
+    0 1px 2px rgba(15, 34, 56, 0.10),
+    0 4px 8px -2px rgba(15, 34, 56, 0.10);
+  --button-shadow-soft-hover:
+    inset 0 1px 0 rgba(255, 255, 255, 0.24),
+    0 2px 4px rgba(15, 34, 56, 0.12),
+    0 8px 16px -4px rgba(15, 34, 56, 0.14);
+  --button-shadow-soft-neutral:
+    inset 0 1px 0 rgba(255, 255, 255, 0.80),
+    0 1px 2px rgba(15, 34, 56, 0.06),
+    0 4px 8px -2px rgba(15, 34, 56, 0.08);
+  --button-shadow-soft-neutral-hover:
+    inset 0 1px 0 rgba(255, 255, 255, 0.90),
+    0 2px 4px rgba(15, 34, 56, 0.08),
+    0 8px 16px -4px rgba(15, 34, 56, 0.12);
+
+  /* ─── Motion ─────────────────────────────────────────────────── */
+  --ease-out:    cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+  --duration-fast: 120ms;
+  --duration-base: 180ms;
+  --duration-slow: 280ms;
+}
+
+/* ─── Dark mode ──────────────────────────────────────────────────
+ * Three-step navy ladder so the chrome reads cleanly:
+ *   sidebar  → navy 900 (deepest, anchors the brand)
+ *   canvas   → navy 800-ish (one step up, gives sidebar separation)
+ *   card     → navy 700-ish (lifted surface)
+ *   border   → navy 600-ish (visible 1 px hairline against cards)
+ *
+ * Without the canvas lift, sidebar and main blend into one dark slab
+ * because they share the same hue/lightness. Primary lightens to blue
+ * 400 for AA contrast on dark surfaces.
+ */
+[data-theme="dark"] {
+  --bg-canvas:  217 50% 13%;    /* canvas — lifted from sidebar */
+  --fg1:        210 16% 96%;
+  --background:        var(--bg-canvas);
+  --foreground:        var(--fg1);
+
+  --bg-surface: 217 42% 17%;    /* surface — clearly above canvas */
+  --card:              var(--bg-surface);
+  --card-foreground:   var(--fg1);
+
+  --popover:           var(--bg-surface);
+  --popover-foreground: var(--fg1);
+
+  --action-primary:    211 87% 56%;    /* blue 400 */
+  --primary:           var(--action-primary);
+  --primary-foreground: 0 0% 100%;
+
+  --secondary:         220 25% 18%;
+  --secondary-foreground: 210 16% 96%;
+
+  --muted:             220 25% 18%;
+  --fg3:               219 12% 70%;
+  --muted-foreground:  var(--fg3);
+
+  --accent:            214 78% 22%;    /* blue 800 */
+  --accent-foreground: 210 91% 90%;
+
+  --action-danger:     0 65% 60%;
+  --destructive:       var(--action-danger);
+  --destructive-foreground: 0 0% 100%;
+
+  --success:           149 53% 45%;
+  --success-muted:     149 30% 18%;
+  --success-ink:       145 45% 80%;
+
+  --warning:           39 88% 60%;
+  --warning-muted:     33 60% 18%;
+  --warning-ink:       42 95% 85%;
+
+  --danger-muted:      0 50% 22%;
+  --danger-ink:        0 75% 82%;
+
+  --info:              211 87% 56%;
+  --info-muted:        213 60% 18%;
+  --info-ink:          212 95% 85%;
+
+  --plus:              39 88% 60%;
+  --plus-muted:        33 60% 18%;
+  --plus-ink:          42 95% 85%;
+
+  --border:            217 35% 26%;    /* hairline reads against navy 17 */
+  --border-subtle:     217 35% 22%;
+  --border-strong:     217 30% 36%;
+  --input:             217 35% 26%;
+  --border-focus:      211 87% 56%;
+  --ring:              var(--border-focus);
+
+  --sidebar:                  217 65% 9%;     /* navy 900 — anchor */
+  --sidebar-foreground:       var(--fg-on-inverse);
+  --sidebar-muted:            var(--fg-on-inverse-muted);
+  --sidebar-border:           var(--border-on-inverse);
+  --sidebar-accent:           var(--border-on-inverse);
+  --sidebar-accent-foreground: var(--fg-on-inverse);
+  --sidebar-primary:          211 87% 56%;
+  --sidebar-primary-foreground: 0 0% 100%;
+
+  /* §4.2 new tokens — dark mode. bg-inverse, bg-brand, border-brand,
+     fg-on-inverse, fg-on-inverse-muted, fg-on-brand, fg-on-accent,
+     border-on-inverse, fg-link, and fg-link-hover are theme-invariant
+     (brand or identity colors) and intentionally have no override here. */
+  --bg-sunken: var(--muted);      /* reuse dark --muted (220 25% 18%) — already "one step above canvas" in this file's ladder */
+  --bg-accent-subtle: hsl(var(--accent));   /* reuse dark --accent (214 78% 22%) — already the "subtle blue panel on dark canvas" role. Wrapped in hsl() because --bg-accent-subtle is consumed unwrapped by the Tailwind preset (correct for its light-mode hex-ref shape); wrapping here makes the dark value a valid, equivalently-shaped color string. */
+  --fg2: var(--gray-300);         /* light-toned raw swatch for body text on a dark canvas */
+  --fg4: var(--gray-500);         /* dimmer than fg2, still legible — tertiary/disabled register */
+  --border-default: var(--border-strong); /* reuse dark --border-strong (217 30% 36%) */
+  --action-primary-hover:  var(--brand-blue-300);  /* lighter than dark --action-primary (blue 400) — dark surfaces lighten for interaction feedback, the opposite direction from light mode's darken-on-hover */
+  --action-primary-active: var(--brand-blue-200);  /* lighter still than hover, same reasoning */
+  --action-secondary: var(--secondary);        /* reuse dark --secondary (220 25% 18%) */
+  --action-secondary-hover: var(--border-strong); /* one step up from --action-secondary */
+}

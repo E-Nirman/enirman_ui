@@ -7,6 +7,10 @@ change, minor = new components/variants/tokens, patch = fixes.
 
 ---
 
+## 5.2.1
+
+Split theme.css into base + brands/aec. No visual change.
+
 ## 5.2.0
 
 Studio's v3-fidelity audit found that `theme.css` shipped exactly one
