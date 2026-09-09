@@ -7,6 +7,17 @@ change, minor = new components/variants/tokens, patch = fixes.
 
 ---
 
+## 5.2.1
+
+**Fixed**
+- `npm publish --dry-run` crashed in `check:drift`. `--dry-run` exports
+  `npm_config_dry_run=true`, which the child `npm pack` inside
+  `scripts/check-publish-drift.mjs` inherited — it wrote no tarball, so
+  `readdirSync().find()` returned `undefined` and the script died on
+  `join(tmp, undefined)`. The flag is now stripped for that child, and a
+  missing tarball reports itself instead of throwing a path TypeError.
+  Publishing was never affected; only the dry run people sensibly do first.
+
 ## 5.2.0
 
 Studio's v3-fidelity audit found that `theme.css` shipped exactly one

@@ -52,11 +52,30 @@ if (!published) {
   process.exit(0)
 }
 
+/*
+ * `npm publish --dry-run` exports npm_config_dry_run=true, and a child
+ * `npm pack` inherits it — it then writes no tarball and leaves tmp empty,
+ * so this check crashed on `join(tmp, undefined)` under the one command a
+ * careful person runs before publishing. Strip the flag for the child so
+ * the check behaves identically whether or not the outer run is a dry run.
+ */
+const { ...childEnv } = process.env
+for (const k of Object.keys(childEnv)) {
+  if (/^npm_config_dry[_-]run$/i.test(k)) delete childEnv[k]
+}
+childEnv.npm_config_dry_run = 'false'
+
 const tmp = mkdtempSync(join(tmpdir(), 'drift-'))
 let publishedFiles
 try {
-  sh('npm', ['pack', `${pkg.name}@${published}`, '--pack-destination', tmp, '--silent'])
+  sh('npm', ['pack', `${pkg.name}@${published}`, '--pack-destination', tmp, '--silent'], { env: childEnv })
   const tgz = readdirSync(tmp).find((f) => f.endsWith('.tgz'))
+  if (!tgz) {
+    console.error(`\n✗ could not fetch the published ${published} tarball: npm pack wrote no .tgz.`)
+    console.error('  Without it this check cannot tell whether a publish would drop files.')
+    console.error('  Set SKIP_DRIFT_CHECK=1 only if you know what you are doing.')
+    process.exit(1)
+  }
   publishedFiles = sh('tar', ['-tzf', join(tmp, tgz)])
     .split('\n')
     .map((p) => p.replace(/^package\//, ''))
