@@ -201,8 +201,11 @@ Brands live in `src/brands/*.css` and are selected at runtime with
 3. Give the brand a light block (`[data-brand="x"]`) and a dark block
    (`[data-brand="x"][data-theme="dark"]`). Any token the light block
    declares that the AEC dark block *also* tunes must be re-declared in
-   the brand's dark block — the light brand block sits later in source
-   order than the AEC dark block and would otherwise win in dark mode.
+   the brand's dark block — the two selectors have equal specificity and
+   the light brand block sits later in source order than the AEC dark
+   block, so it would otherwise win in dark mode. See "Cascade rule" in
+   `docs/DESIGN_TOKENS.md`. A brand file overrides theme-axis tokens only
+   under the documented exception listed there (Estate's slate ladder).
 4. Never change a value under an existing name in `brands/aec.css` —
    that is a major, not a brand addition.
 

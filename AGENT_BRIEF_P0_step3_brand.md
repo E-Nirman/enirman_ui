@@ -227,3 +227,42 @@ both themes, the contrast table, `package.json` → `5.3.0`, CHANGELOG:
 `5.3.0 — Add brand axis (data-brand), Estate brand file, pooled tone, .ds-field density. AEC unchanged.`
 
 Do not publish. Human publishes after review.
+
+---
+
+## Errata — applied in 5.3.0 (2026-09-09, human-approved)
+
+- **§0** was imprecise. The two axes are disjoint in *intent* but not in
+  the cascade: `[data-brand="estate"]` and `[data-theme="dark"]` share
+  specificity and `estate.css` is later in source, so any token the Estate
+  light block sets that the AEC dark block also tunes **must** be
+  re-declared in the Estate dark block, or Estate light wins on dark. Four
+  fills were needed beyond the brief's dark block: `--sidebar-foreground:
+  var(--fg-on-inverse)`, `--sidebar-muted: var(--fg-on-inverse-muted)`,
+  `--sidebar-accent-foreground: var(--fg-on-inverse)`,
+  `--bg-accent-subtle: hsl(var(--accent))`.
+- **§3.2 value shapes.** `--fg-on-brand` is `var(--gray-0)` (consumed
+  unwrapped), not `0 0% 100%`. The `--sidebar-*` grays are HSL triples
+  (consumed via `hsl(var())`), not `var(--gray-N)` hex refs. `--shadow-focus`
+  is written `rgba(88, 94, 149, 0.25)` (same value as `#585E9540`, same
+  form as AEC).
+- **§3.2 sidebar hover.** `--sidebar-accent` light is the gray-900 triple,
+  not gray-100: `SidebarItem` paints it at 6% alpha, so it must be an ink.
+- **§3.2 shadows.** The four `--button-shadow-soft*` values are included
+  in the clay tint (`rgba(29, 13, 8, a)`), white insets unchanged.
+- **§3.3** `--bg-muted` means `--muted`. The structural exception is
+  eight tokens, not four: `--secondary`, `--input`, `--border-subtle`,
+  `--border-strong` are also overridden at slate equivalents.
+  `--accent`, `--accent-foreground` and `--sidebar-primary-foreground` are
+  HSL triples (indigo-800 `234 28% 20.6%`, indigo-100 `231 100% 92%`,
+  gray-50 `210 33% 97%`), not `var()` hex refs.
+- **§3.3 dark action.** `--action-primary` dark is the one-off literal
+  `233 30% 54%` (#676FAD, 4.71:1 white-on); indigo-400 is 3.63:1 and fails
+  the §5.4 gate. Ramp unchanged; hover/active stay indigo-300/-200;
+  `--border-focus` and `--shadow-focus` track the literal, as in AEC.
+- **§3.3 dark sidebar hover.** `--sidebar-accent` dark is
+  `var(--border-on-inverse)` (white), not `218 15% 18%`, for the same 6%-alpha
+  reason as the light fix. Agent judgement, flagged in the delivery report.
+- **§5.4 finding.** AEC's own dark `--action-primary` is 3.43:1 and fails
+  the same gate. Not fixed (value change under an existing name); on
+  enirman_ui#1.

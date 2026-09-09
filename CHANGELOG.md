@@ -7,6 +7,101 @@ change, minor = new components/variants/tokens, patch = fixes.
 
 ---
 
+## 5.3.0
+
+Adds a second, orthogonal axis to the theme: **brand**. `data-brand="aec"`
+(default, identical to no attribute) or `data-brand="estate"` on `<html>`,
+driven by `useTheme().setBrand()`. AEC is unchanged — verified by a
+Chromium-resolved cascade probe against the published 5.2.1 tarball (see
+**Verification** below).
+
+**Added**
+- **Brand axis.** `brands/aec.css` widens its selectors to
+  `:root, [data-brand="aec"]` and
+  `[data-theme="dark"], [data-brand="aec"][data-theme="dark"]`; `:root`
+  stays so a consumer that never sets `data-brand` gets exactly 5.2.1.
+  `useTheme()` gains `brand` / `setBrand('aec' | 'estate')` with its own
+  storage key (`enirman-brand`); setting a brand never touches the theme
+  value or its key, and vice versa (unit-tested — `vitest` + `jsdom` are
+  new devDependencies, `npm test` is wired into `npm run check`).
+- **`brands/estate.css` — the Estate brand.** Two raw ramps
+  (`--brand-clay-50…900`, the logo mark only, never a surface;
+  `--brand-indigo-50…900`, A1 indigo-slate, O8 resolved 2026-09-09) and a
+  partial override of the brand-axis tokens: brand surface, action, link,
+  focus, sidebar (light neutral, O5 resolved) and the shadow tint
+  (clay-900 `rgba(29, 13, 8, a)`, including the four `--button-shadow-soft*`
+  values). Everything not declared inherits from the AEC blocks.
+- **`pooled` tone** — shared / commons teal, same shape as the other tones
+  plus `-border` and `-card`, in both brand files (AEC carries it unused).
+  Tailwind: `pooled`, `pooled-foreground`, `pooled-muted`, `pooled-ink`,
+  `pooled-border`, `pooled-card`.
+- **`.ds-field`** density opt-in: 16px text and a 44px minimum hit target
+  on `button`, `[role="button"]`, `input`, `select` — next to `.ds-marketing`.
+- **`check:css`** now also asserts the six brand/theme selectors, the seven
+  pooled tokens, both Estate ramps and `.ds-field` survive parsing.
+
+**Corrections to the step-3 brief, recorded here so nobody re-learns them**
+- *§0 — the two axes are not "disjoint override sets" in the cascade.*
+  `[data-brand="estate"]` and `[data-theme="dark"]` have equal specificity
+  and `estate.css` is imported after `aec.css`, so any token the Estate
+  **light** block sets that the AEC **dark** block also tunes must be
+  re-declared in the Estate **dark** block, or the light value wins on dark.
+  Four such re-declarations exist in `estate.css` (`--sidebar-foreground`,
+  `--sidebar-muted`, `--sidebar-accent-foreground`, `--bg-accent-subtle`);
+  the rest of the dark block re-states values for the same reason.
+- *Documented theme-axis exception.* Estate has no dark brand-surface hue,
+  so its dark block overrides the structural ladder with neutral slate.
+  The complete list of theme-axis tokens any brand file overrides is:
+  `--bg-canvas`, `--bg-surface`, `--muted`, `--secondary`, `--border`,
+  `--input`, `--border-subtle`, `--border-strong`. Nothing else.
+- *Value shapes.* Every token is declared in the shape its consumers
+  expect: HSL triples where the preset wraps `hsl(var())`, hex / `var()`
+  refs where it consumes unwrapped (`--fg-on-brand` is `var(--gray-0)`, not
+  a triple). Verified: all 119 preset expressions resolve in every Estate
+  state; none fall back to the sentinel.
+- *Dark action colour is a one-off literal.* `indigo-400` (#7981BB) is
+  3.63:1 white-on and fails AA, so dark `--action-primary` is
+  `233 30% 54%` (#676FAD, 4.71:1 white-on; 3.84:1 vs canvas, 3.50:1 vs
+  card). The ramp is unchanged; hover / active stay indigo-300 / -200.
+- *Sidebar hover.* `SidebarItem` paints `bg-sidebar-accent` at 6% alpha, so
+  `--sidebar-accent` is an ink, not a surface: gray-900 on the light
+  sidebar, white (`--border-on-inverse`) on the dark one.
+
+**Known limitation (Estate app must handle in components; not a 5.3.0 concern)**
+- `SidebarItem` uses `--sidebar-primary` for both the active-row fill and
+  the `focus-visible` ring. On Estate's light neutral sidebar the active
+  fill is indigo-50 on gray-50 (1.05:1) and on dark it is #262B34 on
+  #0F1216 (1.35:1) — correct for the fill (the row's text carries the
+  state), but the same token makes the focus ring near-invisible. Estate
+  components should draw their focus ring from `--ring`.
+
+**Finding, not fixed here — tracked on enirman_ui#1**
+- AEC's own dark `--action-primary` (`211 87% 56%`, #2D8CF0) is 3.43:1
+  white-on, below AA; `--sidebar-primary` dark (same value, white text) and
+  `--fg-link` on the dark canvas (3.60:1) fail the same gate. A value change
+  under an existing name is a major, so this waits for the 6.0.0 window
+  alongside `--border` / `--secondary` / `--border-strong`.
+
+**Verification**
+- AEC unchanged: flattened `theme.css` from this tree and from the
+  published 5.2.1 tarball were loaded into Chromium and every custom
+  property, every preset colour expression and every shadow expression
+  resolved for six states ({no `data-brand`, `data-brand="aec"`} × {no
+  `data-theme`, light, dark}). All 188 pre-existing tokens, 101 colour and
+  12 shadow expressions resolve identically; the only additions are the
+  seven `--pooled-*` tokens, the six `pooled` preset colours and the
+  `.ds-field` probes, and the twenty Estate ramp tokens resolve to the
+  empty string in every AEC state (declared, not leaking). The textual
+  diff of the flattened sheets shows only the widened selectors, the
+  pooled lines, `.ds-field` and the appended Estate blocks.
+- Studio and Connect both build clean against the packed 5.3.0 tarball.
+- Contrast (Estate, Chromium-resolved): white on `action-primary` 6.09:1
+  light / 4.71:1 dark; `pooled-ink` on `pooled-muted` 9.26:1 / 7.04:1;
+  `accent-foreground` on `accent` 9.78:1 / 10.50:1; sidebar active-row text
+  9.78:1 / 13.06:1; `fg-link` on canvas 5.67:1 / 6.94:1. All AA.
+- `npm run check:css`, `check:tokens`, `check:parity` and `npm test`
+  (10/10) pass.
+
 ## 5.2.1
 
 **Fixed**
