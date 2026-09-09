@@ -7,7 +7,7 @@ change, minor = new components/variants/tokens, patch = fixes.
 
 ---
 
-## 5.2.1
+## 5.1.2
 
 Split theme.css into base + brands/aec. No visual change.
 

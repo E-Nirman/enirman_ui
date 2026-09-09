@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap');
+
 /* ─── Base layer ─────────────────────────────────────────────────
  * Brand-agnostic foundations: web-font loading, the frappe-ui
  * variable bridge, base type rendering, the semantic .t-* typography
@@ -6,8 +8,6 @@
  *
  * Contains no brand tokens — those live in brands/*.css.
  */
-
-@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap');
 
 /* ─── Frappe-ui variable bridge ──────────────────────────────────
  * frappe-ui components read their own CSS variables. Map them to
