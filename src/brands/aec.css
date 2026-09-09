@@ -26,9 +26,17 @@
  *   - Raw hex variables for the brand scales (so SVGs / inline styles
  *     can pick exact swatches without HSL conversion)
  *   - Dark mode keys off [data-theme="dark"] on <html>
+ *   - Brand keys off [data-brand="aec" | "estate"] on <html> (5.3.0).
+ *     AEC is the default brand: `:root` stays on both blocks below so a
+ *     consumer that never sets data-brand gets exactly what 5.2.1 shipped,
+ *     and [data-brand="aec"] is the explicit spelling of the same thing.
+ *     The two axes are disjoint override sets — theme (this file's dark
+ *     block) remaps surfaces, text, borders, status tones; brand
+ *     (brands/estate.css) remaps brand surface, action, link, sidebar,
+ *     focus, shadow tint. Never merge them.
  */
 
-:root {
+:root, [data-brand="aec"] {
   /* ─── Brand scales (raw hex, source of truth) ────────────────── */
   --brand-navy-50:  #EEF2F7;
   --brand-navy-100: #D5DEEA;
@@ -175,6 +183,17 @@
   --plus-muted:        42 95% 95%;
   --plus-ink:          33 88% 22%;
 
+  /* `pooled` (5.3.0) — shared / commons tone. Same quad shape as the
+     tones above plus -border and -card. Identical in every brand; AEC
+     carries it unused so the token is never undefined. */
+  --pooled:             177 71% 30%;     /* #16827D */
+  --pooled-hover:       177 67% 36%;     /* #1E9A94 */
+  --pooled-foreground:  0 0% 100%;
+  --pooled-muted:       175 68% 90%;     /* #D5F7F4 */
+  --pooled-ink:         178 100% 14%;    /* #004946 */
+  --pooled-border:      176 44% 69%;     /* #8ED3CE */
+  --pooled-card:        175 62% 96%;     /* #EEFBFA */
+
   /* ─── Chrome ─────────────────────────────────────────────────── */
   --border:            218 19% 89%;    /* PRAGMATIC EXCEPTION — spec's --border-default is gray-200; this stays gray-150 (Hub's existing shade). Do not alias. */
   --border-subtle:     218 19% 89%;    /* already spec-compliant — same name, same value as colors_and_type.css */
@@ -298,7 +317,7 @@
  * because they share the same hue/lightness. Primary lightens to blue
  * 400 for AA contrast on dark surfaces.
  */
-[data-theme="dark"] {
+[data-theme="dark"], [data-brand="aec"][data-theme="dark"] {
   --bg-canvas:  217 50% 13%;    /* canvas — lifted from sidebar */
   --fg1:        210 16% 96%;
   --background:        var(--bg-canvas);
@@ -347,6 +366,12 @@
   --plus:              39 88% 60%;
   --plus-muted:        33 60% 18%;
   --plus-ink:          42 95% 85%;
+
+  --pooled-muted:      177 59% 15%;     /* #0F3B39 */
+  --pooled-ink:        176 44% 69%;     /* #8ED3CE */
+  --pooled-border:     178 55% 26%;     /* #1E6663 */
+  --pooled-card:       174 31% 12%;     /* #152826 */
+  /* --pooled, --pooled-hover, --pooled-foreground are theme-invariant */
 
   --border:            217 35% 26%;    /* hairline reads against navy 17 */
   --border-subtle:     217 35% 22%;

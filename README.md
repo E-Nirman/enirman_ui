@@ -47,6 +47,12 @@ without touching components.
 To opt a single app surface into a light sidebar, override the
 `--sidebar-*` tokens inside that surface's scope.
 
+Since 5.3.0 there is also a runtime **brand axis**: `data-brand="aec"`
+(default, identical to no attribute) or `data-brand="estate"` on `<html>`,
+driven by `useTheme().setBrand()`. Brand files live in `src/brands/` and
+override only brand-axis tokens; the theme axis (`data-theme`) is
+untouched by them. See `docs/DESIGN_TOKENS.md` → "Brand axis".
+
 ## Soft button materiality
 
 `<Button variant="default">` ships the **Soft** material — vertical

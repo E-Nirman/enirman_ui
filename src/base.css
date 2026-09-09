@@ -148,6 +148,14 @@ body {
 /* ─── Marketing-density opt-in ──────────────────────────────── */
 .ds-marketing { font-size: 16px; }
 
+/* ─── Field-density opt-in (5.3.0) ───────────────────────────
+ * Touch-first surfaces used on site: 16px base text and a 44px
+ * minimum hit target on controls. Brand-agnostic; opt in per scope
+ * exactly like .ds-marketing.
+ */
+.ds-field { font-size: 16px; }
+.ds-field button, .ds-field [role="button"], .ds-field input, .ds-field select { min-height: 44px; }
+
 /* =============================================================
    BUTTON MATERIALITY — Enirman Design System "Soft" preset
    Tailwind's JIT can't safely parse arbitrary `bg-[linear-gradient(…)]`

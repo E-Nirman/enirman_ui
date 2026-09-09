@@ -8,6 +8,61 @@ utility classes by `tailwind-preset.js`. Tokens live in two scopes:
 
 ---
 
+## Brand axis (5.3.0)
+
+Two orthogonal axes, two disjoint override sets, both keyed on `<html>`:
+
+| Axis | Attribute | Overrides |
+|---|---|---|
+| Theme | `data-theme="light" \| "dark"` | surfaces, text, borders, status tones |
+| Brand | `data-brand="aec" \| "estate"` | brand surface, action, link, sidebar, focus, shadow tint, clay mark |
+
+- `src/brands/aec.css` — the default brand. Its light block is
+  `:root, [data-brand="aec"]` and its dark block is
+  `[data-theme="dark"], [data-brand="aec"][data-theme="dark"]`, so a
+  document with no `data-brand` renders identically to one with
+  `data-brand="aec"`.
+- `src/brands/estate.css` — the Estate brand. Two raw ramps
+  (`--brand-clay-*`, logo mark only — never a surface; `--brand-indigo-*`,
+  the action colour) and overrides of the brand-axis tokens only.
+- Select at runtime with `useTheme().setBrand('aec' | 'estate')`; see
+  `docs/USAGE.md` §5.
+
+The dark theme block deliberately does not override brand/identity tokens
+and a brand block must not override theme-only tokens. The one sanctioned
+exception is Estate's dark block, which sets a neutral-slate structural
+ladder (`--bg-canvas`, `--bg-surface`, `--muted`, `--border`) because
+Estate has no dark brand-surface hue to build one from.
+
+### `pooled` tone (5.3.0)
+
+Shared / commons tone, same shape as `success` / `warning` / `danger` /
+`info` plus `-border` and `-card`. Identical in every brand; AEC carries it
+unused so the token is never undefined.
+
+| Token | Light | Dark |
+|---|---|---|
+| `--pooled` | `177 71% 30%` (#16827D) | invariant |
+| `--pooled-hover` | `177 67% 36%` (#1E9A94) | invariant |
+| `--pooled-foreground` | `0 0% 100%` | invariant |
+| `--pooled-muted` | `175 68% 90%` (#D5F7F4) | `177 59% 15%` (#0F3B39) |
+| `--pooled-ink` | `178 100% 14%` (#004946) | `176 44% 69%` (#8ED3CE) |
+| `--pooled-border` | `176 44% 69%` (#8ED3CE) | `178 55% 26%` (#1E6663) |
+| `--pooled-card` | `175 62% 96%` (#EEFBFA) | `174 31% 12%` (#152826) |
+
+Tailwind: `pooled`, `pooled-foreground`, `pooled-muted`, `pooled-ink`,
+`pooled-border`, `pooled-card` (e.g. `bg-pooled-card text-pooled-ink
+border-pooled-border`).
+
+### Density opt-ins
+
+| Class | Effect |
+|---|---|
+| `.ds-marketing` | `font-size: 16px` |
+| `.ds-field` (5.3.0) | `font-size: 16px`; `button`, `[role="button"]`, `input`, `select` inside get `min-height: 44px` — touch-first surfaces used on site |
+
+---
+
 ## Color
 
 ### Brand scale (change to rebrand)

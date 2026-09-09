@@ -126,6 +126,14 @@ export default {
           muted:      'hsl(var(--plus-muted))',
           ink:        'hsl(var(--plus-ink))',
         },
+        pooled: {
+          DEFAULT:    'hsl(var(--pooled))',
+          foreground: 'hsl(var(--pooled-foreground))',
+          muted:      'hsl(var(--pooled-muted))',
+          ink:        'hsl(var(--pooled-ink))',
+          border:     'hsl(var(--pooled-border))',
+          card:       'hsl(var(--pooled-card))',
+        },
 
         card: {
           DEFAULT:    'hsl(var(--card))',

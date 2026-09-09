@@ -105,8 +105,20 @@ const EXPECTED_SCALE_TOKENS = [
   '--lh-tight', '--lh-snug', '--lh-normal', '--lh-relaxed',
 ]
 
-const missingClasses = EXPECTED_T_CLASSES.filter((c) => !selectors.has(c))
-const missingTokens = EXPECTED_SCALE_TOKENS.filter((t) => !declaredProps.has(t))
+// 5.3.0 additions — the brand axis selectors, the pooled tone and the
+// .ds-field density opt-in must survive parsing the same way.
+const EXPECTED_BRAND_SELECTORS = [
+  ':root', '[data-brand="aec"]',
+  '[data-theme="dark"]', '[data-brand="aec"][data-theme="dark"]',
+]
+const EXPECTED_TONE_TOKENS = [
+  '--pooled', '--pooled-hover', '--pooled-foreground',
+  '--pooled-muted', '--pooled-ink', '--pooled-border', '--pooled-card',
+]
+const EXPECTED_DENSITY_CLASSES = ['.ds-marketing', '.ds-field']
+
+const missingClasses = [...EXPECTED_T_CLASSES, ...EXPECTED_DENSITY_CLASSES, ...EXPECTED_BRAND_SELECTORS].filter((c) => !selectors.has(c))
+const missingTokens = [...EXPECTED_SCALE_TOKENS, ...EXPECTED_TONE_TOKENS].filter((t) => !declaredProps.has(t))
 
 if (missingClasses.length || missingTokens.length) {
   console.error(`\n✗ the theme stylesheets parsed, but expected rules/tokens are missing from the parse tree:\n`)
@@ -127,4 +139,4 @@ if (missingClasses.length || missingTokens.length) {
 }
 
 const totalNodes = roots.reduce((n, r) => n + r.nodes.length, 0)
-console.log(`✓ css syntax: ${roots.length} file(s) parse (${totalNodes} top-level nodes); ${EXPECTED_T_CLASSES.length} .t-* rules and ${EXPECTED_SCALE_TOKENS.length} type-scale tokens present`)
+console.log(`✓ css syntax: ${roots.length} file(s) parse (${totalNodes} top-level nodes); ${EXPECTED_T_CLASSES.length} .t-* rules, ${EXPECTED_DENSITY_CLASSES.length} .ds-* rules, ${EXPECTED_BRAND_SELECTORS.length} brand/theme selectors, ${EXPECTED_SCALE_TOKENS.length} type-scale and ${EXPECTED_TONE_TOKENS.length} pooled tokens present`)
