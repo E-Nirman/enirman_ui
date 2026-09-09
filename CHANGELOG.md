@@ -7,10 +7,6 @@ change, minor = new components/variants/tokens, patch = fixes.
 
 ---
 
-## 5.1.2
-
-Split theme.css into base + brands/aec. No visual change.
-
 ## 5.2.0
 
 Studio's v3-fidelity audit found that `theme.css` shipped exactly one
@@ -58,6 +54,9 @@ no CSS rule. Also fixes finding `S-21` in the same audit
   was green (see `check:css` above for why). Caught in review before
   publish. Reworded both comments to use commas; no rule's selector or
   value changed.
+
+**Changed**
+- Split theme.css into base + brands/aec. No visual change.
 
 ---
 
