@@ -147,6 +147,32 @@ const { theme, toggle } = useTheme()
 </template>
 ```
 
+### Brand (5.3.0)
+
+`useTheme()` also owns the **brand axis**, which is orthogonal to the
+theme: a separate ref (`brand`), a separate setter (`setBrand`), a
+separate storage key (`localStorage['enirman-brand']`), and a separate
+attribute (`data-brand="aec" | "estate"` on `<html>`). Setting one axis
+never touches the other.
+
+- Default brand is `aec`. A consumer that never calls `setBrand` renders
+  exactly what it rendered before the brand axis existed — `:root` still
+  carries the AEC tokens, and `[data-brand="aec"]` is just the explicit
+  spelling of the same block.
+- `setBrand('estate')` switches to the Estate brand file
+  (`src/brands/estate.css`), which overrides only brand-axis tokens —
+  brand surface, action, link, focus, sidebar, shadow tint — and inherits
+  everything else from the AEC blocks.
+- Unknown values are ignored (`setBrand('studio')` is a no-op).
+
+```js
+const { brand, setBrand } = useTheme()
+setBrand('estate')   // <html data-brand="estate">; theme untouched
+```
+
+`darkMode` in the Tailwind preset stays keyed to `[data-theme="dark"]`;
+the brand attribute is CSS-only and never affects `dark:` variants.
+
 ## 6. Icons
 
 The design system keeps icon choice to the consumer (we don't want to
@@ -161,14 +187,30 @@ import LucideSearch from '~icons/lucide/search'
 
 ## 7. Rebranding
 
-To change the primary brand color across every consumer app:
+Brands live in `src/brands/*.css` and are selected at runtime with
+`data-brand` (see §5 above). To add or adjust a brand:
 
-1. Edit `apps/enirman_ui/src/theme.css`
-2. Update `--brand-50 / 100 / 300 / 500 / 600 / 700` under `:root` and `[data-theme="dark"]`
-3. That's it — every component re-derives its color from these six values
+1. Edit (or add) `apps/enirman_ui/src/brands/<brand>.css` and import it
+   from `src/theme.css` after `brands/aec.css`.
+2. A brand file overrides **only brand-axis tokens** — brand surface
+   (`--bg-brand`, `--border-brand`, `--bg-inverse`), action
+   (`--action-primary*`, `--accent*`), link (`--fg-link*`), focus
+   (`--border-focus`, `--shadow-focus`), sidebar (`--sidebar-*`) and the
+   shadow tint. Everything else inherits from the AEC `:root` /
+   `[data-theme="dark"]` blocks.
+3. Give the brand a light block (`[data-brand="x"]`) and a dark block
+   (`[data-brand="x"][data-theme="dark"]`). Any token the light block
+   declares that the AEC dark block *also* tunes must be re-declared in
+   the brand's dark block — the two selectors have equal specificity and
+   the light brand block sits later in source order than the AEC dark
+   block, so it would otherwise win in dark mode. See "Cascade rule" in
+   `docs/DESIGN_TOKENS.md`. A brand file overrides theme-axis tokens only
+   under the documented exception listed there (Estate's slate ladder).
+4. Never change a value under an existing name in `brands/aec.css` —
+   that is a major, not a brand addition.
 
-No other file changes. No JS rebuild needed in the design system itself;
-consumers just need to restart their dev server.
+No JS rebuild is needed in the design system itself; consumers just need
+to restart their dev server.
 
 ## 8. Where to read next
 

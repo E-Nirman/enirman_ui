@@ -1,6 +1,193 @@
-/* ─── Estate brand ────────────────────────────────────────────────
- * Placeholder. Populated in a later task.
+/*
+ * @enirman/ui — Estate brand (5.3.0)
  *
- * Will mirror brands/aec.css: one :root block and one
- * [data-theme="dark"] block, same token names, different values.
+ * Selected with data-brand="estate" on <html>. Partial override file: it
+ * declares only what Estate changes and inherits everything else from the
+ * AEC blocks in brands/aec.css (which stay on :root, so the raw navy, blue,
+ * amber and gray ramps, the type scale, radii, motion and every status
+ * tone are still defined here).
+ *
+ * Brand:
+ *   indigo-slate 500 (#585E95) → action (buttons, links, focus)
+ *   clay 500 (#793722)         → the "E" logo mark ONLY. Never a surface —
+ *                                rejected as a surface in every Design round.
+ *   sidebar                    → light neutral (gray-50), O5 resolved
+ *   pooled teal                → the one chromatic semantic Estate adds;
+ *                                defined in brands/aec.css for every brand.
+ *
+ * Cascade rule (corrects §0 of the step-3 brief, which called the two axes
+ * "disjoint override sets"): [data-brand="estate"] and [data-theme="dark"]
+ * have the SAME specificity (0,1,0), and this file is imported after
+ * aec.css. So for any token that BOTH the Estate light block and the AEC
+ * dark block declare, the Estate light value wins in dark mode unless the
+ * Estate dark block re-declares it. Every token in the light block below
+ * that the AEC dark block also tunes therefore appears again in the dark
+ * block, even when the value is simply the AEC dark value repeated.
+ *
+ * Structural exception (documented): Estate has no dark brand-surface hue,
+ * so its dark block overrides the theme-axis surface ladder with neutral
+ * slate. The full list of theme-axis tokens this file overrides is the
+ * "Structural ladder" group in the dark block, and nothing else.
  */
+
+[data-brand="estate"] {
+  /* ─── Brand scales (raw hex) ─────────────────────────────────── */
+  /* Clay — logo mark ONLY. oklch hue 38, chroma 0.10. */
+  --brand-clay-50:  #FFEBE4;
+  --brand-clay-100: #FFD3C5;
+  --brand-clay-200: #E6AA98;
+  --brand-clay-300: #C27E69;
+  --brand-clay-400: #9C5640;
+  --brand-clay-500: #793722;   /* the mark, both themes */
+  --brand-clay-600: #642916;
+  --brand-clay-700: #4F2011;
+  --brand-clay-800: #37170D;
+  --brand-clay-900: #1D0D08;   /* shadow tint */
+
+  /* Indigo-slate — A1, O8 resolved 2026-09-09. oklch hue 278, chroma 0.09,
+     lightness on the rendered curve (Action Options file, 500 at L 0.50). */
+  --brand-indigo-50:  #EDF1FF;
+  --brand-indigo-100: #D6DCFF;
+  --brand-indigo-200: #B6BDED;
+  --brand-indigo-300: #959DD4;
+  --brand-indigo-400: #7981BB;
+  --brand-indigo-500: #585E95;   /* primary action, light */
+  --brand-indigo-600: #464B7C;
+  --brand-indigo-700: #353960;
+  --brand-indigo-800: #262943;
+  --brand-indigo-900: #181927;
+
+  /* ─── Brand surface + identity ───────────────────────────────
+   * Consumed unwrapped by the preset (var(--x)), so these are hex refs.
+   * --bg-brand is the mark colour; Estate components must not paint a
+   * surface with it (clay is not a surface). */
+  --bg-brand:     var(--brand-clay-500);
+  --border-brand: var(--brand-clay-500);
+  --bg-inverse:   var(--gray-900);        /* no dark brand surface */
+  --fg-on-brand:  var(--gray-0);
+
+  /* ─── Action ─────────────────────────────────────────────────
+   * HSL triples where the preset wraps in hsl(var()), hex refs where it
+   * does not — same shapes as the AEC declarations of the same names. */
+  --action-primary:        234 26% 46.5%;   /* indigo-500 #585E95 — white-on 6.09:1 */
+  --action-primary-hover:  var(--brand-indigo-600);
+  --action-primary-active: var(--brand-indigo-700);
+  --primary:               var(--action-primary);
+  --accent:                227 100% 96.5%;  /* indigo-50 #EDF1FF */
+  --accent-foreground:     234 29% 29.2%;   /* indigo-700 #353960 */
+  --bg-accent-subtle:      var(--brand-indigo-50);
+
+  /* ─── Links ──────────────────────────────────────────────────── */
+  --fg-link:       var(--brand-indigo-500);
+  --fg-link-hover: var(--brand-indigo-600);
+
+  /* ─── Focus ──────────────────────────────────────────────────── */
+  --border-focus: 234 26% 46.5%;
+  --ring:         var(--border-focus);
+  --shadow-focus: 0 0 0 3px rgba(88, 94, 149, 0.25);   /* indigo-500 at the AEC alpha */
+
+  /* ─── Sidebar — LIGHT NEUTRAL (O5 resolved). Not tinted, not dark. ─
+   * Triples reuse the spellings aec.css already uses for the same grays
+   * (--bg-canvas, --fg1, --fg3, --border). SidebarItem paints hover as
+   * bg-sidebar-accent at 6% alpha and EuiFileViewer at 10%, so
+   * --sidebar-accent must be an INK, not a surface: gray-900 at 6% over
+   * gray-50 reads as a hover tint; gray-100 at 6% is invisible. */
+  --sidebar:                    210 33% 97%;   /* gray-50 #F6F8FA */
+  --sidebar-foreground:         222 27% 10%;   /* gray-900 #131722 */
+  --sidebar-muted:              219 11% 47%;   /* gray-500 #6B7585 */
+  --sidebar-border:             218 19% 89%;   /* gray-150 #DFE3EA — same hairline as --border */
+  --sidebar-accent:             222 27% 10%;   /* gray-900 ink — hover at 6% alpha */
+  --sidebar-accent-foreground:  222 27% 10%;   /* gray-900 */
+  --sidebar-primary:            227 100% 96.5%; /* indigo-50 — active row bg */
+  --sidebar-primary-foreground: 234 29% 29.2%;  /* indigo-700 — active row fg */
+
+  /* ─── Shadows — clay-900 tint ────────────────────────────────
+   * rgba(15, 34, 56, a) → rgba(29, 13, 8, a) — #1D0D08. Offsets, blurs and
+   * alphas are the AEC values unchanged; the white inset highlights on the
+   * soft button shadows are brand-invariant and unchanged. */
+  --shadow-xs: 0 1px 1px rgba(29, 13, 8, 0.04);
+  --shadow-sm: 0 1px 2px rgba(29, 13, 8, 0.06), 0 1px 1px rgba(29, 13, 8, 0.04);
+  --shadow-md: 0 4px 8px -2px rgba(29, 13, 8, 0.08), 0 2px 4px -2px rgba(29, 13, 8, 0.05);
+  --shadow-lg: 0 12px 24px -8px rgba(29, 13, 8, 0.12), 0 4px 8px -4px rgba(29, 13, 8, 0.06);
+  --shadow-xl: 0 24px 48px -12px rgba(29, 13, 8, 0.18), 0 8px 16px -8px rgba(29, 13, 8, 0.08);
+  --shadow-inner: inset 0 1px 2px rgba(29, 13, 8, 0.06);
+
+  --button-shadow-soft:
+    inset 0 1px 0 rgba(255, 255, 255, 0.20),
+    0 1px 2px rgba(29, 13, 8, 0.10),
+    0 4px 8px -2px rgba(29, 13, 8, 0.10);
+  --button-shadow-soft-hover:
+    inset 0 1px 0 rgba(255, 255, 255, 0.24),
+    0 2px 4px rgba(29, 13, 8, 0.12),
+    0 8px 16px -4px rgba(29, 13, 8, 0.14);
+  --button-shadow-soft-neutral:
+    inset 0 1px 0 rgba(255, 255, 255, 0.80),
+    0 1px 2px rgba(29, 13, 8, 0.06),
+    0 4px 8px -2px rgba(29, 13, 8, 0.08);
+  --button-shadow-soft-neutral-hover:
+    inset 0 1px 0 rgba(255, 255, 255, 0.90),
+    0 2px 4px rgba(29, 13, 8, 0.08),
+    0 8px 16px -4px rgba(29, 13, 8, 0.12);
+}
+
+/* ─── Estate dark ─────────────────────────────────────────────────
+ * Neutral slate ladder (Design, 2026-09-07):
+ *   sidebar #0F1216 · canvas #14171C · card #1C2027 · muted #262B34 ·
+ *   border #2E343E
+ * Text (--fg1..4), status tones and everything else not listed here come
+ * from the AEC dark block unchanged.
+ */
+[data-brand="estate"][data-theme="dark"] {
+  /* ─── Structural ladder — THE documented theme-axis exception ─
+   * These nine are the only theme-axis tokens any brand file overrides.
+   * --background, --card, --popover, --bg-sunken, --border-default,
+   * --action-secondary and --action-secondary-hover follow through the
+   * var() refs the AEC dark block already declares. */
+  --bg-canvas:     220 15% 9%;    /* #14171C — canvas  */
+  --bg-surface:    220 15% 13%;   /* #1C2027 — card    */
+  --muted:         218 15% 18%;   /* #262B34 — muted   */
+  --secondary:     218 15% 18%;   /* #262B34 — AEC dark keys --secondary to the --muted value; kept */
+  --border:        218 15% 21%;   /* #2E343E — border  */
+  --input:         218 15% 21%;   /* #2E343E — AEC dark keys --input to the --border value; kept */
+  --border-subtle: 218 15% 20%;   /* #2B303A — midway muted→border, where AEC's dark ladder puts it */
+  --border-strong: 218 15% 31%;   /* #434C5B — +10 L over --border, AEC's dark-ladder offset */
+
+  /* ─── Action ─────────────────────────────────────────────────
+   * ONE-OFF LITERAL, deliberately not on the indigo ramp. indigo-400
+   * (#7981BB, 233 33% 60.4%) is 3.63:1 white-on and fails AA; this value
+   * (#676FAD) sits between indigo-400 and -500 and is 4.72:1 white-on,
+   * 3.79:1 against the canvas and 3.46:1 against the card. The ramp is
+   * unchanged; hover/active stay indigo-300/-200 (lighten on dark). */
+  --action-primary:        233 30% 54%;   /* #676FAD — see above */
+  --action-primary-hover:  var(--brand-indigo-300);
+  --action-primary-active: var(--brand-indigo-200);
+  --accent:                234 28% 20.6%;   /* indigo-800 #262943 */
+  --accent-foreground:     231 100% 92%;    /* indigo-100 #D6DCFF */
+  --bg-accent-subtle:      hsl(var(--accent));   /* re-declared: AEC dark tunes it (cascade rule) */
+
+  /* ─── Links ──────────────────────────────────────────────────── */
+  --fg-link:       var(--brand-indigo-300);
+  --fg-link-hover: var(--brand-indigo-200);
+
+  /* ─── Focus — tracks --action-primary, as in AEC ─────────────── */
+  --border-focus: 233 30% 54%;
+  --shadow-focus: 0 0 0 3px rgba(103, 111, 173, 0.25);
+
+  /* ─── Sidebar ────────────────────────────────────────────────
+   * The four var() lines are re-declarations required by the cascade
+   * rule: the light block above sets them to grays, AEC dark sets them
+   * to on-inverse whites, and without these lines the light grays would
+   * win on a #0F1216 sidebar. --sidebar-accent is white for the same
+   * reason it is gray-900 in light: it is painted at 6% alpha. */
+  --sidebar:                    220 19% 7%;    /* #0F1216 */
+  --sidebar-foreground:         var(--fg-on-inverse);
+  --sidebar-muted:              var(--fg-on-inverse-muted);
+  --sidebar-border:             218 15% 18%;   /* #262B34 */
+  --sidebar-accent:             var(--border-on-inverse);   /* white ink — hover at 6% alpha */
+  --sidebar-accent-foreground:  var(--fg-on-inverse);
+  --sidebar-primary:            218 15% 18%;   /* #262B34 — active row bg */
+  --sidebar-primary-foreground: 210 33% 97%;   /* gray-50 #F6F8FA — active row fg */
+
+  /* --bg-brand, --border-brand, --bg-inverse, --fg-on-brand and the
+     --shadow-… tints are theme-invariant: no override here. */
+}

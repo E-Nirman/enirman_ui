@@ -21,7 +21,10 @@ const ROOT = new URL('..', import.meta.url).pathname
  * base/brands split landed. Read the brand file directly: theme.css is now
  * only @import lines, and the first `:root` in the flattened result belongs
  * to base.css's frappe-ui bridge, not to the brand palette this check is
- * about. Add further brands to this list as they are populated.
+ * about. brands/estate.css (5.3.0) is a partial override file — it declares
+ * only the tokens Estate changes and inherits the rest from the AEC blocks —
+ * so it cannot be parity-checked against SPEC_HEX on its own; its cascade is
+ * verified in a real browser by the release proof instead.
  */
 const BRAND_FILE = 'src/brands/aec.css'
 const css = readFileSync(new URL(`../${BRAND_FILE}`, import.meta.url), 'utf8')
@@ -131,8 +134,15 @@ function extractBlock(selectorPattern) {
   return m[1]
 }
 
-const ROOT_BLOCK = extractBlock(':root')
-const DARK_BLOCK = extractBlock('\\[data-theme="dark"\\]')
+/*
+ * Since 5.3.0 the AEC blocks carry the brand axis on their selectors:
+ *   :root, [data-brand="aec"] { ... }
+ *   [data-theme="dark"], [data-brand="aec"][data-theme="dark"] { ... }
+ * The optional groups below accept both the widened and the pre-5.3.0
+ * spelling, so this check is indifferent to which one the file uses.
+ */
+const ROOT_BLOCK = extractBlock(':root(?:,\\s*\\[data-brand="aec"\\])?')
+const DARK_BLOCK = extractBlock('\\[data-theme="dark"\\](?:,\\s*\\[data-brand="aec"\\]\\[data-theme="dark"\\])?')
 
 function resolveIn(name, blockText, seen = new Set()) {
   if (seen.has(name)) throw new Error(`circular var reference: ${name}`)
