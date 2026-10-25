@@ -49,6 +49,17 @@ yarn install
 yarn build
 ```
 
+## Automated release (from CI)
+
+Pushing a `vX.Y.Z` tag runs `.github/workflows/publish.yml`, which checks the tag matches `package.json`, runs `npm run check`, and publishes with the repository secret `NPM_TOKEN`. So a release no longer needs a local `npm login`:
+
+```bash
+npm version minor                 # commit + tag
+git push origin HEAD --follow-tags  # CI publishes to npm
+```
+
+Steps 3 and 4 of the standard release are then done by CI. If `NPM_TOKEN` is missing the job fails with a clear message and nothing is published. A version already on npm is skipped.
+
 ## Automated guards
 
 `npm publish` runs `prepublishOnly` → `npm run check`, which is two gates.
