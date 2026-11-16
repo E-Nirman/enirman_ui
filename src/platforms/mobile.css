@@ -1,0 +1,97 @@
+/*
+ * Platform axis (5.4.0) — data-platform="desktop" | "mobile"
+ *
+ * A third axis next to theme (data-theme) and brand (data-brand). It
+ * switches DENSITY only: touch sizes, spacing and the type scale. It never
+ * touches colour, so it composes with every brand and both themes.
+ *
+ * Default (no attribute, or data-platform="desktop"):
+ *   Every token this file introduces is new in 5.4.0 and nothing that
+ *   existed before reads it, so a document without data-platform renders
+ *   exactly as 5.3.0 did. The existing tokens this file re-tunes
+ *   (--font-size-base, --fs-*, --eui-btn-h-*) are touched ONLY under
+ *   [data-platform="mobile"].
+ *
+ * data-platform="mobile":
+ *   16px body text (also stops iOS zooming into focused inputs), a type
+ *   scale one step up for arm's-length reading, 48px touch targets, roomier
+ *   control padding, a 16px page gutter, and taller .eui-btn heights.
+ *
+ * Cascade: [data-platform="mobile"] has the same specificity (0,1,0) as
+ * :root and [data-brand="…"], and this file is imported after the brand
+ * files, so on the same element (normally <html>) the platform values win.
+ * Set data-platform on <html> together with data-brand, or on an element
+ * INSIDE the data-brand element — not on an ancestor of a nested
+ * data-brand element, whose brand block would re-declare --fs-* below it.
+ * No brand file declares a density token; check:css keeps it that way.
+ */
+
+/* ─── New density tokens, desktop values ─────────────────────────────── */
+:root, [data-platform="desktop"] {
+  --touch-target:   44px;   /* minimum hit size for touch-first controls (WCAG 2.5.5 / Apple HIG) */
+  --density-pad-x:  12px;   /* inline padding inside a control */
+  --density-pad-y:  8px;    /* block padding inside a control */
+  --density-gap:    8px;    /* gap between sibling controls */
+  --page-gutter:    24px;   /* side gutter of a page body */
+  --tabbar-height:  56px;   /* bottom tab bar row, excluding the safe-area inset */
+}
+
+/* ─── Mobile ─────────────────────────────────────────────────────────── */
+[data-platform="mobile"] {
+  --touch-target:   48px;
+  --density-pad-x:  16px;
+  --density-pad-y:  12px;
+  --density-gap:    12px;
+  --page-gutter:    16px;
+  --tabbar-height:  64px;
+
+  --font-size-base: 16px;
+
+  --fs-2xs: 12px;
+  --fs-xs:  13px;
+  --fs-sm:  15px;
+  --fs-md:  16px;
+  --fs-lg:  18px;
+  --fs-xl:  20px;
+  --fs-2xl: 24px;
+  --fs-3xl: 28px;
+  --fs-4xl: 32px;
+}
+
+/* .eui-btn declares its heights on the button itself (base.css), so the
+ * mobile values have to be set at the same element to win. */
+[data-platform="mobile"] .eui-btn {
+  --eui-btn-h-xs: 32px;
+  --eui-btn-h-sm: 40px;
+  --eui-btn-h-md: 44px;
+  --eui-btn-h-lg: 48px;
+}
+
+/* ─── Explicit desktop inside a mobile subtree ───────────────────────────
+ * Only matters when data-platform="desktop" is nested under a mobile
+ * element (e.g. a desktop-density preview pane in a phone shell). Restates
+ * the 5.3.0 values of the re-tuned tokens — the same numbers as
+ * brands/aec.css and base.css — so the subtree drops back to desktop
+ * density. Not reached by :root, so a document with no attribute is
+ * untouched by this block.
+ */
+[data-platform="desktop"] {
+  --font-size-base: 14px;
+
+  --fs-2xs: 11px;
+  --fs-xs:  12px;
+  --fs-sm:  13px;
+  --fs-md:  14px;
+  --fs-lg:  16px;
+  --fs-xl:  18px;
+  --fs-2xl: 22px;
+  --fs-3xl: 28px;
+  --fs-4xl: 36px;
+}
+
+[data-platform="desktop"] .eui-btn {
+  --eui-btn-h-xs: 24px;
+  --eui-btn-h-sm: 28px;
+  --eui-btn-h-md: 34px;
+  --eui-btn-h-lg: 42px;
+}

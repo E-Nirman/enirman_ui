@@ -385,6 +385,85 @@ EuiAppShell
 
 ---
 
+## SegmentedControl (5.4.0)
+
+A short, mutually exclusive choice shown as joined segments (Length unit:
+m / ft; Calendar: BS / AD). For switching *content* within a page, use
+`Tabs`; for more than ~4 options, use `InlineSelect`.
+
+```vue
+<p id="len-label" class="t-label">Length unit</p>
+<SegmentedControl
+  v-model="unit"
+  labelledby="len-label"
+  :options="[{ value: 'm', label: 'Metres' }, { value: 'ft', label: 'Feet' }]"
+/>
+```
+
+**Props:** `options` `[{ value, label, disabled? }]` (required) · `label`
+(accessible name) or `labelledby` (id of a visible label) · `disabled` ·
+`block` (fill the width, equal segments). `v-model` is the checked value;
+`change` fires with the new value. Slot `option` (`{ option, checked }`).
+
+**Accessibility:** `role="radiogroup"` of `role="radio"` buttons with
+`aria-checked`; one tab stop (the checked segment); Arrow keys move and
+select (wrapping, skipping disabled), Home / End jump, Space / Enter
+select; visible focus ring (`--ring`); every segment is at least
+`--touch-target` tall (44px, 48px under `data-platform="mobile"`).
+
+**Rules:**
+- Always give it a name — `label` or `labelledby`. A segmented control
+  without a visible label next to it needs `label`.
+- Keep segment labels to one or two words; 2–4 segments.
+- Checked segment uses the brand's action colour (`bg-primary`); don't
+  restyle it per screen.
+
+---
+
+## TabBar (5.4.0)
+
+Bottom tab bar for phones: 3–5 top-level destinations, icon over label.
+Pair it with `data-platform="mobile"` (see DESIGN_TOKENS.md → Platform
+axis). On wider screens use the sidebar instead.
+
+```vue
+<TabBar
+  class="md:hidden"
+  :items="[
+    { value: 'tools',      label: 'Tools',      icon: Wrench,     to: '/tools' },
+    { value: 'plotter',    label: 'Plotter',    icon: Map,        to: '/plotter' },
+    { value: 'workspaces', label: 'Workspaces', icon: LayoutGrid, to: '/workspaces' },
+    { value: 'me',         label: 'Me',         icon: User,       to: '/me' },
+  ]"
+/>
+```
+
+**Props:** `items` `[{ value, label, icon?, to?, href?, exact?, active?,
+disabled? }]` (required) · `label` (landmark name, default `"Main"`) ·
+`fixed` (default `true`: pinned to the viewport bottom with the safe-area
+inset; `false` renders in flow). Optional `v-model` (the current value);
+`select` fires `(value, event)` on every activation. Slot `icon`
+(`{ item, current }`).
+
+**Current item:** `v-model` if bound → else `item.active === true` → else
+derived from the route like `SidebarItem` (the longest `to` that equals
+or is a parent of the current path; `exact` disables the parent match).
+Works without a router (button / `href` items).
+
+**Accessibility:** a `<nav>` landmark with a list of links (buttons when an
+item has neither `to` nor `href`); the current one has
+`aria-current="page"`; icons are `aria-hidden`; visible focus ring; items
+at least `--touch-target` tall.
+
+**Rules:**
+- 3–5 items. Labels always shown — never icon-only.
+- Hide it on the screens that hide the mockup's tab bar (e.g. sign-in)
+  with `v-if` in the app, and at tablet widths with `class="md:hidden"`.
+- Leave room for it: pad the page bottom by
+  `calc(var(--tabbar-height) + env(safe-area-inset-bottom))`.
+
+---
+
 ## ProgressBar (`EuiProgressBar`)
 
 Determinate or indeterminate progress.

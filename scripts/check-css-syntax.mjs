@@ -121,8 +121,18 @@ const EXPECTED_DENSITY_CLASSES = ['.ds-marketing', '.ds-field']
 const RAMP_STEPS = [50, 100, 200, 300, 400, 500, 600, 700, 800, 900]
 const EXPECTED_ESTATE_RAMP_TOKENS = RAMP_STEPS.flatMap((n) => [`--brand-clay-${n}`, `--brand-indigo-${n}`])
 
-const missingClasses = [...EXPECTED_T_CLASSES, ...EXPECTED_DENSITY_CLASSES, ...EXPECTED_BRAND_SELECTORS].filter((c) => !selectors.has(c))
-const missingTokens = [...EXPECTED_SCALE_TOKENS, ...EXPECTED_TONE_TOKENS, ...EXPECTED_ESTATE_RAMP_TOKENS].filter((t) => !declaredProps.has(t))
+// 5.4.0 additions — the platform axis (platforms/mobile.css): its selectors
+// and the density tokens SegmentedControl and TabBar size themselves from.
+const EXPECTED_PLATFORM_SELECTORS = [
+  '[data-platform="desktop"]', '[data-platform="mobile"]',
+  '[data-platform="mobile"] .eui-btn', '[data-platform="desktop"] .eui-btn',
+]
+const EXPECTED_DENSITY_TOKENS = [
+  '--touch-target', '--density-pad-x', '--density-pad-y', '--density-gap', '--page-gutter', '--tabbar-height',
+]
+
+const missingClasses = [...EXPECTED_T_CLASSES, ...EXPECTED_DENSITY_CLASSES, ...EXPECTED_BRAND_SELECTORS, ...EXPECTED_PLATFORM_SELECTORS].filter((c) => !selectors.has(c))
+const missingTokens = [...EXPECTED_SCALE_TOKENS, ...EXPECTED_TONE_TOKENS, ...EXPECTED_ESTATE_RAMP_TOKENS, ...EXPECTED_DENSITY_TOKENS].filter((t) => !declaredProps.has(t))
 
 if (missingClasses.length || missingTokens.length) {
   console.error(`\n✗ the theme stylesheets parsed, but expected rules/tokens are missing from the parse tree:\n`)
@@ -143,4 +153,4 @@ if (missingClasses.length || missingTokens.length) {
 }
 
 const totalNodes = roots.reduce((n, r) => n + r.nodes.length, 0)
-console.log(`✓ css syntax: ${roots.length} file(s) parse (${totalNodes} top-level nodes); ${EXPECTED_T_CLASSES.length} .t-* rules, ${EXPECTED_DENSITY_CLASSES.length} .ds-* rules, ${EXPECTED_BRAND_SELECTORS.length} brand/theme selectors, ${EXPECTED_SCALE_TOKENS.length} type-scale, ${EXPECTED_TONE_TOKENS.length} pooled and ${EXPECTED_ESTATE_RAMP_TOKENS.length} Estate ramp tokens present`)
+console.log(`✓ css syntax: ${roots.length} file(s) parse (${totalNodes} top-level nodes); ${EXPECTED_T_CLASSES.length} .t-* rules, ${EXPECTED_DENSITY_CLASSES.length} .ds-* rules, ${EXPECTED_BRAND_SELECTORS.length} brand/theme selectors, ${EXPECTED_PLATFORM_SELECTORS.length} platform selectors, ${EXPECTED_SCALE_TOKENS.length} type-scale, ${EXPECTED_TONE_TOKENS.length} pooled, ${EXPECTED_ESTATE_RAMP_TOKENS.length} Estate ramp and ${EXPECTED_DENSITY_TOKENS.length} density tokens present`)

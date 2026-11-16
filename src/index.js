@@ -57,6 +57,8 @@ export { EuiAvatarStack }           from './components/app/EuiAvatarStack'
 export { EuiFeatureGate }           from './components/app/EuiFeatureGate'
 export { DetailRow }                from './components/app/DetailRow'
 export { InlineSelect }             from './components/app/InlineSelect'
+export { SegmentedControl }         from './components/app/SegmentedControl'
+export { TabBar }                   from './components/app/TabBar'
 
 // ─── Layouts ──────────────────────────────────────────────────────
 export { default as AppShell }        from './layouts/AppShell.vue'
