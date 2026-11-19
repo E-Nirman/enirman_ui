@@ -17,14 +17,23 @@ import { ref, watch, onMounted } from 'vue'
  * theme — a separate ref, a separate storage key, and setting one never
  * touches the other. Default is 'aec', which renders exactly what
  * consumers got before the brand axis existed.
+ *
+ * Platform (5.4.0): sets data-platform="desktop" | "mobile" on <html>,
+ * switching density tokens only (platforms/mobile.css). Unlike theme and
+ * brand it is not a user preference: the app decides it (a phone build
+ * calls setPlatform('mobile') once at start-up), so it is not persisted
+ * and nothing is applied on mount. A consumer that never calls
+ * setPlatform gets no data-platform attribute at all — exactly 5.3.0.
  */
 
 const STORAGE_KEY = 'enirman_theme'
 const BRAND_STORAGE_KEY = 'enirman-brand'   // deliberately not the theme key
 const BRANDS = ['aec', 'estate']
+const PLATFORMS = ['desktop', 'mobile']
 
 const theme = ref('light')
 const brand = ref('aec')
+const platform = ref('desktop')
 
 function apply(value) {
   if (typeof document === 'undefined') return
@@ -42,6 +51,13 @@ function setBrand(v) {
   brand.value = v
   applyBrand(v)
   try { localStorage.setItem(BRAND_STORAGE_KEY, v) } catch { /* ignore */ }
+}
+
+function setPlatform(v) {
+  if (!PLATFORMS.includes(v)) return
+  platform.value = v
+  if (typeof document === 'undefined') return
+  document.documentElement.setAttribute('data-platform', v)
 }
 
 export function useTheme() {
@@ -77,5 +93,7 @@ export function useTheme() {
     },
     brand,
     setBrand,
+    platform,
+    setPlatform,
   }
 }

@@ -7,6 +7,69 @@ change, minor = new components/variants/tokens, patch = fixes.
 
 ---
 
+## 5.4.0
+
+Phone shell pieces for Enirman Mobile (Anup's decision of 2026-11-16 on
+enirman_mobile PR #24, ⛔ u1: move the app's local segmented control and
+bottom tab bar into the package). Purely additive: without
+`data-platform="mobile"` every existing screen renders exactly as 5.3.0
+(see **Verification**).
+
+**Added**
+- **`SegmentedControl`** — short exclusive choice as joined segments.
+  WAI-ARIA radio group: `role="radiogroup"` / `role="radio"` +
+  `aria-checked`, one tab stop, Arrow keys move and select (wrap, skip
+  disabled), Home / End, Space / Enter; `label` or `labelledby`; `block`;
+  `disabled` per option or group; `v-model` + `change`. Segments are at
+  least `--touch-target` tall. Tier-2 tokens only (`bg-muted` track,
+  `bg-primary` / `text-primary-foreground` checked, `text-fg3` → `text-fg1`,
+  `ring-ring` focus).
+- **`TabBar`** — bottom tab bar for phones. `<nav>` landmark (default name
+  "Main") with a list of `RouterLink` / `<a>` / `<button>` items; current
+  item has `aria-current="page"`, from `v-model`, `item.active` or the route
+  (longest matching `to`, `exact` supported; no router needed). Fixed to the
+  viewport bottom with the safe-area inset by default (`fixed=false` for in
+  flow). Icons `aria-hidden`, stroke 1.75 → 2.25 when current. Items at least
+  `--touch-target` tall. Tier-2 tokens only (`bg-card`,
+  `border-border-subtle`, `text-action-primary` current, `text-fg3` others).
+- **Platform axis** — `data-platform="desktop" | "mobile"`, new file
+  `src/platforms/mobile.css`, imported last by `theme.css`. Density only:
+  new tokens `--touch-target`, `--density-pad-x`, `--density-pad-y`,
+  `--density-gap`, `--page-gutter`, `--tabbar-height` (desktop values on
+  `:root`, read by nothing that existed before), and under
+  `[data-platform="mobile"]` a 16px `--font-size-base`, a type scale one
+  step up (`--fs-*`) and taller `.eui-btn` heights. A nested
+  `data-platform="desktop"` restores the 5.3.0 values.
+- **`useTheme().platform` / `setPlatform('desktop' | 'mobile')`** — sets
+  `data-platform` on `<html>`. Not persisted and not applied on mount (the
+  app decides it, the user doesn't), so an app that never calls it gets no
+  attribute. Theme and brand are untouched by it, and vice versa.
+- `check:css` asserts the four platform selectors and six density tokens;
+  `src/platforms/platforms.test.js` asserts the platform file only reaches
+  `:root` with new tokens, re-tunes existing ones only under a
+  `data-platform` selector, restates the exact 5.3.0 values for desktop,
+  holds no colour, and that no brand file declares a density token.
+- Unit tests for both components (`vitest.config.js` now loads
+  `@vitejs/plugin-vue`, already a devDependency). No new dependencies.
+
+**Verification — zero visual change without the attribute**
+Built the playground from `v5@5.3.0` and from this branch (same
+`App.vue`) and probed both in Chromium in 12 states (light / dark × no
+brand / `aec` / `estate` × 1440 / 402 px): every computed style of every
+element (485 / 467 elements) identical, and full-page screenshots
+pixel-identical.
+
+**Known limitations**
+- Tailwind's `text-*` sizes in the preset are fixed px and don't follow the
+  platform axis; `.t-*` classes and the new components do.
+- `TabBar` current-item text uses `--action-primary` at `--fs-2xs` (bold).
+  On dark surfaces that is below 4.5:1 in both brands (AEC dark blue on
+  navy card, Estate #676FAD on #1C2027 ≈ 3.5:1) — the same
+  `--action-primary`-on-dark finding already tracked on enirman_ui#1; the
+  thicker icon stroke also marks the current item.
+
+---
+
 ## 5.3.0
 
 Adds a second, orthogonal axis to the theme: **brand**. `data-brand="aec"`

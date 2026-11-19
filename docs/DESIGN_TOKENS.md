@@ -8,6 +8,47 @@ utility classes by `tailwind-preset.js`. Tokens live in two scopes:
 
 ---
 
+## Platform axis (5.4.0)
+
+A third axis, `data-platform="desktop" | "mobile"`, switches **density
+only** — touch sizes, spacing and the type scale — and never colour, so it
+composes with every brand and both themes. File: `src/platforms/mobile.css`
+(imported last in `theme.css`). Select it with
+`useTheme().setPlatform('mobile')`, or put the attribute in markup.
+
+| Token | Desktop (default) | Mobile | Used by |
+|---|---|---|---|
+| `--touch-target` | 44px | 48px | `SegmentedControl`, `TabBar` item min-height |
+| `--density-pad-x` | 12px | 16px | inline padding inside a control |
+| `--density-pad-y` | 8px | 12px | block padding inside a control |
+| `--density-gap` | 8px | 12px | gap between sibling controls |
+| `--page-gutter` | 24px | 16px | side gutter of a page body |
+| `--tabbar-height` | 56px | 64px | `TabBar` row (safe-area inset added below) |
+| `--font-size-base` | 14px | 16px | body text (16px also stops iOS input zoom) |
+| `--fs-2xs … --fs-4xl` | 11 · 12 · 13 · 14 · 16 · 18 · 22 · 28 · 36 | 12 · 13 · 15 · 16 · 18 · 20 · 24 · 28 · 32 | `.t-*` classes, new components |
+| `--eui-btn-h-xs … -lg` | 24 · 28 · 34 · 42 | 32 · 40 · 44 · 48 | `Button` heights |
+
+- **No attribute = 5.3.0, exactly.** The six new tokens are declared on
+  `:root` but nothing that existed before reads them; every existing token
+  the axis re-tunes is touched only under a `data-platform` selector.
+  Verified for 5.4.0 by a Chromium probe of the whole playground against
+  5.3.0 (light / dark × no brand / aec / estate × 1440 / 402 px): every
+  computed style of every element identical, screenshots pixel-identical.
+- Tailwind's `text-xs`, `text-sm`, … in the preset are fixed px and do
+  **not** follow the axis; the `.t-*` classes and components that size
+  from `var(--fs-*)` do. Mobile screens should set type with `.t-*`.
+- `data-platform` can sit on `<html>` or on any element (a phone-frame
+  preview, say). Keep it on the same element as `data-brand` or inside it:
+  a nested `data-brand` element below a `data-platform` element would
+  re-declare the type scale for its subtree. No brand file declares a
+  density token (enforced by `src/platforms/platforms.test.js`).
+- `data-platform="desktop"` nested inside a mobile subtree restores the
+  5.3.0 values.
+- For a blanket 44px hit target on every native control in a scope, add
+  `.ds-field` as well.
+
+---
+
 ## Brand axis (5.3.0)
 
 Two orthogonal axes, two disjoint override sets, both keyed on `<html>`:

@@ -173,6 +173,21 @@ setBrand('estate')   // <html data-brand="estate">; theme untouched
 `darkMode` in the Tailwind preset stays keyed to `[data-theme="dark"]`;
 the brand attribute is CSS-only and never affects `dark:` variants.
 
+### Platform (5.4.0)
+
+The third axis, `data-platform="desktop" | "mobile"`, switches density
+(touch sizes, spacing, type scale) for phones. It is not a user preference:
+the app decides it, so it is not stored and nothing is applied on mount — an
+app that never calls `setPlatform` gets no attribute and renders as 5.3.0.
+
+```js
+const { setPlatform } = useTheme()
+setPlatform('mobile')   // <html data-platform="mobile">; theme and brand untouched
+```
+
+A phone app pairs it with `TabBar` and `SegmentedControl`; see
+`docs/COMPONENTS.md` and `docs/DESIGN_TOKENS.md` → Platform axis.
+
 ## 6. Icons
 
 The design system keeps icon choice to the consumer (we don't want to

@@ -27,10 +27,10 @@ Shared design system and Vue component library for every eNirman app.
 |---|---|
 | Actions | `Button` (Soft / Flat / Ghost / Outline / Subtle / Link / Destructive / Success), `Icon` button sizes |
 | Data display | `Card` family, `StatCard` (with optional sparkline), `Badge` (pill / tag, dot + status), `Progress`, `EuiSparkline`, `EuiAvatarStack`, `Skeleton` |
-| Forms | `Input`, `Label`, `Switch` |
+| Forms | `Input`, `Label`, `Switch`, `SegmentedControl` (5.4.0) |
 | Overlays | `Dialog`, `Sheet`, `Popover`, `DropdownMenu`, `Tooltip`, `Sonner` |
 | Tables | `Table` family, `EuiPhaseTable`, `EuiPhaseKanban` |
-| Navigation | `Tabs`, `PageHeader`, `Command` palette |
+| Navigation | `Tabs`, `PageHeader`, `Command` palette, `TabBar` (bottom tabs for phones, 5.4.0) |
 | Domain (CDE / design ops) | `EuiStageBadge`, `EuiBlockBadge`, `EuiCdeStateBadge`, `EuiDesignItemCard`, `EuiVersionTimeline`, `EuiStatusFlow`, `EuiDwgViewer`, `EuiFileViewer`, `EuiHandoffCard`, `EuiReviewCard`, `EuiActivityFeed` |
 | Layout | `AppShell` (dark sidebar, 52 px topbar), `SidebarItem`, `SidebarSection`, `EmptyState`, `PageContainer` |
 | Composables | `useTheme`, `useBreakpoint`, `useCommandPalette` |
@@ -52,6 +52,11 @@ Since 5.3.0 there is also a runtime **brand axis**: `data-brand="aec"`
 driven by `useTheme().setBrand()`. Brand files live in `src/brands/` and
 override only brand-axis tokens; the theme axis (`data-theme`) is
 untouched by them. See `docs/DESIGN_TOKENS.md` → "Brand axis".
+
+Since 5.4.0 a third axis, **platform**, switches density for phones:
+`data-platform="mobile"` (via `useTheme().setPlatform()`) raises touch
+targets, spacing and the type scale; without the attribute nothing changes.
+See `docs/DESIGN_TOKENS.md` → "Platform axis".
 
 ## Soft button materiality
 

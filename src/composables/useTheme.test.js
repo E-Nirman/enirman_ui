@@ -130,3 +130,49 @@ describe('useTheme — brand axis', () => {
     expect(html().getAttribute('data-brand')).toBe('aec')
   })
 })
+
+describe('useTheme — platform axis (5.4.0)', () => {
+  beforeEach(() => html().removeAttribute('data-platform'))
+
+  it('applies nothing on mount: no data-platform attribute unless the app asks', async () => {
+    const { platform } = await mountTheme()
+    expect(platform.value).toBe('desktop')
+    expect(html().hasAttribute('data-platform')).toBe(false)
+  })
+
+  it('setPlatform("mobile") sets the attribute and stores nothing', async () => {
+    const { platform, setPlatform } = await mountTheme()
+    const storageBefore = JSON.stringify({ ...localStorage })
+    setPlatform('mobile')
+    expect(platform.value).toBe('mobile')
+    expect(html().getAttribute('data-platform')).toBe('mobile')
+    expect(JSON.stringify({ ...localStorage })).toBe(storageBefore)
+    setPlatform('desktop')
+    expect(html().getAttribute('data-platform')).toBe('desktop')
+  })
+
+  it('setPlatform leaves theme and brand alone, and they leave it alone', async () => {
+    const { theme, brand, setTheme, setBrand, setPlatform, platform } = await mountTheme()
+    setTheme('dark'); setBrand('estate')
+    await nextTick()
+    setPlatform('mobile')
+    await nextTick()
+    expect(theme.value).toBe('dark')
+    expect(brand.value).toBe('estate')
+    expect(html().getAttribute('data-theme')).toBe('dark')
+    expect(html().getAttribute('data-brand')).toBe('estate')
+    setTheme('light'); setBrand('aec')
+    await nextTick()
+    expect(platform.value).toBe('mobile')
+    expect(html().getAttribute('data-platform')).toBe('mobile')
+  })
+
+  it('ignores unknown platforms', async () => {
+    const { platform, setPlatform } = await mountTheme()
+    for (const bad of ['tablet', 'Mobile', '', null, undefined, 1]) {
+      setPlatform(bad)
+      expect(platform.value).toBe('desktop')
+      expect(html().hasAttribute('data-platform')).toBe(false)
+    }
+  })
+})

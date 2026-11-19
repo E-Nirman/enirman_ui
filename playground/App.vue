@@ -6,7 +6,9 @@ import {
   EuiProjectTimeline, EuiActivityFeed, EuiFileViewer,
   EuiKanbanColumn, EuiKanbanCard,
   AppShell, SidebarItem, SidebarSection, TooltipProvider,
+  SegmentedControl, TabBar,
 } from '@enirman/ui'
+import { Wrench, Map as MapIcon, LayoutGrid, User } from 'lucide-vue-next'
 
 /* ── mockup data (mirrors eNirman Connect Redesign.dc.html) ─────────── */
 
@@ -16,6 +18,18 @@ const toggleDark = () => {
   document.documentElement.classList.toggle('dark', dark.value)
   document.documentElement.setAttribute('data-theme', dark.value ? 'dark' : 'light')
 }
+
+/* 5.4.0 — SegmentedControl + TabBar, and the data-platform="mobile" axis */
+const lengthUnit = ref('m')
+const areaFirst = ref('ropani')
+const calendarFirst = ref('bs')
+const phoneTab = ref('tools')
+const phoneTabs = [
+  { value: 'tools',      label: 'Tools',      icon: Wrench },
+  { value: 'plotter',    label: 'Plotter',    icon: MapIcon },
+  { value: 'workspaces', label: 'Workspaces', icon: LayoutGrid },
+  { value: 'me',         label: 'Me',         icon: User },
+]
 
 const badgeStatuses = [
   'Draft', 'Internal Review', 'Sent to Client', 'Reviewer Approved',
@@ -260,6 +274,43 @@ const activity = [
             </EuiKanbanCard>
           </EuiKanbanColumn>
           <EuiKanbanColumn label="Archived" :count="0" tone="warning" />
+        </div>
+      </section>
+
+      <section id="mobile-shell" class="mb-10">
+        <h2 class="mb-3 text-sm font-bold uppercase tracking-wider text-muted-foreground">SegmentedControl + TabBar (5.4.0)</h2>
+        <div class="flex flex-wrap items-start gap-8">
+          <div class="space-y-3">
+            <p class="t-label">Desktop density (no data-platform)</p>
+            <SegmentedControl v-model="lengthUnit" label="Length unit" :options="[{ value: 'm', label: 'm' }, { value: 'ft', label: 'ft' }]" />
+          </div>
+          <div
+            data-platform="mobile"
+            class="relative flex h-[640px] w-[402px] flex-col overflow-hidden rounded-xl border border-border bg-background"
+          >
+            <div class="flex-1 space-y-4 overflow-y-auto p-[var(--page-gutter)]">
+              <p class="t-h5">Defaults</p>
+              <div class="space-y-2">
+                <p id="pg-len" class="t-label">Length unit</p>
+                <SegmentedControl v-model="lengthUnit" labelledby="pg-len" block :options="[{ value: 'm', label: 'Metres' }, { value: 'ft', label: 'Feet' }]" />
+              </div>
+              <div class="space-y-2">
+                <p id="pg-area" class="t-label">Area shown first</p>
+                <SegmentedControl
+                  v-model="areaFirst"
+                  labelledby="pg-area"
+                  block
+                  :options="[{ value: 'ropani', label: 'Ropani' }, { value: 'bigha', label: 'Bigha' }, { value: 'sqft', label: 'sq ft' }, { value: 'sqm', label: 'm²' }]"
+                />
+              </div>
+              <div class="space-y-2">
+                <p id="pg-cal" class="t-label">Calendar shown first</p>
+                <SegmentedControl v-model="calendarFirst" labelledby="pg-cal" :options="[{ value: 'bs', label: 'BS' }, { value: 'ad', label: 'AD' }]" />
+              </div>
+              <p class="t-body">Current tab: {{ phoneTab }}</p>
+            </div>
+            <TabBar v-model="phoneTab" :items="phoneTabs" label="Main" :fixed="false" />
+          </div>
         </div>
       </section>
     </div>
