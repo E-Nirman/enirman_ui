@@ -1,0 +1,76 @@
+# Publish @enirman/ui to npm when a version tag is pushed.
+#
+# Release = `npm version <patch|minor|major>` on the default branch (creates the
+# commit and the vX.Y.Z tag), then `git push origin HEAD --follow-tags`.
+# This workflow then runs the guards (`npm run check`) and publishes.
+#
+# REQUIRED REPOSITORY SECRET: NPM_TOKEN
+#   An npm automation (or granular) token with publish rights on the @enirman
+#   scope. Only Anup creates it: npmjs.com -> Access Tokens, then
+#   enirman_ui -> Settings -> Secrets and variables -> Actions -> New secret.
+name: Publish to npm
+
+on:
+  push:
+    tags:
+      - 'v*.*.*'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: publish-enirman-ui
+  cancel-in-progress: false
+
+jobs:
+  publish:
+    name: Publish @enirman/ui
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v6
+
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 24
+          registry-url: 'https://registry.npmjs.org'
+
+      - name: Check the token is there
+        env:
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: |
+          if [ -z "$NPM_TOKEN" ]; then
+            echo "::error::Repository secret NPM_TOKEN is missing. Anup adds it under Settings -> Secrets and variables -> Actions."
+            exit 1
+          fi
+
+      - name: Tag must match package.json version
+        run: |
+          PKG="v$(node -p "require('./package.json').version")"
+          if [ "$PKG" != "$GITHUB_REF_NAME" ]; then
+            echo "::error::Tag $GITHUB_REF_NAME does not match package.json version $PKG."
+            exit 1
+          fi
+
+      - name: Skip if this version is already on npm
+        id: exists
+        run: |
+          V="$(node -p "require('./package.json').version")"
+          if npm view "@enirman/ui@$V" version >/dev/null 2>&1; then
+            echo "@enirman/ui@$V is already published; nothing to do."
+            echo "skip=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Install
+        if: steps.exists.outputs.skip != 'true'
+        run: npm install --no-audit --no-fund
+
+      - name: Guards (css, tokens, parity, tests, drift)
+        if: steps.exists.outputs.skip != 'true'
+        run: npm run check
+
+      - name: Publish
+        if: steps.exists.outputs.skip != 'true'
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: npm publish --access public
